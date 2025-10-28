@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { IoKeyOutline } from "react-icons/io5";
 import { TbEye, TbEyeClosed } from "react-icons/tb";
 import { Link } from "react-router-dom";
+import SignupLoginSwitch from "./SignupLoginSwitch";
 
 const SignupPassword = ({ handlePassword }) => {
   const [password, setPassword] = useState("");
@@ -46,7 +47,8 @@ const SignupPassword = ({ handlePassword }) => {
             <IoKeyOutline />
           </div>
           <div className="absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-4 text-xl text-stone-400">
-            <button className="cursor-pointer hover:text-blue-400 duration-300 ease-in-out"
+            <button
+              className="cursor-pointer hover:text-blue-400 duration-300 ease-in-out"
               onClick={(e) => {
                 e.preventDefault();
                 setPasswordVisible((prevState) => !prevState);
@@ -57,7 +59,7 @@ const SignupPassword = ({ handlePassword }) => {
           </div>
 
           <input
-            className="bg-[#261046] w-full py-4 px-12 outline-0 rounded-xl leading-0 text-sm block"
+            className="md:bg-[#261046] bg-[#190733] w-full custom-md:py-4 py-3 px-12 outline-0 rounded-xl leading-0 text-sm block"
             type={passwordVisible ? "text" : "password"}
             id="password"
             name="password"
@@ -70,7 +72,7 @@ const SignupPassword = ({ handlePassword }) => {
       </div>
 
       <button
-        className={`w-full p-4 block rounded-xl cursor-pointer disabled:cursor-not-allowed ${
+        className={`w-full custom-md:p-4 p-3 block rounded-xl cursor-pointer disabled:cursor-not-allowed ${
           passwordValid
             ? "bg-[linear-gradient(to_left,_#501794,_#3E70A1)]"
             : "bg-gray-600"
@@ -79,13 +81,9 @@ const SignupPassword = ({ handlePassword }) => {
       >
         Sign Up
       </button>
-
-      <p className="text-stone-400 text-xs text-center">
-        Already have an account?{" "}
-        <Link to="/login" className="text-blue-300">
-          Login
-        </Link>
-      </p>
+      <div className="md:block hidden">
+        <SignupLoginSwitch />
+      </div>
     </form>
   );
 };

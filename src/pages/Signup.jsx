@@ -1,13 +1,13 @@
 import React from "react";
 
-import WelcomeMessage from "../components/WelcomeMessage";
+import WelcomeMessage from "../components/Auth/WelcomeMessage";
 import SignupSection from "../components/Auth/SignupSection";
 
 const Signup = () => {
   return (
-    <div className="text-white w-full h-full grid grid-cols-[40%_15%_40%]">
+    <div className="text-white w-full h-full absolute inset-0 grid md:grid-cols-[40%_15%_45%] grid-cols-1 grid-rows-[53%_28%] md:grid-rows-1">
       <WelcomeMessage>
-        <h1 className="font-bold text-5xl ">
+        <h1 className="font-bold lg:text-5xl md:text-3xl duration-300 ">
           Join Telejam <br />
           <span className="bg-gradient-to-l from-[#7d12ff] to-[rgb(197,145,255)] bg-clip-text text-transparent">
             Today
@@ -15,11 +15,13 @@ const Signup = () => {
         </h1>
       </WelcomeMessage>
 
-      <div className="bg-[linear-gradient(to_left,_#160430_20%,_rgba(0,0,0,0)_100%)]"></div>
+      <div className="md:bg-[linear-gradient(to_left,_#160430_10%,_rgba(0,0,0,0)_100%)] bg-[linear-gradient(to_top,_#240b48_0%,_rgba(0,0,0,0)_50%)]"></div>
 
-      <div className="bg-dark_purple w-full p-4 relative">
+      <div className="md:bg-dark_purple bg-normal_purple w-full relative">
         <SignupSection />
       </div>
+
+      {/* <div className="md:block hidden bg-dark_purple"></div> */}
     </div>
   );
 };
