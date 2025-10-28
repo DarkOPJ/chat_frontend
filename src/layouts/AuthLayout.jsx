@@ -1,0 +1,23 @@
+import React from "react";
+import { Outlet } from "react-router-dom";
+import space from "../assets/images/space.jpg";
+import telejam2 from "../assets/images/telejam2.png";
+const AuthLayout = () => {
+  return (
+    <section className="h-screen relative bg-dark_purple">
+      <div className="w-full fixed px-10 py-6">
+        <img className="w-[130px]" src={telejam2} alt="Telejam Logo" />
+      </div>
+      <div
+        className="h-full w-full bg-no-repeat bg-[-30px_-0px] bg-contain"
+        style={{ backgroundImage: `url(${space})` }}
+      >
+        {/* <img className="h-screen object-[-80px_-0px]" src={space} alt="Space" /> */}
+        <Outlet />
+      </div>
+      <div className="absolute bottom-0 left-0 w-full h-[134px] bg-[linear-gradient(to_top,_#160430_0%,_rgba(0,0,0,0)_100%)] z-10"></div>
+    </section>
+  );
+};
+
+export default AuthLayout;
