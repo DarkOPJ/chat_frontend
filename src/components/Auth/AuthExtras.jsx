@@ -3,7 +3,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebook } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-const SignupExtras = () => {
+const AuthExtras = () => {
   return (
     <div className="space-y-4">
       <p className="text-stone-400 text-xs">Or continue with</p>
@@ -26,7 +26,7 @@ const SignupExtras = () => {
       </div>
 
       <p className="text-stone-400 text-xs ">
-        By registering you with our{" "}
+        By using Telejam, you are agreeing to our{" "}
         <Link to="#" className="text-[#9D5CE9]">
           Terms and Conditions
         </Link>
@@ -35,4 +35,4 @@ const SignupExtras = () => {
   );
 };
 
-export default SignupExtras;
+export default AuthExtras;

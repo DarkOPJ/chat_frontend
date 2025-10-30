@@ -3,23 +3,9 @@ import { CiMail, CiUser } from "react-icons/ci";
 import { Link } from "react-router-dom";
 import SignupLoginSwitch from "./SignupLoginSwitch";
 
-const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
-  const [fullName, setFullName] = useState("");
+const LoginEmail = ({ emailHandler }) => {
   const [email, setEmail] = useState("");
-  const [fullNameValid, setFullNameValid] = useState(null);
   const [emailValid, setEmailValid] = useState(null);
-
-  const checkFullName = (name) => {
-    if (typeof name !== "string") return false;
-    const trimmed = name.trim();
-
-    // Must contain at least two alphabetic parts, separated by exactly one space, hyphen, or apostrophe
-    const nameRegex = /^[A-Za-z]+(?:[ '-][A-Za-z]+)+$/;
-    // Reject consecutive spaces, hyphens, or apostrophes
-    if (/([ '\-])\1/.test(trimmed)) return false;
-
-    return nameRegex.test(trimmed);
-  };
 
   const checkEmail = (email) => {
     if (typeof email !== "string") return false;
@@ -30,30 +16,18 @@ const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
     return emailRegex.test(trimmed);
   };
 
-  const validCredentials = () => {
-    return fullNameValid && emailValid;
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here
 
-    const nameAndEmail = {
-      full_name: fullName,
+    const email_object = {
       email: email,
     };
 
-    if (validCredentials()) {
-      nameAndEmailHandler(nameAndEmail);
+    if (emailValid) {
+      emailHandler(email_object);
     }
   };
-
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setFullNameValid(fullName ? checkFullName(fullName) : null);
-    }, 500);
-    return () => clearTimeout(timeout);
-  }, [fullName]);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -67,27 +41,6 @@ const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
       className="space-y-6 duration-300 ease-in-out"
       onSubmit={handleSubmit}
     >
-      <div className="space-y-2">
-        <label htmlFor="full_name" className="text-sm block leading-none">
-          Full Name
-        </label>
-        <div className="w-full relative">
-          <div className="absolute top-1/2 -translate-y-1/2 left-4 text-xl text-stone-400">
-            <CiUser />
-          </div>
-
-          <input
-            className="md:bg-[#261046] bg-[#190733] w-full custom-md:py-4 py-3 px-12 outline-0 rounded-xl leading-0 text-sm block"
-            type="text"
-            id="full_name"
-            name="full_name"
-            placeholder="John Doe"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            required
-          />
-        </div>
-      </div>
       <div className="space-y-2">
         <label htmlFor="email" className="text-sm block leading-none">
           E-mail
@@ -110,11 +63,11 @@ const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
       </div>
       <button
         className={`w-full custom-md:p-4 p-3 block rounded-xl cursor-pointer disabled:cursor-not-allowed ${
-          validCredentials()
+          emailValid
             ? "bg-[linear-gradient(to_left,_#501794,_#3E70A1)]"
             : "bg-gray-600"
         }`}
-        disabled={!validCredentials()}
+        disabled={!emailValid}
       >
         Proceed
       </button>
@@ -125,4 +78,4 @@ const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
   );
 };
 
-export default SignupNameAndEmail;
+export default LoginEmail;

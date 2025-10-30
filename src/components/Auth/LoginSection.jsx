@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 
-import SignupNameAndEmail from "./SignupNameAndEmail";
-import SignupPassword from "./SignupPassword";
 import { axiosInstance } from "../../lib/Axios";
 import { toast } from "react-toastify";
 import AuthTransitions from "./AuthTransitions";
 import useAuthStore from "../../store/AuthStore";
+import LoginEmail from "./LoginEmail";
+import LoginPassword from "./LoginPassword";
 
-const SignupSection = () => {
-  const { user_signup } = useAuthStore();
+const LoginSection = () => {
+  const { user_login } = useAuthStore();
+  // Below is for correct email. not name and email.
   const [correctNameAndEmail, setCorrectNameAndEmail] = useState(false);
   const [credentials, setCredentials] = useState({
-    full_name: "",
     email: "",
     password: "",
   });
@@ -19,20 +19,19 @@ const SignupSection = () => {
   const correctNameAndEmailHandler = (status) => {
     setCorrectNameAndEmail(status);
   };
-  const nameAndEmailHandler = async (data) => {
-    if (!data.full_name || !data.email) {
+
+  const emailHandler = async (data) => {
+    if (!data.email) {
       toast.error("All fields are required.");
       return null;
     }
 
     try {
-      const res = await axiosInstance.post("/auth/signup_check", data);
+      const res = await axiosInstance.post("/auth/login_check", data);
       // Check if the response was successful (2xx)
       if (res.status >= 200 && res.status < 300) {
-        toast.success("Great! Proceed to set your password.");
         setCredentials({
           ...credentials,
-          full_name: data.full_name,
           email: data.email,
         });
         setCorrectNameAndEmail(true);
@@ -42,23 +41,19 @@ const SignupSection = () => {
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Your request could not be processed."
+        error.response.data.message || "Your request could not be processed."
       );
       setCorrectNameAndEmail(false);
     }
   };
 
-  const signup = async (password_data) => {
-    if (
-      !credentials.full_name ||
-      !credentials.email ||
-      !password_data.password
-    ) {
+  const passwordHandler = async (password_data) => {
+    if (!credentials.email || !password_data.password) {
       toast.error("All fields are required.");
       return null;
     }
 
-    user_signup(credentials, password_data);
+    user_login(credentials, password_data);
   };
 
   return (
@@ -67,21 +62,21 @@ const SignupSection = () => {
         mode="name_and_or_email"
         correctNameAndEmail={correctNameAndEmail}
         setCorrectNameAndEmail={correctNameAndEmailHandler}
-        authType="Sign Up"
+        authType="Login"
       >
-        <SignupNameAndEmail nameAndEmailHandler={nameAndEmailHandler} />
+        <LoginEmail emailHandler={emailHandler} />
       </AuthTransitions>
 
       <AuthTransitions
         mode="password"
         correctNameAndEmail={correctNameAndEmail}
         setCorrectNameAndEmail={correctNameAndEmailHandler}
-        authType= "Sign Up"
+        authType="Login"
       >
-        <SignupPassword signup={signup} />
+        <LoginPassword handlePassword={passwordHandler} />
       </AuthTransitions>
     </>
   );
 };
 
-export default SignupSection;
+export default LoginSection;

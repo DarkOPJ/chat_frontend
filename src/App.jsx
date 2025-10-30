@@ -1,5 +1,4 @@
-import { RouterProvider } from "react-router-dom";
-import router from "./router";
+import Router from "./Router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -21,7 +20,7 @@ function App() {
         toast.info("Processing request...");
         toast.warn("Network unstable!"); */}
 
-      <RouterProvider router={router} />
+      <Router />
     </>
   );
 }

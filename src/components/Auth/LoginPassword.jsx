@@ -5,8 +5,8 @@ import SignupLoginSwitch from "./SignupLoginSwitch";
 import { PiSpinnerBallDuotone } from "react-icons/pi";
 import useAuthStore from "../../store/AuthStore";
 
-const SignupPassword = ({ signup }) => {
-  const { is_signing_up } = useAuthStore();
+const LoginPassword = ({ handlePassword }) => {
+  const { is_logging_in } = useAuthStore();
   const [password, setPassword] = useState("");
   const [passwordValid, setPasswordValid] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -17,7 +17,7 @@ const SignupPassword = ({ signup }) => {
     const passwordData = {
       password: password,
     };
-    signup(passwordData);
+    handlePassword(passwordData);
   };
 
   const checkPassword = (password) => {
@@ -79,12 +79,12 @@ const SignupPassword = ({ signup }) => {
             ? "bg-[linear-gradient(to_left,_#501794,_#3E70A1)]"
             : "bg-gray-600"
         }`}
-        disabled={!passwordValid || is_signing_up}
+        disabled={!passwordValid || is_logging_in}
       >
-        {is_signing_up ? (
+        {is_logging_in ? (
           <PiSpinnerBallDuotone className="animate-spin m-auto text-2xl text-normal_purple" />
         ) : (
-          "Sign Up"
+          "Login"
         )}
       </button>
       <div className="md:block hidden">
@@ -94,4 +94,4 @@ const SignupPassword = ({ signup }) => {
   );
 };
 
-export default SignupPassword;
+export default LoginPassword;

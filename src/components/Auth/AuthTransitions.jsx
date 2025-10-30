@@ -1,11 +1,11 @@
 import React from "react";
-import SignupExtras from "./SignupExtras";
 import { IoArrowBackOutline } from "react-icons/io5";
+import AuthExtras from "./AuthExtras";
 
-const SignupTransition = ({ children, signupMode, correctNameAndEmail, setCorrectNameAndEmail }) => {
+const AuthTransitions = ({ children, mode, correctNameAndEmail, setCorrectNameAndEmail, authType }) => {
   return (
     <div>
-      {signupMode === "name_and_email" ? (
+      {mode === "name_and_or_email" ? (
         <div
           className={`absolute px-8 lg:pl-8 lg:pr-12 md:pl-5 md:pr-6 w-full md:top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 transition-all duration-500 ease-in-out ${
             correctNameAndEmail
@@ -14,13 +14,13 @@ const SignupTransition = ({ children, signupMode, correctNameAndEmail, setCorrec
           }`}
         >
           <div className="w-full md:space-y-10 space-y-6 h-[580px] flex flex-col justify-center ">
-            <h1 className="font-bold text-5xl">Sign Up</h1>
+            <h1 className="font-bold text-5xl">{authType}</h1>
 
             {children}
 
             <hr className="text-stone-400" />
 
-            <SignupExtras />
+            <AuthExtras />
           </div>
         </div>
       ) : (
@@ -42,13 +42,13 @@ const SignupTransition = ({ children, signupMode, correctNameAndEmail, setCorrec
                 </button>
               </div>
             )}
-            <h1 className="font-bold text-5xl">Sign Up</h1>
+            <h1 className="font-bold text-5xl">{authType}</h1>
 
             {children}
 
             <hr className="text-stone-400" />
 
-            <SignupExtras />
+            <AuthExtras />
           </div>
         </div>
       )}
@@ -56,4 +56,4 @@ const SignupTransition = ({ children, signupMode, correctNameAndEmail, setCorrec
   );
 };
 
-export default SignupTransition;
+export default AuthTransitions;
