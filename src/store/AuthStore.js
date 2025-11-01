@@ -40,7 +40,7 @@ const useAuthStore = create((set, get) => ({
       }
     } catch (error) {
       toast.error(
-        error.response.data.message || "Your request could not be processed."
+        error?.response?.data?.message || "Your request could not be processed."
       );
       set({ authenticated_user: null });
     } finally {
@@ -57,31 +57,33 @@ const useAuthStore = create((set, get) => ({
       };
 
       const res = await axiosInstance.post("/auth/login", existing_user);
+      console.log(res.data);
 
-      if (res.success) {
+      if (res.data.success) {
         set({ authenticated_user: res.data });
         toast.success("Keep chatting with us! 😉");
-        //   } else {
-        //     console.log("1");
-        //     console.log(res.data);
-        //     console.log("1");
-        //     toast.error(res.data.message || "Your request could not be processed.");
-        //     set({ authenticated_user: null });
-        //   }
-      }
-      if (res.data.message === "Invalid email or password.") {
+      } else {
         toast.error(res.data.message || "Your request could not be processed.");
         set({ authenticated_user: null });
       }
     } catch (error) {
-      console.log("2");
-
       toast.error(
-        error.response.data.message || "Your request could not be processed."
+        error?.response?.data?.message || "Your request could not be processed."
       );
       set({ authenticated_user: null });
     } finally {
       set({ is_logging_in: false });
+    }
+  },
+
+  logout: async () => {
+    try {
+      const res = await axiosInstance.post("/auth/logout");
+      set({ authenticated_user: null });
+      toast.success(res.data.message);
+    } catch (error) {
+      // TODO
+      console.log("There was an error with the Logout", error);
     }
   },
 }));
