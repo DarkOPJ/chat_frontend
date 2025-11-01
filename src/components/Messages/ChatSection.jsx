@@ -14,7 +14,7 @@ const ChatSection = ({ chat }) => {
         backgroundImage: `url(${background1})`,
       }}
     >
-      <div className="absolute py-2.5 px-5 top-0 left-0 right-0 bg-dark_purple z-10 flex items-center justify-between gap-10">
+      <div className="absolute py-3 px-5 top-0 left-0 right-0 bg-dark_purple z-10 flex items-center justify-between gap-10">
         <div className="flex gap-4 items-center">
           <Avatar seed={chat.id}>{chat.avatar}</Avatar>
           <div>
@@ -55,7 +55,7 @@ const ChatSection = ({ chat }) => {
         </div>
       </div>
 
-      <div class="flex-1 flex items-center justify-center h-full bg-[linear-gradient(135deg,rgba(99,102,241,0.1),rgba(10,10,10,0.2),rgba(200,197,94,0.1))]">
+      <div className="flex-1 flex items-center justify-center h-full bg-[linear-gradient(135deg,rgba(99,102,241,0.1),rgba(10,10,10,0.2),rgba(200,197,94,0.1))]">
         <StartChattingPopup />
       </div>
     </div>

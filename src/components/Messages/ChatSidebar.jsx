@@ -3,17 +3,21 @@ import ChatUserBtn from "./ChatUserBtn";
 import SoundLogoutBtns from "./SoundLogoutBtns";
 import Search from "./Search";
 import { HiMenu } from "react-icons/hi";
+import SubMenus from "./SubMenus";
+import useMessageStore from "../../store/MessageStore";
 
 const COMPACT_WIDTH = 95;
-const MIN_WIDTH = 240;
-const MAX_WIDTH = 400;
+const MIN_WIDTH = 310;
+const MAX_WIDTH = 420;
 const COLLAPSE_THRESHOLD = 180;
 
-const ChatSidebar = ({ chats = [] }) => {
+const ChatSidebar = () => {
+  const { chats, contacts, current_submenu } = useMessageStore();
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const [isResizing, setIsResizing] = useState(false);
   const [isCompact, setIsCompact] = useState(false);
   const sidebarRef = useRef(null);
+  // const [subMenu, setSubMenu] = useState(current_submenu)
 
   const handleMouseDown = (e) => {
     e.preventDefault();
@@ -63,14 +67,18 @@ const ChatSidebar = ({ chats = [] }) => {
     <div
       ref={sidebarRef}
       style={{ width: `${sidebarWidth}px` }}
-      className=" shadow-lg flex flex-col relative transition-none bg-dark_purple text-white"
+      className=" shadow-lg flex flex-col relative transition-none bg-dark_purple text-white border-r  border-slate-800"
     >
       {/* Header */}
-      <div className="p-4 border-r border-b border-zinc-800 flex items-center justify-between">
+      <div
+        className={`px-4 pt-4 ${
+          isCompact && "pb-4"
+        } border-b border-slate-800 flex items-center justify-between `}
+      >
         {!isCompact ? (
-          <div className="flex items-center gap-2 w-full justify-between">
-            {/* Search */}
-            <div className="flex items-center gap-2 w-full">
+          <div className=" w-full space-y-3 ">
+            <div className="flex items-center gap-2 ">
+              {/* Search */}
               <button
                 onClick={(e) => {
                   e.preventDefault();
@@ -83,7 +91,9 @@ const ChatSidebar = ({ chats = [] }) => {
               {!isCompact && <Search />}
             </div>
 
-            <SoundLogoutBtns />
+            {/* <SoundLogoutBtns /> */}
+
+            <SubMenus />
           </div>
         ) : (
           <div className="flex justify-center w-full text-2xl">
@@ -101,11 +111,23 @@ const ChatSidebar = ({ chats = [] }) => {
       </div>
 
       {/* Chat List */}
-      <div className="flex-1 overflow-y-auto p-2 ">
-        {chats.map((chat) => (
-          <ChatUserBtn chat={chat} isCompact={isCompact} />
-        ))}
-      </div>
+      {current_submenu === "All Chats" ? (
+        <div>
+          <div className="flex-1 overflow-y-auto p-2 ">
+            {chats.map((chat) => (
+              <ChatUserBtn key={chat.id} chat={chat} isCompact={isCompact} />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div className="flex-1 overflow-y-auto p-2 ">
+            {contacts.map((contact) => (
+              <ChatUserBtn key={contact.id} contact={contact} isCompact={isCompact} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Resize Handle */}
       <div
