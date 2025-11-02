@@ -17,3 +17,27 @@ body {
   --color-dark_shadow: #202124;
   --color-dark_pink: #35012c;
 }
+
+/* Change scrollbar background and thumb */
+::-webkit-scrollbar {
+  width: 5px; /* scrollbar width */
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* or any color you want */
+    padding: 2px;
+
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.6); /* thumb color */
+  border-radius: 10px;
+}
+
+/* Hide scrollbar by default, show on hover */
+.hide-scrollbar::-webkit-scrollbar {
+  width: 0px;
+}
+.hide-scrollbar:hover::-webkit-scrollbar {
+  width: 5px;
+}
