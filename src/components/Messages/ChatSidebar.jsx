@@ -11,7 +11,7 @@ const MIN_WIDTH = 310;
 const MAX_WIDTH = 420;
 const COLLAPSE_THRESHOLD = 180;
 
-const ChatSidebar = ({ openSidebar, setOpenSidebar }) => {
+const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
   const {
     chats,
     contacts,
@@ -75,7 +75,13 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar }) => {
   return (
     <div
       ref={sidebarRef}
-      style={{ width: `${openSidebar ? "100%" : `${sidebar_width}px`}` }}
+      style={{
+        width: smallScreen
+          ? openSidebar
+            ? "100%"
+            : `${sidebar_width}px`
+          : `${sidebar_width}px`,
+      }}
       className="shadow-lg flex flex-col transition-none relative bg-dark_purple text-white md:border-r  border-slate-800 duration-300"
     >
       {/* Header */}
@@ -84,7 +90,44 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar }) => {
           is_compact && "pb-4"
         } border-b border-slate-800 flex items-center justify-between `}
       >
-        {is_compact == false ? (
+        {!smallScreen &&
+          (is_compact == false ? (
+            <div className=" w-full space-y-3 ">
+              <div className="flex items-center gap-2 ">
+                <div className="relative">
+                  <button
+                    onClick={() => {
+                      setMenuOpen((prev) => !prev);
+                    }}
+                    className="cursor-pointer hover:bg-gray-500/15 text-stone-300 p-2 rounded-full duration-300 text-xl"
+                  >
+                    <HiMenu />
+                  </button>
+
+                  <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+                </div>
+                <Search />
+              </div>
+
+              <SubMenus />
+            </div>
+          ) : (
+            <div className="flex justify-center w-full text-2xl">
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setMenuOpen((prev) => !prev);
+                  }}
+                  className="cursor-pointer hover:bg-gray-500/15 text-stone-300 p-2 rounded-full duration-300 text-xl"
+                >
+                  <HiMenu />
+                </button>
+
+                <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+              </div>
+            </div>
+          ))}
+        {smallScreen && (
           <div className=" w-full space-y-3 ">
             <div className="flex items-center gap-2 ">
               <div className="relative">
@@ -103,21 +146,6 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar }) => {
             </div>
 
             <SubMenus />
-          </div>
-        ) : (
-          <div className="flex justify-center w-full text-2xl">
-            <div className="relative">
-              <button
-                onClick={() => {
-                  setMenuOpen((prev) => !prev);
-                }}
-                className="cursor-pointer hover:bg-gray-500/15 text-stone-300 p-2 rounded-full duration-300 text-xl"
-              >
-                <HiMenu />
-              </button>
-
-              <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-            </div>
           </div>
         )}
       </div>

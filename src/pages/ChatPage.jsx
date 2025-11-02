@@ -9,8 +9,11 @@ const ChatPage = () => {
 
   return (
     <section className="flex h-screen bg-dark_purple overflow-x-hidden">
-      <div className={`flex duration-300 md:w-auto ${openSidebar ? "w-full" : "w-0"}`}>
-        <ChatSidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar}/>
+      <div className={`hidden md:flex duration-300 md:w-auto ${openSidebar ? "w-full" : "w-0"}`}>
+        <ChatSidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} smallScreen={false}/>
+      </div>
+      <div className={`flex md:hidden duration-300 md:w-auto ${openSidebar ? "w-full" : "w-0"}`}>
+        <ChatSidebar openSidebar={openSidebar} setOpenSidebar={setOpenSidebar} smallScreen={true}/>
       </div>
 
       {/* Main Content Area */}
