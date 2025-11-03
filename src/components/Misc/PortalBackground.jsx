@@ -18,7 +18,7 @@ const PortalBackground = ({ children, openCloseHandler }) => {
 
   return (
     <section
-      className={`fixed inset-0 bg-black/50 z-30 transition-opacity duration-300 ${
+      className={`fixed inset-0 bg-black/70 z-30 transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0"
       }`}
       onClick={openCloseHandler}

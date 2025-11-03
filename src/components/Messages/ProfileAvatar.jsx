@@ -1,6 +1,24 @@
 import React, { useMemo } from "react";
+import { TbCameraPlus } from "react-icons/tb";
 
-const Avatar = ({ children, seed }) => {
+const ProfileAvatar = ({
+  seed,
+  name,
+  size = "normal",
+  fullView = false,
+  edit = false,
+}) => {
+  // size is "small", "normal", "large"
+  const sizeStyling = (sizeToUse) => {
+    if (sizeToUse === "small") {
+      return "size-6 text-xs";
+    } else if (sizeToUse === "large") {
+      return "size-32 text-4xl";
+    } else {
+      return "size-12";
+    }
+  };
+
   const gradientColors = useMemo(() => {
     const colors = [
       ["from-blue-500", "to-purple-600"],
@@ -22,13 +40,31 @@ const Avatar = ({ children, seed }) => {
     return colors[index];
   }, [seed]);
 
+  const getAvatarInitials = (nameToUse) => {
+    if (!nameToUse || typeof nameToUse !== "string") return "?"; // fallback
+
+    const parts = nameToUse.trim().split(/\s+/); // split only by spaces
+    const first = parts[0][0];
+    const last = parts[parts.length - 1][0];
+    return (first + last).toUpperCase();
+  };
+
   return (
     <div
-      className={`w-12 h-12 rounded-full bg-gradient-to-br ${gradientColors[0]} ${gradientColors[1]} flex items-center justify-center text-white font-semibold flex-shrink-0`}
+      className={`${sizeStyling(size)} ${
+        fullView ? " size-full" : ""
+      }  bg-linear-to-br ${gradientColors[0]} ${
+        gradientColors[1]
+      } flex items-center justify-center text-white font-semibold rounded-full duration-500 ease-in-out shrink-0 cursor-default relative`}
     >
-      {children}
+      {edit && (
+        <div className="absolute inset-0 z-10 bg-black/70 rounded-full flex justify-center items-center text-5xl duration-300 opacity-0 hover:opacity-100 cursor-pointer">
+          <TbCameraPlus />
+        </div>
+      )}
+      {getAvatarInitials(name)}
     </div>
   );
 };
 
-export default Avatar;
+export default ProfileAvatar;

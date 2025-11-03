@@ -6,12 +6,14 @@ import { IoSearchSharp } from "react-icons/io5";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { IoArrowBack } from "react-icons/io5";
 
-import Avatar from "./ProfileAvatar";
+import ProfileAvatar from "./ProfileAvatar";
 
 const ChatSection = ({ chat, openSidebar, setOpenSidebar }) => {
   return (
     <div
-      className={`flex bg-contain relative ${openSidebar ? "w-0 md:w-full" : "w-full"} duration-300`}
+      className={`flex bg-contain relative ${
+        openSidebar ? "w-0 md:w-full" : "w-full"
+      } duration-300`}
       style={{
         backgroundImage: `url(${background1})`,
       }}
@@ -24,7 +26,11 @@ const ChatSection = ({ chat, openSidebar, setOpenSidebar }) => {
           >
             <IoArrowBack />
           </button>
-          <Avatar seed={chat.id}>{chat.avatar}</Avatar>
+          <ProfileAvatar
+            seed={chat.id}
+            name={chat.name}
+          />
+
           <div>
             <p className="font-semibold text-white truncate">{chat.name}</p>
             <p className="text-sm text-gray-500 truncate">

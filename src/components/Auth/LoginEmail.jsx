@@ -1,6 +1,5 @@
-import React, { useState, useEffect, use } from "react";
-import { CiMail, CiUser } from "react-icons/ci";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { CiMail } from "react-icons/ci";
 import SignupLoginSwitch from "./SignupLoginSwitch";
 
 const LoginEmail = ({ emailHandler }) => {

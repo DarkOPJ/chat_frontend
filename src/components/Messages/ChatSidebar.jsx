@@ -159,7 +159,7 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
     `}
         >
           {chats.map((chat) => (
-            <ChatUserBtn key={chat.id} chat={chat} is_compact={is_compact} />
+            <ChatUserBtn key={chat.id} chat={chat}  />
           ))}
         </div>
 
@@ -173,7 +173,6 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
             <ChatUserBtn
               key={contact.id}
               contact={contact}
-              is_compact={is_compact}
             />
           ))}
         </div>

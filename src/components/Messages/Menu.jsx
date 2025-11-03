@@ -6,10 +6,11 @@ import MenuBtn from "./MenuBtn";
 import useMessageStore from "../../store/MessageStore";
 import PortalBackground from "../Misc/PortalBackground";
 import Profile from "./Profile";
-import {createPortal} from "react-dom"
+import { createPortal } from "react-dom";
+import ProfileAvatar from "./ProfileAvatar";
 
 const Menu = ({ menuOpen, setMenuOpen }) => {
-  const { logout } = useAuthStore();
+  const { authenticated_user, logout } = useAuthStore();
   const { enable_sound, toggle_sound } = useMessageStore();
   const [toggleProfile, setToggleProfile] = useState(false);
   return (
@@ -33,8 +34,15 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
             setMenuOpen(false);
           }}
         >
-          <FiLogOut className="text-lg text-red-700" />
-          <p className="text-sm text-red-700">Logout</p>
+          <div className="outline-2 outline-purple-600 outline-offset-1 rounded-full">
+            <ProfileAvatar
+              size={"small"}
+              seed={authenticated_user._id}
+              name={authenticated_user.full_name}
+            />
+          </div>
+
+          <p className="text-sm">{authenticated_user.full_name}</p>
         </MenuBtn>
 
         {/* Toggle sound */}
@@ -45,16 +53,16 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
           }}
         >
           {enable_sound ? (
-            <MdOutlineMusicOff className="text-lg" />
+            <MdOutlineMusicOff className="text-xl" />
           ) : (
-            <MdOutlineMusicNote className="text-lg" />
+            <MdOutlineMusicNote className="text-xl" />
           )}
           <p className="text-sm">{enable_sound ? "Disable" : "Enable"} Sound</p>
         </MenuBtn>
 
         {/* Logout */}
         <MenuBtn func={logout}>
-          <FiLogOut className="text-lg text-red-700" />
+          <FiLogOut className="text-xl text-red-700" />
           <p className="text-sm text-red-700">Logout</p>
         </MenuBtn>
 
@@ -63,14 +71,11 @@ const Menu = ({ menuOpen, setMenuOpen }) => {
           createPortal(
             <PortalBackground openCloseHandler={() => setToggleProfile(false)}>
               <Profile
-                toggleProfile={toggleProfile}
                 openCloseHandler={() => setToggleProfile(false)}
               />
             </PortalBackground>,
             document.getElementById("backdrop-root")
-            
           )}
-          
       </div>
     </div>
   );

@@ -7,6 +7,7 @@ const useAuthStore = create((set, get) => ({
   is_authenticating: true,
   is_signing_up: false,
   is_logging_in: false,
+  is_updating_profile: false,
 
   check_authentication_state: async () => {
     try {
@@ -86,6 +87,8 @@ const useAuthStore = create((set, get) => ({
       console.log("There was an error with the Logout", error);
     }
   },
+
+  // update
 }));
 
 export default useAuthStore;
