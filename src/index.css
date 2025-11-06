@@ -35,9 +35,13 @@ body {
 }
 
 /* Hide scrollbar by default, show on hover */
-.hide-scrollbar::-webkit-scrollbar {
-  width: 0px;
+.hide-scrollbar::-webkit-scrollbar-thumb {
+    background-color: transparent;
 }
+.hide-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(100, 100, 100, 0.6);
+}
+
 .hide-scrollbar:hover::-webkit-scrollbar {
   width: 5px;
 }

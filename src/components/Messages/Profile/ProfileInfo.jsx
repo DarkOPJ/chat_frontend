@@ -2,87 +2,69 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 
 import { PiUserCircleCheck } from "react-icons/pi";
-import { CiMail } from "react-icons/ci";
+import { MdOutlineMarkEmailRead } from "react-icons/md";
 import { IoIosInformationCircleOutline } from "react-icons/io";
+import { IoAtOutline } from "react-icons/io5";
+
 import useAuthStore from "../../../store/AuthStore";
+import useDebounce from "../../../hooks/useDebounce";
+import useMessageStore from "../../../store/MessagesStore";
 
-const ProfileInfo = ({ fullView, editProfile }) => {
-  const { authenticated_user } = useAuthStore();
-  const [name, setName] = useState(authenticated_user.full_name);
-  const [bio, setBio] = useState(authenticated_user.bio);
-  const [error, setError] = useState("");
+const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
+  const { authenticated_user, compare_update_data, is_updating_profile_info } =
+    useAuthStore();
+  const { selected_user } = useMessageStore();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const debouncedCompare = useDebounce((data) => {
+    compare_update_data(data);
+  }, 1000);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const newFormData = { ...formData, [name]: value };
 
-    const processed_name = typeof name === "string" ? name.trim() : "";
-    const processed_bio = typeof bio === "string" ? bio.trim() : "";
-    if (!processed_name) {
-      toast.error("Name is required.");
-      return;
-    }
-    if (processed_name.length < 1 || processed_name.length > 40) {
-      toast.error("Name is too long.");
-      return;
-    }
-    const nameRegex =
-      /^[\p{L}\p{N}' \-\p{Emoji_Presentation}\p{Extended_Pictographic}]+$/u;
-    if (!nameRegex.test(processed_name)) {
-      toast.error("Invalid name format.");
-      return;
-    }
-    if (processed_bio.length > 200) {
-      toast.error("Bio is too long.");
-      return;
-    }
+    // Update form immediately
+    setFormData(newFormData);
 
-
+    // Debounced comparison
+    debouncedCompare(newFormData);
   };
 
-  // const handleNameChange = (e) => {
-  //   const value = e.target.value;
-  //   const nameRegex =
-  //     /^[\p{L}\p{N}' \-\p{Emoji_Presentation}\p{Extended_Pictographic}]+$/u;
-  //   if (!name || typeof name !== "string") setError("Name is required.");
-  //   if (!nameRegex.test(value)) setError("Invalid name format.");
-  //   setName(value);
-  // };
-
-  // const validateName = (name) => {
-  //   // Allow letters, numbers, spaces, apostrophes, hyphens, and emojis
-  //   const nameRegex =
-  //     /^[\p{L}\p{N}' \-\p{Emoji_Presentation}\p{Extended_Pictographic}]+$/u;
-  //   if (!name || typeof name !== "string") return false;
-
-  //   const trimmed = name.trim();
-  //   if (trimmed.length === 0 || trimmed.length > 40) return false;
-
-  //   return nameRegex.test(trimmed);
-  // };
-
-  // const validateBio = (bio) => {
-  //   if (typeof bio !== "string") return false;
-
-  //   const trimmed = bio.trim();
-  //   if (trimmed.length > 200) return false;
-
-  //   return trimmed;
-  // };
-
   return (
-    <form
-      onSubmit={handleSubmit}
-      className={`${fullView && "mt-20 "} duration-500 ${
-        editProfile && "space-y-2"
-      }`}
-    >
+    <div className={` ${editProfile && "space-y-1"}`}>
       {editProfile ? (
         <div className="w-full py-3 px-4 rounded-xl relative">
-          {error && (
-            <p className="absolute -top-10 left-1/2 -translate-x-1/2 text-xs text-red-500 text-center w-[500px] ">
-              {error}
+          <div className="relative">
+            <label
+              htmlFor="email"
+              className="text-xs text-gray-400 bg-dark_shadow px-1.5 absolute -top-2 left-2.5 font-light"
+            >
+              Email
+            </label>
+            <input
+              type="text"
+              id=""
+              name="email"
+              placeholder="Email"
+              value={authenticated_user.email}
+              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              disabled={true}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
+          <MdOutlineMarkEmailRead size={30} />
+          <div className="space-y-1">
+            <p className="text-white">
+              {isChatPartner ? selected_user.email : authenticated_user.email}
             </p>
-          )}
+            <p className="text-xs">Email</p>
+          </div>
+        </div>
+      )}
+
+      {editProfile ? (
+        <div className="w-full py-3 px-4 rounded-xl ">
           <div className="relative">
             <label
               htmlFor="full_name"
@@ -92,21 +74,26 @@ const ProfileInfo = ({ fullView, editProfile }) => {
             </label>
             <input
               type="text"
-              id="full_name"
+              id="fullName"
               name="full_name"
               placeholder="Name"
-              value={name}
-              maxLength={40}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs"
+              value={formData.full_name}
+              maxLength={30}
+              onChange={handleInputChange}
+              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              disabled={is_updating_profile_info}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full py-3 px-4 flex items-center text-gray-400 gap-6 hover:bg-gray-600/20 rounded-xl">
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
           <PiUserCircleCheck size={30} />
           <div className="space-y-1">
-            <p className="text-white">{authenticated_user.full_name}</p>
+            <p className="text-white">
+              {isChatPartner
+                ? selected_user.full_name
+                : authenticated_user.full_name}
+            </p>
             <p className="text-xs">Name</p>
           </div>
         </div>
@@ -116,26 +103,38 @@ const ProfileInfo = ({ fullView, editProfile }) => {
         <div className="w-full py-3 px-4  rounded-xl">
           <div className="relative">
             <label
-              htmlFor=""
-              className="text-xs text-gray-400 bg-dark_shadow px-1.5 absolute -top-2 left-2.5 font-light"
+              htmlFor="username"
+              className="text-xs text-gray-400 bg-dark_shadow px-1.5 absolute -top-2 left-2.5 font-light "
             >
-              Email
+              Username (optional)
             </label>
             <input
               type="text"
-              placeholder="Email"
-              value={authenticated_user.email}
-              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs"
-              disabled={true}
+              id="username"
+              name="username"
+              placeholder="Username"
+              value={formData.username}
+              onChange={handleInputChange}
+              maxLength={16}
+              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              disabled={is_updating_profile_info}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full py-3 px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
-          <CiMail size={30} />
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
+          <IoAtOutline size={30} />
           <div className="space-y-1">
-            <p className="text-white">{authenticated_user.email}</p>
-            <p className="text-xs">Email</p>
+            <p className="text-white">
+              {isChatPartner
+                ? selected_user.username || (
+                    <span className="text-xs">Set your username</span>
+                  )
+                : authenticated_user.username || (
+                    <span className="text-xs">Set your username</span>
+                  )}
+            </p>
+            <p className="text-xs">Username</p>
           </div>
         </div>
       )}
@@ -151,29 +150,35 @@ const ProfileInfo = ({ fullView, editProfile }) => {
             </label>
             <input
               type="text"
+              id="bio"
               name="bio"
               placeholder="Bio"
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
+              value={formData.bio}
+              onChange={handleInputChange}
               maxLength={200}
-              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs"
+              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              disabled={is_updating_profile_info}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full py-3 px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
           <IoIosInformationCircleOutline size={30} />
           <div className="space-y-1">
             <p className="text-white">
-              {authenticated_user.bio || (
-                <span className="text-xs">Set your bio now</span>
-              )}
+              {isChatPartner
+                ? selected_user.bio || (
+                    <span className="text-xs">Set your bio</span>
+                  )
+                : authenticated_user.bio || (
+                    <span className="text-xs">Set your bio</span>
+                  )}
             </p>
             <p className="text-xs">Bio</p>
           </div>
         </div>
       )}
-    </form>
+    </div>
   );
 };
 

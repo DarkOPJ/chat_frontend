@@ -1,33 +1,38 @@
 import React from "react";
-import ProfileAvatar from "./ProfileAvatar";
-import useMessageStore from "../../store/MessageStore";
+import ProfileAvatar from "./Profile/ProfileAvatar";
+import useMessageStore from "../../store/MessagesStore";
 
 const ChatUserBtn = ({ chat = {}, contact = {} }) => {
-  const { is_compact } = useMessageStore();
+  const { is_compact, selected_user, select_a_user } = useMessageStore();
+
+  const id = chat._id || contact._id;
+  if (!id) return; // safety
+  
   return (
     <div
-      key={chat.id || contact.id}
-      className="p-4 hover:bg-gray-500/15 cursor-pointer  flex items-center gap-3 rounded-xl duration-300"
+      onClick={() => select_a_user(chat._id ? chat : contact)}
+      key={chat._id || contact._id}
+      className={`${id === selected_user?._id && "bg-purple-500/15"} p-4 hover:bg-gray-500/15 cursor-pointer   flex items-center gap-3 rounded-xl duration-300`}
     >
       <ProfileAvatar
-        size={""}
-        seed={chat.id || contact.id}
-        name={chat.name || contact.name}
+        seed={chat._id || contact._id}
+        name={chat.full_name || contact.full_name}
+        profile_pic={chat.profile_pic || contact.profile_pic}
       />
       {!is_compact && (
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-baseline">
             <h3 className="font-semibold text-white truncate">
-              {chat.name || contact.name}
+              {chat.full_name || contact.full_name}
             </h3>
-            {chat && !is_compact &&  (
+            {chat && !is_compact && (
               <span className="text-xs text-gray-500 ml-2">
-                {chat.time}
+                {chat.time || "10m"}
               </span>
             )}
           </div>
           <p className="text-sm text-gray-500 truncate">
-            {chat.lastMessage || contact.status}
+            {chat.lastMessage || contact.status || "Yet to do"}
           </p>
         </div>
       )}

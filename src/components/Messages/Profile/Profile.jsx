@@ -1,19 +1,17 @@
-
-
 import React, { useState } from "react";
-import ModalWrapper from "../Misc/ModalWrapper";
+import ModalWrapper from "../../Misc/ModalWrapper";
 
-import MainProfile from "./Profile/MainProfile";
-import EditProfile from "./Profile/EditProfile";
+import MainProfile from "./MainProfile";
+import EditProfile from "./EditProfile";
 
-const Profile = ({ openCloseHandler }) => {
+const Profile = ({ openCloseHandler, isChatPartner = false }) => {
   const [isMainProfile, setIsMainProfile] = useState(true);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleToggle = () => {
     setIsTransitioning(true);
     setTimeout(() => {
-      setIsMainProfile(prev => !prev);
+      setIsMainProfile((prev) => !prev);
       setIsTransitioning(false);
     }, 100);
   };
@@ -26,31 +24,30 @@ const Profile = ({ openCloseHandler }) => {
           <div
             className="absolute inset-0 transition-transform duration-300 ease-in-out"
             style={{
-              transform: isMainProfile 
-                ? 'translateX(0)' 
-                : 'translateX(-105%)',
+              transform: isMainProfile ? "translateX(0)" : "translateX(-105%)",
             }}
           >
             <MainProfile
+            isChatPartner={isChatPartner}
               openCloseHandler={openCloseHandler}
               setIsMainProfile={handleToggle}
             />
           </div>
 
           {/* EditProfile */}
-          <div
-            className="absolute inset-0 transition-transform duration-300 ease-in-out"
-            style={{
-              transform: isMainProfile 
-                ? 'translateX(105%)' 
-                : 'translateX(0)',
-            }}
-          >
-            <EditProfile
-              openCloseHandler={openCloseHandler}
-              setIsMainProfile={handleToggle}
-            />
-          </div>
+          {!isChatPartner && (
+            <div
+              className="absolute inset-0 transition-transform duration-300 ease-in-out"
+              style={{
+                transform: isMainProfile ? "translateX(105%)" : "translateX(0)",
+              }}
+            >
+              <EditProfile
+                openCloseHandler={openCloseHandler}
+                setIsMainProfile={handleToggle}
+              />
+            </div>
+          )}
         </div>
       </ModalWrapper>
     </div>

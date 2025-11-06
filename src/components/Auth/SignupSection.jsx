@@ -42,7 +42,7 @@ const SignupSection = () => {
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message || "Your request could not be processed."
+        error?.response?.data?.message || "Your request could not be processed."
       );
       setCorrectNameAndEmail(false);
     }

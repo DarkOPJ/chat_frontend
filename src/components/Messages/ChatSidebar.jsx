@@ -4,24 +4,34 @@ import Menu from "./Menu";
 import Search from "./Search";
 import { HiMenu } from "react-icons/hi";
 import SubMenus from "./SubMenus";
-import useMessageStore from "../../store/MessageStore";
+import useApplicationStore from "../../store/ApplicationStore";
+import useMessageStore from "../../store/MessagesStore";
+import UsersLoadingSkeleton from "./UsersLoadingSkeleton";
 
 const COMPACT_WIDTH = 95;
 const MIN_WIDTH = 310;
 const MAX_WIDTH = 420;
 const COLLAPSE_THRESHOLD = 180;
 
-const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
+const ChatSidebar = ({ smallScreen }) => {
   const {
-    chats,
-    contacts,
+    is_loading_contacts,
+    is_loading_chat_partners,
+    get_all_contacts,
+    get_all_chat_partners,
+    all_contacts,
+    all_chat_partners,
+    open_sidebar,
+    set_open_sidebar,
+  } = useMessageStore();
+  const {
     current_submenu,
     sidebar_width,
     change_sidebar_width,
     is_compact,
     change_compact,
     hydrate,
-  } = useMessageStore();
+  } = useApplicationStore();
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -29,11 +39,16 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsResizing(true);
-    setOpenSidebar(false);
+    set_open_sidebar(false);
   };
 
   useEffect(() => {
+    get_all_chat_partners();
+    get_all_contacts();
     hydrate();
+  }, [get_all_chat_partners, get_all_contacts]);
+
+  useEffect(() => {
     const handleMouseMove = (e) => {
       if (!isResizing) return;
 
@@ -77,7 +92,7 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
       ref={sidebarRef}
       style={{
         width: smallScreen
-          ? openSidebar
+          ? open_sidebar
             ? "100%"
             : `${sidebar_width}px`
           : `${sidebar_width}px`,
@@ -158,9 +173,11 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
       ${current_submenu === "All Chats" ? "translate-x-0" : "-translate-x-full"}
     `}
         >
-          {chats.map((chat) => (
-            <ChatUserBtn key={chat.id} chat={chat}  />
-          ))}
+          {is_loading_chat_partners && <UsersLoadingSkeleton />}
+          {all_chat_partners &&
+            all_chat_partners.map((chat) => (
+              <ChatUserBtn key={chat._id} chat={chat} />
+            ))}
         </div>
 
         {/* Contacts */}
@@ -169,12 +186,12 @@ const ChatSidebar = ({ openSidebar, setOpenSidebar, smallScreen }) => {
       ${current_submenu === "Contacts" ? "translate-x-0" : "translate-x-full"}
     `}
         >
-          {contacts.map((contact) => (
-            <ChatUserBtn
-              key={contact.id}
-              contact={contact}
-            />
-          ))}
+          {is_loading_contacts && <UsersLoadingSkeleton />}
+
+          {all_contacts &&
+            all_contacts.map((contact) => (
+              <ChatUserBtn key={contact._id} contact={contact} />
+            ))}
         </div>
       </div>
 

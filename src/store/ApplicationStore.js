@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-const useMessageStore = create((set, get) => ({
+const useApplicationStore = create((set, get) => ({
   chats: [
     {
       id: 1,
@@ -76,7 +76,6 @@ const useMessageStore = create((set, get) => ({
     const newValue = !get().enable_sound;
     localStorage.setItem("enable_sound", newValue);
     set({ enable_sound: newValue });
-    console.log(newValue);
   },
 
   hydrate: () => {
@@ -94,4 +93,4 @@ const useMessageStore = create((set, get) => ({
   },
 }));
 
-export default useMessageStore;
+export default useApplicationStore;

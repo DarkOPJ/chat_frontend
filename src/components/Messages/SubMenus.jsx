@@ -1,10 +1,11 @@
 import React from "react";
 import Badge from "./Badge";
-import useMessageStore from "../../store/MessageStore";
+import useApplicationStore from "../../store/ApplicationStore";
+import useMessageStore from "../../store/MessagesStore";
 
 const SubMenus = () => {
-  const { chats, contacts, current_submenu, switch_submenu } =
-    useMessageStore();
+  const { all_contacts, all_chat_partners } = useMessageStore();
+  const { current_submenu, switch_submenu } = useApplicationStore();
   return (
     <div className="flex overflow-x-hidden min-w-fit">
       <button
@@ -17,7 +18,7 @@ const SubMenus = () => {
             : "text-gray-500 hover:bg-gray-500/15"
         } flex items-center gap-1.5 text-sm cursor-pointer  p-3 rounded-t-xl truncate font-medium`}
       >
-        All Chats <Badge text={chats.length} />
+        All Chats <Badge text={all_chat_partners.length} />
       </button>
       <button
         onClick={() => {
@@ -29,7 +30,7 @@ const SubMenus = () => {
             : "text-gray-500 hover:bg-gray-500/15"
         } flex items-center gap-1.5 text-sm cursor-pointer  p-3 rounded-t-xl truncate font-medium`}
       >
-        Contacts <Badge text={contacts.length} />
+        Contacts <Badge text={all_contacts.length} />
       </button>
     </div>
   );

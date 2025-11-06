@@ -13,7 +13,9 @@ const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
     const trimmed = name.trim();
 
     // Must contain at least two alphabetic parts, separated by exactly one space, hyphen, or apostrophe
-    const nameRegex = /^[A-Za-z]+(?:[ '-][A-Za-z]+)+$/;
+    const nameRegex =
+      /^[\p{L}\p{N}' \-\p{Emoji}\p{Emoji_Component}]+$/u;
+
     // Reject consecutive spaces, hyphens, or apostrophes
     if (/([ '\-])\1/.test(trimmed)) return false;
 

@@ -7,7 +7,9 @@ const useAuthStore = create((set, get) => ({
   is_authenticating: true,
   is_signing_up: false,
   is_logging_in: false,
-  is_updating_profile: false,
+  is_updating_profile_pic: false,
+  is_updating_profile_info: false,
+  profile_editted: false,
 
   check_authentication_state: async () => {
     try {
@@ -58,7 +60,6 @@ const useAuthStore = create((set, get) => ({
       };
 
       const res = await axiosInstance.post("/auth/login", existing_user);
-      console.log(res.data);
 
       if (res.data.success) {
         set({ authenticated_user: res.data });
@@ -88,7 +89,44 @@ const useAuthStore = create((set, get) => ({
     }
   },
 
-  // update
+  compare_update_data: (data) => {
+    const { full_name, bio, username } = get().authenticated_user;
+
+    const hasChanges =
+      full_name !== data.full_name.trim() ||
+      username !== data.username.trim() ||
+      bio !== data.bio.trim();
+
+    set({ profile_editted: hasChanges });
+  },
+  update_profile_info: async (data) => {
+    set({ is_updating_profile_info: true });
+    try {
+      const res = await axiosInstance.put("/profile/update_profile_info", data);
+      set({ authenticated_user: res.data.user });
+      toast.success(res.data.message || "Profile updated successfully");
+      set({ profile_editted: false });
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Your profile could not be updated."
+      );
+    } finally {
+      set({ is_updating_profile_info: false });
+    }
+  },
+
+  update_profile_pic: async (data) => {
+    set({ is_updating_profile_pic: true });
+    try {
+      const res = await axiosInstance.put("/profile/update_profile_pic", data);
+      set({ authenticated_user: res.data.user });
+    } catch (error) {
+      console.log(error);
+      throw error;
+    } finally {
+      set({ is_updating_profile_pic: false });
+    }
+  },
 }));
 
 export default useAuthStore;
