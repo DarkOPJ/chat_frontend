@@ -17,7 +17,7 @@ const SelectedUserBanner = () => {
   const [toggleProfile, setToggleProfile] = useState(false);
 
   return (
-    <div className="absolute py-2 px-3 top-0 left-0 right-0 bg-dark_purple z-10 flex items-center justify-between gap-3">
+    <div className="px-3 py-1 bg-dark_purple flex items-center justify-between gap-3">
       <div className="flex gap-1 items-center">
         <button
           onClick={() => {

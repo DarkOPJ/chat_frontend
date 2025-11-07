@@ -39,9 +39,12 @@ body {
     background-color: transparent;
 }
 .hide-scrollbar:hover::-webkit-scrollbar-thumb {
-    background-color: rgba(100, 100, 100, 0.6);
+  background-color: rgba(100, 100, 100, 0.6);
 }
 
 .hide-scrollbar:hover::-webkit-scrollbar {
   width: 5px;
+}
+.hide-chat-input-scrollbar::-webkit-scrollbar-thumb {
+    background-color: transparent;
 }
