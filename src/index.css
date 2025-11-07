@@ -48,3 +48,14 @@ body {
 .hide-chat-input-scrollbar::-webkit-scrollbar-thumb {
     background-color: transparent;
 }
+
+.chat-left-bottom{
+  background-color: black;
+  width: 20px;
+  aspect-ratio: 1/1;
+  position: absolute;
+  right: 100%;
+  bottom: 0;
+  /* border-top-left-radius: 100%; */
+  border-top-left-radius: 100%;
+}

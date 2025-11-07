@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { TbCameraPlus } from "react-icons/tb";
 import { getAvatarInitials, handleImage } from "../../../lib/ProfileFunctions";
+import { getGradientFromSeed } from "../../../lib/ColorUtils";
 
 const ProfileAvatar = ({
   seed,
@@ -12,6 +13,7 @@ const ProfileAvatar = ({
 }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const imageRef = useRef();
+  const [fromColor, toColor] = getGradientFromSeed(seed);
 
   // size is "small", "normal", "large"
   const sizeStyling = (sizeToUse) => {
@@ -24,34 +26,10 @@ const ProfileAvatar = ({
     }
   };
 
-  const gradientColors = useMemo(() => {
-    const colors = [
-      ["from-blue-500", "to-purple-600"],
-      ["from-pink-500", "to-rose-600"],
-      ["from-green-500", "to-emerald-600"],
-      ["from-orange-500", "to-red-600"],
-      ["from-cyan-500", "to-blue-600"],
-      ["from-violet-500", "to-purple-600"],
-      ["from-amber-500", "to-orange-600"],
-      ["from-teal-500", "to-cyan-600"],
-      ["from-indigo-500", "to-blue-600"],
-      ["from-fuchsia-500", "to-pink-600"],
-    ];
-
-    // Use seed to consistently select the same color for the same user
-    const index = seed
-      ? seed.toString().charCodeAt(0) % colors.length
-      : Math.floor(Math.random() * colors.length);
-    return colors[index];
-  }, [seed]);
-
   return (
     <div
       className={`${sizeStyling(size)} ${fullView ? " size-full" : ""}  ${
-        !profile_pic && "bg-linear-to-br"
-      } ${gradientColors[0]} ${
-        gradientColors[1]
-      } flex items-center justify-center text-white font-semibold rounded-full duration-500 ease-in-out shrink-0 cursor-default relative overflow-hidden`}
+        !profile_pic && "bg-linear-to-br" } ${fromColor} ${toColor} flex items-center justify-center text-white font-medium rounded-full duration-500 ease-in-out shrink-0 cursor-default relative overflow-hidden`}
     >
       {edit && (
         <button

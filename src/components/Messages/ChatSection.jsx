@@ -5,9 +5,13 @@ import StartChattingPopup from "./StartChattingPopup";
 import useMessageStore from "../../store/MessagesStore";
 import SelectedUserBanner from "./SelectedUserBanner";
 import ChatInput from "./ChatInput";
+import MessagesWrapper from "./MessagesWrapper";
 
 const ChatSection = () => {
-  const { open_sidebar, selected_user, select_a_user } = useMessageStore();
+  const { open_sidebar, selected_user, select_a_user, get_messages_by_id } =
+    useMessageStore();
+
+  
 
   useEffect(() => {
     const handleEscKey = (event) => {
@@ -35,10 +39,12 @@ const ChatSection = () => {
           <SelectedUserBanner />
 
           {/* Messages area */}
-          <div className="w-full row-span-7 flex-1"></div>
+          <div className="flex-1 lg:px-16 px-4 pt-2 hide-scrollbar overflow-y-scroll">
+            <MessagesWrapper />
+          </div>
 
           {/* Text input area */}
-          <div className="w-full row-span-1 py-4 px-16 ">
+          <div className="w-full  py-2 lg:px-16 px-4">
             <ChatInput />
           </div>
         </div>

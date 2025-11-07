@@ -2,11 +2,13 @@ import React, { useState, useRef, useEffect } from "react";
 import EmojiPicker from "emoji-picker-react";
 import { BsEmojiSmile } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
-import logo from "../../assets/images/telejam.png"
+import logo from "../../assets/images/telejam.png";
+import Menu from "./Menu";
 
 const ChatInput = ({ onSend }) => {
   const [message, setMessage] = useState("");
   const [showPicker, setShowPicker] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const textareaRef = useRef(null);
   const pickerRef = useRef(null);
   const buttonRef = useRef(null);
@@ -65,7 +67,7 @@ const ChatInput = ({ onSend }) => {
           ref={pickerRef}
           className="absolute bottom-16 left-0 z-20 bg-black/90 rounded-lg shadow-lg"
         >
-          <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+          <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/>
         </div>
       )}
 
@@ -81,12 +83,20 @@ const ChatInput = ({ onSend }) => {
             className="max-h-40 w-full px-[52px] py-4 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-500/20 focus:ring-2 ring rounded-3xl duration-300 text-white bg-black/65 resize-none hide-chat-input-scrollbar"
           />
           {/* Media attachment menu button */}
-          <button
-            type="button"
-            className="absolute right-5 bottom-6 text-xl text-gray-400 hover:text-white duration-300 cursor-pointer"
-          >
-            <GrAttachment />
-          </button>
+          <div className="absolute right-5 bottom-6 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              className="text-xl text-gray-400 hover:text-white duration-300 cursor-pointer"
+            >
+              <GrAttachment />
+            </button>
+            <Menu
+              menuOpen={menuOpen}
+              setMenuOpen={setMenuOpen}
+              isMainMenu={false}
+            />
+          </div>
         </div>
 
         {/* Send button */}

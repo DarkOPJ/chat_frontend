@@ -119,7 +119,7 @@ const ChatSidebar = ({ smallScreen }) => {
                     <HiMenu />
                   </button>
 
-                  <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+                  <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} isMainMenu={true} />
                 </div>
                 <Search />
               </div>
@@ -138,7 +138,7 @@ const ChatSidebar = ({ smallScreen }) => {
                   <HiMenu />
                 </button>
 
-                <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+                <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} isMainMenu={true}/>
               </div>
             </div>
           ))}
