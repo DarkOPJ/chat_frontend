@@ -92,7 +92,7 @@ const EditProfile = ({ openCloseHandler, setIsMainProfile }) => {
         <div className=" h-full aspect-square  flex flex-col gap-3 justify-center items-center duration-300 relative">
           <ProfileAvatar
             profile_pic={authenticated_user.profile_pic}
-            seed={authenticated_user._id}
+            seed={authenticated_user.full_name}
             name={authenticated_user.full_name}
             edit={true}
             fullView={false}

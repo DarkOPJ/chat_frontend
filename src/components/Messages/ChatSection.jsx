@@ -8,11 +8,10 @@ import ChatInput from "./ChatInput";
 import MessagesWrapper from "./MessagesWrapper";
 
 const ChatSection = () => {
-  const { open_sidebar, selected_user, select_a_user, get_messages_by_id } =
+  const { open_sidebar, selected_user, select_a_user } =
     useMessageStore();
 
-  
-
+  // Escape key
   useEffect(() => {
     const handleEscKey = (event) => {
       if (event.key === "Escape") select_a_user(null);
@@ -22,7 +21,7 @@ const ChatSection = () => {
 
     // cleanup function
     return () => window.removeEventListener("keydown", handleEscKey);
-  }, [select_a_user]);
+  }, []);
 
   return (
     <div
@@ -44,7 +43,7 @@ const ChatSection = () => {
           </div>
 
           {/* Text input area */}
-          <div className="w-full  py-2 lg:px-16 px-4">
+          <div className="w-full py-2 lg:px-16 px-4">
             <ChatInput />
           </div>
         </div>

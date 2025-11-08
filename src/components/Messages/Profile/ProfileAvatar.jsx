@@ -29,7 +29,8 @@ const ProfileAvatar = ({
   return (
     <div
       className={`${sizeStyling(size)} ${fullView ? " size-full" : ""}  ${
-        !profile_pic && "bg-linear-to-br" } ${fromColor} ${toColor} flex items-center justify-center text-white font-medium rounded-full duration-500 ease-in-out shrink-0 cursor-default relative overflow-hidden`}
+        !profile_pic && "bg-linear-to-br"
+      } ${fromColor} ${toColor} flex items-center justify-center text-white font-medium rounded-full duration-500 ease-in-out shrink-0 cursor-default relative overflow-hidden`}
     >
       {edit && (
         <button

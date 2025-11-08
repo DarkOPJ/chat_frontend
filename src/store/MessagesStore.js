@@ -11,6 +11,7 @@ const useMessageStore = create((set, get) => ({
   all_messages_by_id: [],
   is_loading_messages: false,
   selected_user: null,
+  is_sending_message: false,
 
   get_all_contacts: async () => {
     set({ is_loading_contacts: true });
@@ -36,7 +37,7 @@ const useMessageStore = create((set, get) => ({
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
-          "There was an error loading your contacts."
+          "There was an error loading your chats."
       );
       set({ all_chat_partners: [] });
     } finally {
@@ -53,11 +54,28 @@ const useMessageStore = create((set, get) => ({
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
-          "There was an error loading your contacts."
+          "There was an error loading your messages."
       );
-      set({ all_chat_partners: [] });
+      set({ all_messages_by_id: [] });
     } finally {
       set({ is_loading_messages: false });
+    }
+  },
+
+  send_message_by_id: async (id, data) => {
+    set({ is_sending_message: true });
+    try {
+      const res = await axiosInstance.post(`/messages/send/${id}`, data);
+      // TODO: change this with socket
+      set({ all_messages_by_id: [...get().all_messages_by_id, res.data] });
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "There was an error sending your message."
+      );
+      // set({ all_chat_partners: [] });
+    } finally {
+      set({ is_sending_message: false });
     }
   },
 

@@ -3,14 +3,14 @@ import { useState } from "react";
 
 // Import your JSON animation file
 // You can download free ones from lottiefiles.com
-import animationData from "../../assets/animations/texting.json";
 
-const ChattingAnimation = ({
+const LottieAnimation = ({
   width = 250,
   height = 250,
   loop = true,
   autoplay = true,
   speed = 1,
+  animationLocation=null,
 }) => {
   const [lottieRef, setLottieRef] = useState(null);
 
@@ -31,7 +31,7 @@ const ChattingAnimation = ({
       {/* Lottie Animation */}
       <Lottie
         lottieRef={setLottieRef}
-        animationData={animationData}
+        animationData={animationLocation}
         loop={loop}
         autoplay={autoplay}
         style={{ width, height }}
@@ -41,4 +41,4 @@ const ChattingAnimation = ({
     </div>
   );
 };
-export default ChattingAnimation;
+export default LottieAnimation;

@@ -1,3 +1,14 @@
+const hashString = (str) => {
+  if (!str) return 0;
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = (hash << 5) - hash + char;
+    hash = hash & hash;
+  }
+  return Math.abs(hash);
+};
+
 export const getGradientFromSeed = (seed) => {
   const colors = [
     ["from-blue-500", "to-purple-600"],
@@ -22,21 +33,12 @@ export const getGradientFromSeed = (seed) => {
     ["from-teal-400", "to-emerald-600"],
   ];
 
-  const hashString = (str) => {
-    if (!str) return 0;
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return Math.abs(hash);
-  };
 
-  const index = seed 
-    ? hashString(seed.toString()) % colors.length
+  const index = seed
+    ? // && hashString(seed.toString()) % colors.length
+      hashString(seed) % colors.length
     : Math.floor(Math.random() * colors.length);
-  
+
   return colors[index];
 };
 
@@ -64,21 +66,12 @@ export const getTextColorFromSeed = (seed) => {
     "text-teal-400",
   ];
 
-  const hashString = (str) => {
-    if (!str) return 0;
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return Math.abs(hash);
-  };
+  const index = seed
+    ? // && hashString(seed.toString()) % colors.length;
 
-  const index = seed 
-    ? hashString(seed.toString()) % colors.length
+      hashString(seed) % colors.length
     : Math.floor(Math.random() * colors.length);
-  
+
   return colors[index];
 };
 
@@ -117,9 +110,9 @@ export const getTextColorFromSeed = (seed) => {
 //     return Math.abs(hash);
 //   };
 
-//   const index = seed 
+//   const index = seed
 //     ? hashString(seed.toString()) % colors.length
 //     : Math.floor(Math.random() * colors.length);
-  
+
 //   return colors[index];
 // };

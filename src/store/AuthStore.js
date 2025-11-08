@@ -12,6 +12,7 @@ const useAuthStore = create((set, get) => ({
   profile_editted: false,
 
   check_authentication_state: async () => {
+    set({ is_authenticating: true });
     try {
       const res = await axiosInstance.get("/auth/check");
       set({ authenticated_user: res.data });

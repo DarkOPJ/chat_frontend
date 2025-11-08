@@ -15,7 +15,7 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
       className={`${id === selected_user?._id && "bg-purple-500/15"} p-4 hover:bg-gray-500/15 cursor-pointer   flex items-center gap-3 rounded-xl duration-300`}
     >
       <ProfileAvatar
-        seed={chat._id || contact._id}
+        seed={chat.full_name || contact.full_name}
         name={chat.full_name || contact.full_name}
         profile_pic={chat.profile_pic || contact.profile_pic}
       />

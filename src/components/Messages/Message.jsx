@@ -4,10 +4,16 @@ import useAuthStore from "../../store/AuthStore";
 import useMessageStore from "../../store/MessagesStore";
 import { getTextColorFromSeed } from "../../lib/ColorUtils";
 
-const Message = ({ leftOrRight, text = "", image = "", sentTime="" }) => {
+const Message = ({
+  leftOrRight="",
+  text = "",
+  image = "",
+  sentTime = "",
+  isSkeleton = false,
+}) => {
   const { authenticated_user } = useAuthStore();
   const { selected_user } = useMessageStore();
-  const textColor = getTextColorFromSeed(selected_user._id);
+  const textColor = getTextColorFromSeed(selected_user.full_name);
 
   return (
     <div className={`w-[80%] ${leftOrRight === "right" && "ml-auto"}`}>
@@ -17,39 +23,60 @@ const Message = ({ leftOrRight, text = "", image = "", sentTime="" }) => {
         }`}
       >
         <div className={`${leftOrRight === "right" && "order-2"}`}>
-          <ProfileAvatar
-            size="small"
-            profile_pic={
-              leftOrRight === "left"
-                ? selected_user.profile_pic
-                : authenticated_user.profile_pic
-            }
-            name={
-              leftOrRight === "left"
-                ? selected_user.full_name
-                : authenticated_user.full_name
-            }
-            seed={
-              leftOrRight === "left"
-                ? selected_user._id
-                : authenticated_user._id
-            }
-          />
+          {!isSkeleton ? (
+            <ProfileAvatar
+              size="small"
+              profile_pic={
+                leftOrRight === "left"
+                  ? selected_user.profile_pic
+                  : authenticated_user.profile_pic
+              }
+              name={
+                leftOrRight === "left"
+                  ? selected_user.full_name
+                  : authenticated_user.full_name
+              }
+              seed={
+                leftOrRight === "left"
+                  ? selected_user.full_name
+                  : authenticated_user.full_name
+              }
+            />
+          ) : (
+            <div className="size-6 rounded-full animate-pulse bg-slate-700/70"></div>
+          )}
         </div>
         <div
-          className={`text-white px-3 py-2 rounded-t-2xl space-y-1 text-sm ${
+          className={`${isSkeleton && "bg-slate-800/60 animate-pulse" } text-white px-3 py-2 rounded-t-2xl space-y-1 text-sm ${
             leftOrRight === "left"
               ? "rounded-r-2xl bg-dark_shadow/80"
               : "rounded-l-2xl bg-purple-800/80 ml-auto"
           } relative`}
         >
-          {leftOrRight === "left" && (
-            <p className={`text-sm leading-none ${textColor}`}>{selected_user.full_name}</p>
-          )}
+          {leftOrRight === "left" &&
+            (!isSkeleton ? (
+              <p className={`text-sm leading-none ${textColor}`}>
+                {selected_user.full_name}
+              </p>
+            ) : (
+              <div className="w-16 p-1.5 animate-pulse bg-slate-600/70 rounded-sm" />
+            ))}
           <div>
-            {image && <img src={image} alt="" />} {text && <p>{text}</p>}
+            {image && !isSkeleton && <img src={image} alt="" />}{" "}
+            {text && !isSkeleton ? (
+              <p>{text}</p>
+            ) : (
+              <div className=" space-y-1">
+                <div className="w-40 p-1.5 animate-pulse bg-slate-600/70 rounded-sm" />
+                <div className="w-32 p-1.5 animate-pulse bg-slate-600/70 rounded-sm" />
+              </div>
+            )}
           </div>
-          <p className="text-xs leading-none ml-auto w-fit">{sentTime}</p>
+          {sentTime && !isSkeleton ? (
+            <p className="text-xs leading-none ml-auto w-fit">{sentTime}</p>
+          ) : (
+            <div className="w-5 p-1 animate-pulse bg-slate-600/70 rounded-xs ml-auto" />
+          )}
           {/* <div className={`absolute right-0 bottom-0 w-0 h-0 border-t-10 border-t-purple-600 border-l-10 border-l-transparent`}></div> */}
           {/* <div className={`absolute size-4 bg-black 
             ${leftOrRight === "left" ? "right-full bottom-0 " : "left-full bottom-0"}`}></div> */}

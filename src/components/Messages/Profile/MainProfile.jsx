@@ -33,7 +33,7 @@ const MainProfile = ({ openCloseHandler, setIsMainProfile, isChatPartner }) => {
             }
             fullView={fullView}
             size={"large"}
-            seed={authenticated_user._id}
+            seed={authenticated_user.full_name}
             name={
               isChatPartner
                 ? selected_user.full_name

@@ -52,7 +52,7 @@ const Menu = ({ menuOpen, setMenuOpen, isMainMenu }) => {
                 <ProfileAvatar
                   profile_pic={authenticated_user.profile_pic}
                   size={"small"}
-                  seed={authenticated_user._id}
+                  seed={authenticated_user.full_name}
                   name={authenticated_user.full_name}
                 />
               </div>

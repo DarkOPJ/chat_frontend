@@ -33,7 +33,7 @@ const SelectedUserBanner = () => {
           className=" px-3 py-2 flex items-center gap-4 text-start cursor-pointer hover:bg-gray-400/5 rounded-xl duration-300"
         >
           <ProfileAvatar
-            seed={selected_user._id}
+            seed={selected_user.full_name}
             name={selected_user.full_name}
             profile_pic={selected_user.profile_pic}
           />

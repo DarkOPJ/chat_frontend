@@ -4,8 +4,10 @@ import { BsEmojiSmile } from "react-icons/bs";
 import { GrAttachment } from "react-icons/gr";
 import logo from "../../assets/images/telejam.png";
 import Menu from "./Menu";
+import useMessageStore from "../../store/MessagesStore";
 
 const ChatInput = ({ onSend }) => {
+  const {send_message_by_id, selected_user} = useMessageStore()
   const [message, setMessage] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -21,7 +23,14 @@ const ChatInput = ({ onSend }) => {
     e.preventDefault();
     if (!message.trim()) return;
     // onSend(message);
-    console.log(message);
+
+    const new_message = {
+      text: message,
+      image: "",
+    }
+    send_message_by_id(selected_user._id, new_message)
+
+    // console.log(message);
     setMessage("");
     textareaRef.current.style.height = "auto";
   };

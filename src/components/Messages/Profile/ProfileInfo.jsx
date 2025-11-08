@@ -113,7 +113,7 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
               id="username"
               name="username"
               placeholder="Username"
-              value={formData.username}
+              value={formData?.username}
               onChange={handleInputChange}
               maxLength={16}
               className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
@@ -153,7 +153,7 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
               id="bio"
               name="bio"
               placeholder="Bio"
-              value={formData.bio}
+              value={formData?.bio}
               onChange={handleInputChange}
               maxLength={200}
               className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
