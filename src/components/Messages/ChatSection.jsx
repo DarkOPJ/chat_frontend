@@ -6,9 +6,10 @@ import useMessageStore from "../../store/MessagesStore";
 import SelectedUserBanner from "./SelectedUserBanner";
 import ChatInput from "./ChatInput";
 import MessagesWrapper from "./MessagesWrapper";
+import NoMessageSent from "./NoMessageSent";
 
 const ChatSection = () => {
-  const { open_sidebar, selected_user, select_a_user } =
+  const { open_sidebar, selected_user, select_a_user, all_messages_by_id } =
     useMessageStore();
 
   // Escape key
@@ -38,7 +39,7 @@ const ChatSection = () => {
           <SelectedUserBanner />
 
           {/* Messages area */}
-          <div className="flex-1 lg:px-16 px-4 pt-2 hide-scrollbar overflow-y-scroll">
+          <div className="flex-1 lg:px-16 px-4 pt-2 hide-scrollbar overflow-y-scroll ">
             <MessagesWrapper />
           </div>
 

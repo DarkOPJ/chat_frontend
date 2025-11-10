@@ -6,8 +6,8 @@ import logo from "../../assets/images/telejam.png";
 import Menu from "./Menu";
 import useMessageStore from "../../store/MessagesStore";
 
-const ChatInput = ({ onSend }) => {
-  const {send_message_by_id, selected_user} = useMessageStore()
+const ChatInput = () => {
+  const { send_message_by_id, selected_user } = useMessageStore();
   const [message, setMessage] = useState("");
   const [showPicker, setShowPicker] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,8 +27,10 @@ const ChatInput = ({ onSend }) => {
     const new_message = {
       text: message,
       image: "",
-    }
-    send_message_by_id(selected_user._id, new_message)
+    };
+    // if (selected_user.is_a_contact) delete selected_user.is_a_contact;
+
+    send_message_by_id(selected_user._id, new_message);
 
     // console.log(message);
     setMessage("");
@@ -76,7 +78,7 @@ const ChatInput = ({ onSend }) => {
           ref={pickerRef}
           className="absolute bottom-16 left-0 z-20 bg-black/90 rounded-lg shadow-lg"
         >
-          <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark"/>
+          <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
         </div>
       )}
 

@@ -46,7 +46,7 @@ const ChatSidebar = ({ smallScreen }) => {
     get_all_chat_partners();
     get_all_contacts();
     hydrate();
-  }, [get_all_chat_partners, get_all_contacts]);
+  }, []);
 
   useEffect(() => {
     const handleMouseMove = (e) => {

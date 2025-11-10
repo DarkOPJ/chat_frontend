@@ -1,57 +1,6 @@
 import { create } from "zustand";
 
 const useApplicationStore = create((set, get) => ({
-  chats: [
-    {
-      id: 1,
-      name: "Alice Johnson",
-
-      lastMessage: "See you tomorrow!",
-      time: "2m",
-    },
-    {
-      id: 2,
-      name: "Bob Smith",
-
-      lastMessage: "Thanks for the help",
-      time: "1h",
-    },
-    {
-      id: 3,
-      name: "Carol White",
-
-      lastMessage: "Did you get my email?",
-      time: "3h",
-    },
-    {
-      id: 4,
-      name: "David Brown",
-
-      lastMessage: "Let's catch up soon",
-      time: "1d",
-    },
-    {
-      id: 5,
-      name: "Emma Davis",
-
-      lastMessage: "Happy birthday! 🎉",
-      time: "2d",
-    },
-  ],
-  contacts: [
-    { id: 1, name: "Sophia Turner", status: "Online" },
-    { id: 2, name: "Liam Carter", status: "Offline" },
-    { id: 3, name: "Noah Bennett", status: "Busy" },
-    { id: 4, name: "Olivia Hayes", status: "Away" },
-    { id: 5, name: "Ethan Ross", status: "Online" },
-    { id: 6, name: "Ava Mitchell", status: "Offline" },
-    { id: 7, name: "Isabella Brooks", status: "Online" },
-    { id: 8, name: "Mason Rivera", status: "Away" },
-    { id: 9, name: "Lucas Reed", status: "Busy" },
-    { id: "ons21", name: "Harper Gray", status: "Online" },
-    { id: "31s", name: "Elijah Collins", status: "Offline" },
-  ],
-
   current_submenu: "All Chats",
   sidebar_width: 310,
   is_compact: false,
@@ -88,7 +37,7 @@ const useApplicationStore = create((set, get) => ({
       current_submenu: savedMenu || "All Chats",
       sidebar_width: savedWidth ? Number(savedWidth) : 310,
       is_compact: savedCompact ? JSON.parse(savedCompact) : false,
-      enable_sound: savedSound ? JSON.parse(savedSound) : true, // ← Fixed this line
+      enable_sound: savedSound ? JSON.parse(savedSound) : true,
     });
   },
 }));

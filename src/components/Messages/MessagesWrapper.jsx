@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Message from "./Message";
 import useAuthStore from "../../store/AuthStore";
 import useMessageStore from "../../store/MessagesStore";
+import NoMessageSent from "./NoMessageSent";
 
 const MessagesWrapper = () => {
   const {
@@ -22,43 +23,47 @@ const MessagesWrapper = () => {
 
   useEffect(() => {
     get_messages_by_id(selected_user._id.toString());
-  }, [get_messages_by_id, selected_user._id]);
+  }, [selected_user._id]);
 
   return (
-    <div className="w-full space-y-2">
-      {!is_loading_messages
-        ? all_messages_by_id.map((msg) => (
-            <Message
-              key={msg._id.toString()}
-              leftOrRight={
-                selected_user._id === msg.sender_id ? "left" : "right"
-              }
-              image={msg.image}
-              text={msg.text}
-              sentTime={formatTime(msg.createdAt)}
-              isSkeleton={false}
-            />
-          ))
-        : // all_messages_by_id.map((msg) => (
-          //   <Message
-          //     key={msg._id.toString()}
-          //     leftOrRight={selected_user._id === msg.sender_id ? "left" : "right"}
-          //     image={msg.image}
-          //     text={msg.text}
-          //     sentTime={formatTime(msg.createdAt)}
-          //   />
-          // ))
+    <div className="w-full space-y-2 h-full">
+      {!is_loading_messages ? (
+        all_messages_by_id.length ? (
+          all_messages_by_id.map((msg, index) => {
+            // Check if this is the last message OR if the next message is from a different sender
+            const isLastInGroup =
+              index === all_messages_by_id.length - 1 ||
+              all_messages_by_id[index + 1].sender_id !== msg.sender_id;
 
-          [...Array(7)].map((_, idx) => (
-            <Message
-              key={idx}
-              leftOrRight={idx % 2 == 1 ? "left" : "right"}
-              image={""}
-              text={"Hello"}
-              sentTime={"10:28"}
-              isSkeleton={true}
-            />
-          ))}
+            return (
+              <Message
+                key={msg._id.toString()}
+                leftOrRight={
+                  selected_user._id === msg.sender_id ? "left" : "right"
+                }
+                image={msg.image}
+                text={msg.text}
+                sentTime={formatTime(msg.createdAt)}
+                isSkeleton={false}
+                showProfilePic={isLastInGroup}
+              />
+            );
+          })
+        ) : (
+          <NoMessageSent />
+        )
+      ) : (
+        [...Array(7)].map((_, idx) => (
+          <Message
+            key={idx}
+            leftOrRight={idx % 2 == 1 ? "left" : "right"}
+            image={""}
+            text={"Hello"}
+            sentTime={"10:28"}
+            isSkeleton={true}
+          />
+        ))
+      )}
     </div>
   );
 };
