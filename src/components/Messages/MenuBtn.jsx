@@ -3,6 +3,7 @@ import React from "react";
 const MenuBtn = ({ children, func, args }) => {
   return (
     <button
+    type="button"
       onClick={() => {
         if (args) {
           func(args);

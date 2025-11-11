@@ -31,7 +31,7 @@ const checkMagicBytes = async (file) => {
   return false;
 };
 
-const handleImage = async (e, setSelectedImage) => {
+const handleImage = async (e, setSelectedImage, function_usage) => {
   const { update_profile_pic } = useAuthStore.getState();
 
   const file = e.target.files && e.target.files[0];
@@ -82,34 +82,38 @@ const handleImage = async (e, setSelectedImage) => {
 
       setSelectedImage(base64Image);
 
-      // Upload image
-      toast.promise(
-        update_profile_pic({ profile_pic: base64Image }),
-        {
-          pending: {
-            render: "Uploading...",
-            icon: "⏳",
-          },
-          success: {
-            render({ data }) {
-              return data?.message || "Upload complete!";
+      // Upload image (can be a conditional for what you want it to do)
+      if (function_usage === "profile_pic") {
+        toast.promise(
+          update_profile_pic({ profile_pic: base64Image }),
+          {
+            pending: {
+              render: "Uploading...",
+              icon: "⏳",
             },
-            icon: "✅",
-          },
-          error: {
-            render({ data }) {
-              return (
-                data?.response?.data?.message ||
-                data?.message || "Upload failed."
-              );
+            success: {
+              render({ data }) {
+                return data?.message || "Upload complete!";
+              },
+              icon: "✅",
             },
-            icon: "❌",
+            error: {
+              render({ data }) {
+                return (
+                  data?.response?.data?.message ||
+                  data?.message ||
+                  "Upload failed."
+                );
+              },
+              icon: "❌",
+            },
           },
-        },
-        {
-          autoClose: 5000,
-        }
-      );
+          {
+            autoClose: 5000,
+          }
+        );
+      } else if (function_usage === "image_upload") {
+      }
     };
 
     img.onerror = () => {
@@ -135,24 +139,22 @@ const getAvatarInitials = (nameToUse) => {
 
   const parts = trimmed.split(/\s+/);
 
-  // helper: return first valid char (skipping apostrophes/dashes)
+  // Comprehensive regex that matches:
+  // - Full emoji sequences (including skin tones, ZWJ sequences)
+  // - Letters from any language (Latin, Arabic, Chinese, Cyrillic, etc.)
+  // - Numbers
+  const emojiRegex = /(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)(\p{Emoji_Modifier})?(\u200D(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)(\p{Emoji_Modifier})?)*|[\p{L}\p{N}]/gu;
+
+  // Helper: get first valid character or emoji
   const getFirstValidChar = (s) => {
-    const chars = [...s];
-    for (let i = 0; i < chars.length; i++) {
-      const c = chars[i];
-      if (/[A-Za-z0-9\u00C0-\uFFFF]/.test(c)) return c; // includes emojis and unicode
-    }
-    return "";
+    const matches = s.match(emojiRegex);
+    return matches ? matches[0] : "";
   };
 
-  // helper: return last valid char (skipping trailing symbols)
+  // Helper: get last valid character or emoji
   const getLastValidChar = (s) => {
-    const chars = [...s];
-    for (let i = chars.length - 1; i >= 0; i--) {
-      const c = chars[i];
-      if (/[A-Za-z0-9\u00C0-\uFFFF]/.test(c)) return c;
-    }
-    return "";
+    const matches = s.match(emojiRegex);
+    return matches ? matches[matches.length - 1] : "";
   };
 
   if (parts.length === 1) {
@@ -160,6 +162,9 @@ const getAvatarInitials = (nameToUse) => {
     const word = parts[0];
     const f = getFirstValidChar(word);
     const l = getLastValidChar(word);
+    
+    // If same character (single char name or emoji), return just one
+    if (f === l) return f.toUpperCase();
     return (f + l).toUpperCase();
   }
 

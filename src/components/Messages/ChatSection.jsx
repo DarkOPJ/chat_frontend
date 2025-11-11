@@ -44,7 +44,7 @@ const ChatSection = () => {
           </div>
 
           {/* Text input area */}
-          <div className="w-full py-2 lg:px-16 px-4">
+          <div className="w-full py-3 lg:px-16 px-4">
             <ChatInput />
           </div>
         </div>

@@ -9,12 +9,10 @@ import Profile from "./Profile/Profile";
 import { createPortal } from "react-dom";
 import ProfileAvatar from "./Profile/ProfileAvatar";
 import { toast } from "react-toastify";
-import { FaMicrophoneAlt } from "react-icons/fa";
-import { IoMdImages } from "react-icons/io";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
-const Menu = ({ menuOpen, setMenuOpen, isMainMenu }) => {
+const Menu = ({ children, menuOpen, setMenuOpen, isMainMenu }) => {
   const { authenticated_user, logout } = useAuthStore();
   const { enable_sound, toggle_sound } = useApplicationStore();
   const [toggleProfile, setToggleProfile] = useState(false);
@@ -99,20 +97,7 @@ const Menu = ({ menuOpen, setMenuOpen, isMainMenu }) => {
           </>
         )}
 
-        {!isMainMenu && (
-          <>
-            {/* Record */}
-            <MenuBtn func={() => {}}>
-              <FaMicrophoneAlt className="text-xl" />
-              <p className="text-sm">Voice Note</p>
-            </MenuBtn>
-            {/* Upload Image */}
-            <MenuBtn func={() => {}}>
-              <IoMdImages className="text-xl" />
-              <p className="text-sm">Upload Image</p>
-            </MenuBtn>
-          </>
-        )}
+        {!isMainMenu && <>{children}</>}
       </div>
     </div>
   );

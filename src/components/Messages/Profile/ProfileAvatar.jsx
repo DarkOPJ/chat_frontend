@@ -28,7 +28,7 @@ const ProfileAvatar = ({
 
   return (
     <div
-      className={`${sizeStyling(size)} ${fullView ? " size-full" : ""}  ${
+      className={`${sizeStyling(size)} ${fullView ? "size-full" : ""}  ${
         !profile_pic && "bg-linear-to-br"
       } ${fromColor} ${toColor} flex items-center justify-center text-white font-medium rounded-full duration-500 ease-in-out shrink-0 cursor-default relative overflow-hidden`}
     >
@@ -40,6 +40,7 @@ const ProfileAvatar = ({
           <TbCameraPlus />
         </button>
       )}
+
       {selectedImage || profile_pic ? (
         <img
           src={selectedImage || profile_pic}
@@ -47,7 +48,7 @@ const ProfileAvatar = ({
           className="size-full object-cover rounded-full"
         />
       ) : (
-        getAvatarInitials(name)
+        <p className={`duration-500 ease-in-out ${fullView && "text-6xl"}`}>{getAvatarInitials(name)}</p>
       )}
 
       {edit && (
@@ -57,7 +58,7 @@ const ProfileAvatar = ({
           id=""
           name=""
           ref={imageRef}
-          onChange={(e) => handleImage(e, setSelectedImage)}
+          onChange={(e) => handleImage(e, setSelectedImage, "profile_pic")}
           hidden={true}
         />
       )}

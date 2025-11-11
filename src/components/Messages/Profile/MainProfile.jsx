@@ -26,14 +26,10 @@ const MainProfile = ({ openCloseHandler, setIsMainProfile, isChatPartner }) => {
           className=" h-full aspect-square  flex flex-col gap-3 justify-center items-center duration-300  relative"
         >
           <ProfileAvatar
-            profile_pic={
-              isChatPartner
-                ? selected_user.profile_pic
-                : authenticated_user.profile_pic
-            }
+            profile_pic={isChatPartner ? selected_user.profile_pic : authenticated_user.profile_pic}
             fullView={fullView}
             size={"large"}
-            seed={authenticated_user.full_name}
+            seed={isChatPartner ? selected_user.full_name : authenticated_user.full_name}
             name={
               isChatPartner
                 ? selected_user.full_name

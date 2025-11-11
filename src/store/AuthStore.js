@@ -9,6 +9,7 @@ const useAuthStore = create((set, get) => ({
   is_logging_in: false,
   is_updating_profile_pic: false,
   is_updating_profile_info: false,
+  is_deleting_profile_pic: false,
   profile_editted: false,
 
   check_authentication_state: async () => {
@@ -126,6 +127,22 @@ const useAuthStore = create((set, get) => ({
       throw error;
     } finally {
       set({ is_updating_profile_pic: false });
+    }
+  },
+
+  delete_profile_pic: async () => {
+    set({ is_deleting_profile_pic: true });
+    try {
+      const res = await axiosInstance.delete("/profile/delete_profile_pic");
+      set({ authenticated_user: res.data.user });
+      toast.success(res.data.message || "Profile picture deleted");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message ||
+          "There was a problem deleting your profile picture."
+      );
+    } finally {
+      set({ is_deleting_profile_pic: false });
     }
   },
 }));

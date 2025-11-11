@@ -86,6 +86,32 @@ const useMessageStore = create((set, get) => ({
   set_open_sidebar: (val) => {
     set({ open_sidebar: val });
   },
+
+  handleDownload: async (imageUrl, customFilename = null) => {
+    try {
+      const response = await fetch(imageUrl);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      // Auto-detect extension from URL or blob type
+      let filename = customFilename;
+      if (!filename) {
+        const extension = imageUrl.split(".").pop().split("?")[0]; // Get extension from URL
+        filename = `image.${extension}`;
+      }
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      toast.error("There was an error downloading this image.");
+    }
+  },
 }));
 
 export default useMessageStore;
