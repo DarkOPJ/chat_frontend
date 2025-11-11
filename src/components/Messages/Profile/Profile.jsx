@@ -6,13 +6,10 @@ import EditProfile from "./EditProfile";
 
 const Profile = ({ openCloseHandler, isChatPartner = false }) => {
   const [isMainProfile, setIsMainProfile] = useState(true);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleToggle = () => {
-    setIsTransitioning(true);
     setTimeout(() => {
       setIsMainProfile((prev) => !prev);
-      setIsTransitioning(false);
     }, 100);
   };
 
@@ -28,7 +25,7 @@ const Profile = ({ openCloseHandler, isChatPartner = false }) => {
             }}
           >
             <MainProfile
-            isChatPartner={isChatPartner}
+              isChatPartner={isChatPartner}
               openCloseHandler={openCloseHandler}
               setIsMainProfile={handleToggle}
             />

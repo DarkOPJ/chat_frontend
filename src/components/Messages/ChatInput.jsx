@@ -14,7 +14,7 @@ import { IoMdImages } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 const ChatInput = () => {
-  const { send_message_by_id, selected_user } = useMessageStore();
+  const { send_message_by_id } = useMessageStore();
   const { enable_sound } = useApplicationStore();
   const [message, setMessage] = useState("");
   const [imagePreview, setImagePreview] = useState(null);
@@ -38,7 +38,7 @@ const ChatInput = () => {
       image: imagePreview,
     };
 
-    send_message_by_id(selected_user._id, new_message);
+    send_message_by_id(new_message);
 
     setMessage("");
     setImagePreview(null);

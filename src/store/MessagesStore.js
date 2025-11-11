@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/Axios";
 import { toast } from "react-toastify";
+import useAuthStore from "./AuthStore";
 
 const useMessageStore = create((set, get) => ({
   open_sidebar: true,
@@ -62,18 +63,36 @@ const useMessageStore = create((set, get) => ({
     }
   },
 
-  send_message_by_id: async (id, data) => {
+  send_message_by_id: async (data) => {
+    const { authenticated_user } = useAuthStore.getState();
+    const { selected_user, all_messages_by_id } = get();
+
+    // This is an optimistic update... to add the message to your chat before its sent
+    const optimistic_message = {
+      _id: `temp-${Date.now()}`,
+      sender_id: authenticated_user._id,
+      receiver_id: selected_user._id,
+      text: data.text,
+      image: data.image,
+      createdAt: new Date().toISOString(),
+      is_optimistic: true,
+    };
+    set({ all_messages_by_id: all_messages_by_id.concat(optimistic_message) });
+
     set({ is_sending_message: true });
     try {
-      const res = await axiosInstance.post(`/messages/send/${id}`, data);
-      // TODO: change this with socket
-      set({ all_messages_by_id: [...get().all_messages_by_id, res.data] });
+      const res = await axiosInstance.post(
+        `/messages/send/${selected_user._id}`,
+        data
+      );
+      set({ all_messages_by_id: [...all_messages_by_id, res.data] });
     } catch (error) {
+      set({ all_messages_by_id: all_messages_by_id });
+
       toast.error(
         error?.response?.data?.message ||
           "There was an error sending your message."
       );
-      // set({ all_chat_partners: [] });
     } finally {
       set({ is_sending_message: false });
     }
@@ -87,7 +106,7 @@ const useMessageStore = create((set, get) => ({
     set({ open_sidebar: val });
   },
 
-  handleDownload: async (imageUrl, customFilename = null) => {
+  handleDownloadImage: async (imageUrl, customFilename = null) => {
     try {
       const response = await fetch(imageUrl);
       const blob = await response.blob();

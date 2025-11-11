@@ -4,7 +4,7 @@ import useAuthStore from "../../store/AuthStore";
 
 const NoMessageSent = () => {
   const { authenticated_user } = useAuthStore();
-  const { selected_user, send_message_by_id } = useMessageStore();
+  const { send_message_by_id } = useMessageStore();
 
   const handleSend = (message) => {
     if (!message.trim()) return;
@@ -14,7 +14,7 @@ const NoMessageSent = () => {
       image: "",
     };
 
-    send_message_by_id(selected_user._id, new_message);
+    send_message_by_id(new_message);
   };
 
   return (

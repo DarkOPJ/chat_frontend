@@ -17,7 +17,7 @@ const Message = ({
   showProfilePic,
 }) => {
   const { authenticated_user } = useAuthStore();
-  const { selected_user, handleDownload } = useMessageStore();
+  const { selected_user, handleDownloadImage } = useMessageStore();
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
   const textColor = getTextColorFromSeed(selected_user.full_name);
 
@@ -97,7 +97,7 @@ const Message = ({
                 <button
                   type="button"
                   className="absolute top-2 right-2 duration-300 bg-black/35 text-white/35 hover:bg-black hover:text-white p-1 rounded-full cursor-pointer"
-                  onClick={() => handleDownload(image)}
+                  onClick={() => handleDownloadImage(image)}
                 >
                   <AiOutlineCloudDownload />
                 </button>

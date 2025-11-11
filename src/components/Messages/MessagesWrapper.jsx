@@ -3,6 +3,7 @@ import Message from "./Message";
 import useAuthStore from "../../store/AuthStore";
 import useMessageStore from "../../store/MessagesStore";
 import NoMessageSent from "./NoMessageSent";
+import { useRef } from "react";
 
 const MessagesWrapper = () => {
   const {
@@ -11,6 +12,7 @@ const MessagesWrapper = () => {
     all_messages_by_id,
     is_loading_messages,
   } = useMessageStore();
+  const messageEndRef = useRef(null);
 
   const formatTime = (createdAt) => {
     const date = new Date(createdAt);
@@ -24,6 +26,13 @@ const MessagesWrapper = () => {
   useEffect(() => {
     get_messages_by_id(selected_user._id.toString());
   }, [selected_user._id]);
+
+  useEffect(() => {
+    // For scrolling to the end
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behaviour: "smooth" });
+    }
+  }, [all_messages_by_id]);
 
   return (
     <div className="w-full space-y-2 h-full">
@@ -64,6 +73,7 @@ const MessagesWrapper = () => {
           />
         ))
       )}
+      <div ref={messageEndRef} />
     </div>
   );
 };
