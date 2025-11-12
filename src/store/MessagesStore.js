@@ -14,6 +14,9 @@ const useMessageStore = create((set, get) => ({
   selected_user: null,
   is_sending_message: false,
 
+  draft_messages: {}, // { user_id: "draft text" }
+  draft_images: {}, // { user_id: "image_preview_url" }
+
   get_all_contacts: async () => {
     set({ is_loading_contacts: true });
     try {
@@ -130,6 +133,28 @@ const useMessageStore = create((set, get) => ({
     } catch (error) {
       toast.error("There was an error downloading this image.");
     }
+  },
+
+  set_draft_message: (user_id, text) => {
+    set((state) => ({
+      draft_messages: { ...state.draft_messages, [user_id]: text },
+    }));
+  },
+
+  set_draft_image: (user_id, image) => {
+    set((state) => ({
+      draft_images: { ...state.draft_images, [user_id]: image },
+    }));
+  },
+
+  clear_draft: (user_id) => {
+    set((state) => {
+      const new_drafts = { ...state.draft_messages };
+      const new_images = { ...state.draft_images };
+      delete new_drafts[user_id];
+      delete new_images[user_id];
+      return { draft_messages: new_drafts, draft_images: new_images };
+    });
   },
 }));
 

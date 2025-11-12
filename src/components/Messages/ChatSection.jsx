@@ -6,7 +6,6 @@ import useMessageStore from "../../store/MessagesStore";
 import SelectedUserBanner from "./SelectedUserBanner";
 import ChatInput from "./ChatInput";
 import MessagesWrapper from "./MessagesWrapper";
-import NoMessageSent from "./NoMessageSent";
 
 const ChatSection = () => {
   const { open_sidebar, selected_user, select_a_user, all_messages_by_id } =

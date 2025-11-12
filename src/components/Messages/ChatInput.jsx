@@ -14,10 +14,18 @@ import { IoMdImages } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 
 const ChatInput = () => {
-  const { send_message_by_id } = useMessageStore();
+  const {
+    send_message_by_id,
+    selected_user,
+    draft_messages,
+    draft_images,
+    set_draft_message,
+    set_draft_image,
+    clear_draft,
+  } = useMessageStore();
   const { enable_sound } = useApplicationStore();
-  const [message, setMessage] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
+  const message = draft_messages[selected_user?._id] || "";
+  const imagePreview = draft_images[selected_user?._id] || null;
   const [showPicker, setShowPicker] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const fileInputRef = useRef(null);
@@ -40,14 +48,24 @@ const ChatInput = () => {
 
     send_message_by_id(new_message);
 
-    setMessage("");
-    setImagePreview(null);
+    // Clear draft for this user
+    clear_draft(selected_user._id);
+
     if (fileInputRef.current) fileInputRef.current.value = null;
     textareaRef.current.style.height = "auto";
   };
 
+  const setMessage = (value) => {
+    const newValue = typeof value === "function" ? value(message) : value;
+    set_draft_message(selected_user._id, newValue);
+  };
+
+  const setImagePreview = (value) => {
+    set_draft_image(selected_user._id, value);
+  };
+
   const removeImage = () => {
-    setImagePreview(null);
+    set_draft_image(selected_user._id, null);
     if (fileInputRef.current) fileInputRef.current.value = null;
   };
 
@@ -111,7 +129,11 @@ const ChatInput = () => {
                 src={imagePreview || ""}
                 alt="Image to upload."
               />
-              <button className="absolute top-1 right-1 duration-300 bg-black/70 text-red-400/70 hover:bg-black hover:text-red-400 text-sm p-0.5 rounded-full cursor-pointer" type="button" onClick={removeImage}>
+              <button
+                className="absolute top-1 right-1 duration-300 bg-black/70 text-red-400/70 hover:bg-black hover:text-red-400 text-sm p-0.5 rounded-full cursor-pointer"
+                type="button"
+                onClick={removeImage}
+              >
                 <IoClose />
               </button>
             </div>

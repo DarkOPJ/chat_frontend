@@ -1,8 +1,16 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/Axios";
 import { toast } from "react-toastify";
+import { io } from "socket.io-client";
+
+// Change the production url
+const BASE_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:3000"
+    : "http://localhost:5000";
 
 const useAuthStore = create((set, get) => ({
+  socket: null,
   authenticated_user: null,
   is_authenticating: true,
   is_signing_up: false,
@@ -11,23 +19,54 @@ const useAuthStore = create((set, get) => ({
   is_updating_profile_info: false,
   is_deleting_profile_pic: false,
   profile_editted: false,
+  online_users: [],
+
+  connect_socket: () => {
+    const { authenticated_user } = get();
+
+    if (!authenticated_user || get().socket?.connected) return;
+
+    // Initialize the socket.
+    const socket = io(BASE_URL, { withCredentials: true });
+
+    // Use the socket to connect to the base url.
+    socket.connect();
+
+    // After successful connection, set the store socket as the initialized socket
+    set({ socket: socket });
+
+    // Listen for all connected users event
+    socket.on("get_all_online_users", (user_ids) => {
+      set({ online_users: user_ids });
+    });
+  },
+  disconnect_socket: () => {
+    const { socket } = get();
+    if (socket?.connected) socket.disconnect();
+  },
 
   check_authentication_state: async () => {
+    const { connect_socket, disconnect_socket } = get();
+
     set({ is_authenticating: true });
     try {
       const res = await axiosInstance.get("/auth/check");
       set({ authenticated_user: res.data });
+      connect_socket();
     } catch (error) {
+      disconnect_socket();
+      set({ authenticated_user: null });
       console.log(error);
       // TODO remove the log
       console.log("Error while authenticating.");
-      set({ authenticated_user: null });
     } finally {
       set({ is_authenticating: false });
     }
   },
 
   user_signup: async (credentials, password_data) => {
+    const { connect_socket } = get();
+
     set({ is_signing_up: true });
     try {
       const new_user = {
@@ -43,6 +82,8 @@ const useAuthStore = create((set, get) => ({
         toast.error(res.data.message || "Your request could not be processed.");
         set({ authenticated_user: null });
       }
+
+      connect_socket();
     } catch (error) {
       toast.error(
         error?.response?.data?.message || "Your request could not be processed."
@@ -54,6 +95,8 @@ const useAuthStore = create((set, get) => ({
   },
 
   user_login: async (credentials, password_data) => {
+    const { connect_socket } = get();
+
     set({ is_logging_in: true });
     try {
       const existing_user = {
@@ -70,6 +113,8 @@ const useAuthStore = create((set, get) => ({
         toast.error(res.data.message || "Your request could not be processed.");
         set({ authenticated_user: null });
       }
+
+      connect_socket();
     } catch (error) {
       toast.error(
         error?.response?.data?.message || "Your request could not be processed."
@@ -81,8 +126,11 @@ const useAuthStore = create((set, get) => ({
   },
 
   logout: async () => {
+    const { disconnect_socket } = get();
+
     try {
       const res = await axiosInstance.post("/auth/logout");
+      disconnect_socket();
       set({ authenticated_user: null });
       toast.success(res.data.message);
     } catch (error) {

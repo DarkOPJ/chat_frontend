@@ -11,6 +11,8 @@ import PortalBackground from "../Misc/PortalBackground";
 import Profile from "./Profile/Profile";
 import { HiOutlineDotsVertical } from "react-icons/hi";
 import { useState } from "react";
+import useAuthStore from "../../store/AuthStore";
+import formatLastSeen from "../../lib/LastSeen";
 
 const SelectedUserBanner = () => {
   const { set_open_sidebar, selected_user, select_a_user } = useMessageStore();
@@ -42,7 +44,9 @@ const SelectedUserBanner = () => {
             <p className="font-semibold text-white truncate">
               {selected_user.full_name}
             </p>
-            <p className="text-sm text-gray-500 truncate">last seen 11:29 am</p>
+            <p className="text-sm text-gray-500 truncate">
+              {formatLastSeen(selected_user.last_seen).toLowerCase()}
+            </p>
           </div>
         </button>
       </div>
