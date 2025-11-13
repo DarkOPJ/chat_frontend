@@ -8,8 +8,11 @@ import ChatInput from "./ChatInput";
 import MessagesWrapper from "./MessagesWrapper";
 
 const ChatSection = () => {
-  const { open_sidebar, selected_user, select_a_user, all_messages_by_id } =
-    useMessageStore();
+  const {
+    open_sidebar,
+    selected_user,
+    select_a_user,
+  } = useMessageStore();
 
   // Escape key
   useEffect(() => {
@@ -22,6 +25,8 @@ const ChatSection = () => {
     // cleanup function
     return () => window.removeEventListener("keydown", handleEscKey);
   }, []);
+
+
 
   return (
     <div

@@ -11,8 +11,25 @@ const MessagesWrapper = () => {
     get_messages_by_id,
     all_messages_by_id,
     is_loading_messages,
+    subscribe_to_messages,
+    unsubscribe_from_messages,
   } = useMessageStore();
   const messageEndRef = useRef(null);
+
+  useEffect(() => {
+    get_messages_by_id();
+    subscribe_to_messages();
+
+    // cleanup function
+    return () => unsubscribe_from_messages();
+  }, [selected_user._id]);
+
+  useEffect(() => {
+    // For scrolling to the end
+    if (messageEndRef.current) {
+      messageEndRef.current.scrollIntoView({ behaviour: "smooth" });
+    }
+  }, [all_messages_by_id]);
 
   const formatTime = (createdAt) => {
     const date = new Date(createdAt);
@@ -22,17 +39,6 @@ const MessagesWrapper = () => {
       hour12: true,
     });
   };
-
-  useEffect(() => {
-    get_messages_by_id(selected_user._id.toString());
-  }, [selected_user._id]);
-
-  useEffect(() => {
-    // For scrolling to the end
-    if (messageEndRef.current) {
-      messageEndRef.current.scrollIntoView({ behaviour: "smooth" });
-    }
-  }, [all_messages_by_id]);
 
   return (
     <div className="w-full space-y-2 h-full">

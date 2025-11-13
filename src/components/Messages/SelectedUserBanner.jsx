@@ -16,6 +16,7 @@ import formatLastSeen from "../../lib/LastSeen";
 
 const SelectedUserBanner = () => {
   const { set_open_sidebar, selected_user, select_a_user } = useMessageStore();
+  const {online_users} = useAuthStore()
   const [toggleProfile, setToggleProfile] = useState(false);
 
   return (
@@ -45,7 +46,7 @@ const SelectedUserBanner = () => {
               {selected_user.full_name}
             </p>
             <p className="text-sm text-gray-500 truncate">
-              {formatLastSeen(selected_user.last_seen).toLowerCase()}
+              {online_users.includes(selected_user._id) ? "online" : formatLastSeen(selected_user.last_seen).toLowerCase()}
             </p>
           </div>
         </button>

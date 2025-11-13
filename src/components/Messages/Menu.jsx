@@ -61,7 +61,7 @@ const Menu = ({ children, menuOpen, setMenuOpen, isMainMenu }) => {
             <MenuBtn
               func={() => {
                 mouseClickSound.currentTime = 0;
-                enable_sound &&
+                !enable_sound &&
                   mouseClickSound
                     .play()
                     .catch((error) => toast.error("Failed to play sound."));

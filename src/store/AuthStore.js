@@ -7,7 +7,7 @@ import { io } from "socket.io-client";
 const BASE_URL =
   import.meta.env.MODE === "development"
     ? "http://localhost:3000"
-    : "http://localhost:5000";
+    : "http://localhost:3000";
 
 const useAuthStore = create((set, get) => ({
   socket: null,

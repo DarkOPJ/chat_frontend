@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/Axios";
 import { toast } from "react-toastify";
 import useAuthStore from "./AuthStore";
+import useApplicationStore from "./ApplicationStore";
+
+const message_sent = new Audio("/sounds/sent-text.mp3");
+const message_received = new Audio("/sounds/notification.mp3");
 
 const useMessageStore = create((set, get) => ({
   open_sidebar: true,
@@ -52,14 +56,16 @@ const useMessageStore = create((set, get) => ({
   get_messages_by_id: async (id) => {
     set({ is_loading_messages: true });
     try {
-      const res = await axiosInstance.get(`/messages/${id}`);
+      const res = await axiosInstance.get(
+        `/messages/${get().selected_user._id}`
+      );
       set({ all_messages_by_id: res.data });
-      // console.log(res.data)
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
           "There was an error loading your messages."
       );
+
       set({ all_messages_by_id: [] });
     } finally {
       set({ is_loading_messages: false });
@@ -68,9 +74,10 @@ const useMessageStore = create((set, get) => ({
 
   send_message_by_id: async (data) => {
     const { authenticated_user } = useAuthStore.getState();
-    const { selected_user, all_messages_by_id } = get();
+    const { enable_sound } = useApplicationStore.getState();
+    const { selected_user } = get(); // Don't get all_messages_by_id here
 
-    // This is an optimistic update... to add the message to your chat before its sent
+    // Optimistic update
     const optimistic_message = {
       _id: `temp-${Date.now()}`,
       sender_id: authenticated_user._id,
@@ -80,7 +87,10 @@ const useMessageStore = create((set, get) => ({
       createdAt: new Date().toISOString(),
       is_optimistic: true,
     };
-    set({ all_messages_by_id: all_messages_by_id.concat(optimistic_message) });
+
+    set((state) => ({
+      all_messages_by_id: [...state.all_messages_by_id, optimistic_message],
+    }));
 
     set({ is_sending_message: true });
     try {
@@ -88,9 +98,27 @@ const useMessageStore = create((set, get) => ({
         `/messages/send/${selected_user._id}`,
         data
       );
-      set({ all_messages_by_id: [...all_messages_by_id, res.data] });
+
+      // Replace the optimistic message with the real one
+      set((state) => ({
+        all_messages_by_id: state.all_messages_by_id.map((msg) =>
+          msg._id === optimistic_message._id ? res.data : msg
+        ),
+      }));
+
+      if (enable_sound) {
+        message_sent.currentTime = 0;
+        message_sent
+          .play()
+          .catch((error) => toast.error("Failed to play sound."));
+      }
     } catch (error) {
-      set({ all_messages_by_id: all_messages_by_id });
+      // Remove the optimistic message on error
+      set((state) => ({
+        all_messages_by_id: state.all_messages_by_id.filter(
+          (msg) => msg._id !== optimistic_message._id
+        ),
+      }));
 
       toast.error(
         error?.response?.data?.message ||
@@ -99,6 +127,45 @@ const useMessageStore = create((set, get) => ({
     } finally {
       set({ is_sending_message: false });
     }
+  },
+
+  subscribe_to_messages: () => {
+    const { selected_user } = get();
+    const { enable_sound } = useApplicationStore.getState();
+
+    if (!selected_user) return;
+
+    const socket = useAuthStore.getState().socket;
+
+    socket.on("sent_message", (sent_message) => {
+      const message_from_selected_user =
+        sent_message.sender_id === selected_user._id;
+      if (!message_from_selected_user) return;
+
+      set((state) => {
+        // Check if message already exists (by real _id, not temp id)
+        const message_exists = state.all_messages_by_id.some(
+          (msg) => msg._id === sent_message._id && !msg.is_optimistic
+        );
+
+        if (message_exists) return state; // Don't add duplicate
+
+        return {
+          all_messages_by_id: [...state.all_messages_by_id, sent_message],
+        };
+      });
+
+      if (enable_sound) {
+        message_received.currentTime = 0;
+        message_received
+          .play()
+          .catch((error) => toast.error("Failed to play sound."));
+      }
+    });
+  },
+  unsubscribe_from_messages: () => {
+    const socket = useAuthStore.getState().socket;
+    socket.off("sent_message");
   },
 
   select_a_user: (user) => {
