@@ -12,15 +12,21 @@ import { toast } from "react-toastify";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
-const Menu = ({ children, menuOpen, setMenuOpen, isMainMenu }) => {
+const Menu = ({
+  children,
+  menuOpen,
+  setMenuOpen,
+  isMainMenu = true,
+  positioningAndSize,
+}) => {
   const { authenticated_user, logout } = useAuthStore();
   const { enable_sound, toggle_sound } = useApplicationStore();
   const [toggleProfile, setToggleProfile] = useState(false);
 
   return (
     <div
-      className={`absolute w-[420px] h-[400px] ${
-        isMainMenu ? "-top-4 -left-4" : "-bottom-8 -right-32"
+      className={`absolute  bg-gray-00 ${
+        isMainMenu ? "w-[420px] h-[400px] -top-4 -left-4" : positioningAndSize
       }  z-20 transition-all duration-500 ease-in-out ${
         !menuOpen
           ? "opacity-0 scale-95 pointer-events-none"

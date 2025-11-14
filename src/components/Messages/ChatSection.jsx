@@ -26,11 +26,9 @@ const ChatSection = () => {
     return () => window.removeEventListener("keydown", handleEscKey);
   }, []);
 
-
-
   return (
     <div
-      className={`flex bg-contain relative ${
+      className={`flex  bg-contain relative ${
         open_sidebar ? "w-0 md:w-full" : "w-full"
       } duration-300`}
       style={{
@@ -43,7 +41,7 @@ const ChatSection = () => {
           <SelectedUserBanner />
 
           {/* Messages area */}
-          <div className="flex-1 lg:px-16 px-4 pt-2 hide-scrollbar overflow-y-scroll ">
+          <div className="flex-1 lg:px-16 px-4 pt-2 hide-scrollbar overflow-y-scroll">
             <MessagesWrapper />
           </div>
 

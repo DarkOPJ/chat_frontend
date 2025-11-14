@@ -75,12 +75,16 @@ const ChatInput = () => {
   };
 
   // Auto-resize textarea
-  useEffect(() => {
-    if (textareaRef.current) {
-      textareaRef.current.style.height = "auto";
+useEffect(() => {
+  if (textareaRef.current) {
+    textareaRef.current.style.height = "auto";
+    
+    // Only set scrollHeight if there's actual content
+    if (message.trim()) {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }, [message]);
+  }
+}, [message]);
 
   // Close picker when clicking outside
   useEffect(() => {
@@ -166,13 +170,13 @@ const ChatInput = () => {
                 menuOpen={menuOpen}
                 setMenuOpen={setMenuOpen}
                 isMainMenu={false}
+                positioningAndSize={"w-[300px] h-[250px] -bottom-7 -right-5"}
               >
-                {/* Record */}
                 <MenuBtn func={() => {}}>
                   <FaMicrophoneAlt className="text-xl" />
                   <p className="text-sm">Voice Note</p>
                 </MenuBtn>
-                {/* Upload Image */}
+
                 <MenuBtn func={() => fileInputRef.current.click()}>
                   <IoMdImages className="text-xl" />
                   <p className="text-sm">Upload Image</p>
