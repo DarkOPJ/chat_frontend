@@ -54,7 +54,6 @@ const ChatSection = () => {
         <StartChattingPopup />
       )}
 
-      {/* {!selected_user && <StartChattingPopup />} */}
     </div>
   );
 };

@@ -24,6 +24,7 @@ const ChatSidebar = ({ smallScreen }) => {
     open_sidebar,
     set_open_sidebar,
   } = useMessageStore();
+  
   const {
     current_submenu,
     sidebar_width,
@@ -108,7 +109,7 @@ const ChatSidebar = ({ smallScreen }) => {
         {!smallScreen &&
           (is_compact == false ? (
             <div className=" w-full space-y-3 ">
-              <div className="flex items-center gap-2 ">
+              <div className="flex items-center gap-2">
                 <div className="relative">
                   <button
                     onClick={() => {
@@ -166,8 +167,8 @@ const ChatSidebar = ({ smallScreen }) => {
       </div>
 
       {/* Chat List */}
-      <div className="flex-1 overflow-hidden relative">
         {/* All Chats */}
+      <div className="flex-1 overflow-hidden relative">
         <div
           className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out overflow-y-auto hide-scrollbar
       ${current_submenu === "All Chats" ? "translate-x-0" : "-translate-x-full"}
