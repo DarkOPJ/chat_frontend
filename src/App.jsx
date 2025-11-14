@@ -1,4 +1,4 @@
-import Router from "./Router.jsx";
+import Router from "/src/Router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
