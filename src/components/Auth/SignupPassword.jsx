@@ -51,10 +51,10 @@ const SignupPassword = ({ signup }) => {
           <div className="absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-4 text-xl text-stone-400">
             <button
               className="cursor-pointer hover:text-blue-400 duration-300 ease-in-out"
-              onClick={(e) => {
-                e.preventDefault();
+              onClick={() => {
                 setPasswordVisible((prevState) => !prevState);
               }}
+              type="button"
             >
               {passwordVisible ? <TbEyeClosed /> : <TbEye />}
             </button>
