@@ -24,7 +24,7 @@ const ChatSidebar = ({ smallScreen }) => {
     open_sidebar,
     set_open_sidebar,
   } = useMessageStore();
-  
+
   const {
     current_submenu,
     sidebar_width,
@@ -120,7 +120,11 @@ const ChatSidebar = ({ smallScreen }) => {
                     <HiMenu />
                   </button>
 
-                  <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} isMainMenu={true} />
+                  <Menu
+                    menuOpen={menuOpen}
+                    setMenuOpen={setMenuOpen}
+                    isMainMenu={true}
+                  />
                 </div>
                 <Search />
               </div>
@@ -139,7 +143,11 @@ const ChatSidebar = ({ smallScreen }) => {
                   <HiMenu />
                 </button>
 
-                <Menu menuOpen={menuOpen} setMenuOpen={setMenuOpen} isMainMenu={true}/>
+                <Menu
+                  menuOpen={menuOpen}
+                  setMenuOpen={setMenuOpen}
+                  isMainMenu={true}
+                />
               </div>
             </div>
           ))}
@@ -167,7 +175,7 @@ const ChatSidebar = ({ smallScreen }) => {
       </div>
 
       {/* Chat List */}
-        {/* All Chats */}
+      {/* All Chats */}
       <div className="flex-1 overflow-hidden relative">
         <div
           className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out overflow-y-auto hide-scrollbar

@@ -22,6 +22,7 @@ const ChatInput = () => {
     set_draft_message,
     set_draft_image,
     clear_draft,
+    all_messages_by_id,
   } = useMessageStore();
   const { enable_sound } = useApplicationStore();
   const message = draft_messages[selected_user?._id] || "";
@@ -46,7 +47,7 @@ const ChatInput = () => {
       image: imagePreview,
     };
 
-    send_message_by_id(new_message);
+    send_message_by_id(new_message, all_messages_by_id.length ? true : false);
 
     // Clear draft for this user
     clear_draft(selected_user._id);
@@ -75,16 +76,16 @@ const ChatInput = () => {
   };
 
   // Auto-resize textarea
-useEffect(() => {
-  if (textareaRef.current) {
-    textareaRef.current.style.height = "auto";
-    
-    // Only set scrollHeight if there's actual content
-    if (message.trim()) {
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+
+      // Only set scrollHeight if there's actual content
+      if (message.trim()) {
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      }
     }
-  }
-}, [message]);
+  }, [message]);
 
   // Close picker when clicking outside
   useEffect(() => {

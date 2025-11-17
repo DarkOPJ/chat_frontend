@@ -14,7 +14,7 @@ const NoMessageSent = () => {
       image: "",
     };
 
-    send_message_by_id(new_message);
+    send_message_by_id(new_message, true);
   };
 
   return (

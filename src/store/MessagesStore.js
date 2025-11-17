@@ -53,7 +53,7 @@ const useMessageStore = create((set, get) => ({
     }
   },
 
-  get_messages_by_id: async (id) => {
+  get_messages_by_id: async () => {
     set({ is_loading_messages: true });
     try {
       const res = await axiosInstance.get(
@@ -72,7 +72,7 @@ const useMessageStore = create((set, get) => ({
     }
   },
 
-  send_message_by_id: async (data) => {
+  send_message_by_id: async (data, new_convo = false) => {
     const { authenticated_user } = useAuthStore.getState();
     const { enable_sound } = useApplicationStore.getState();
     const { selected_user } = get(); // Don't get all_messages_by_id here
@@ -102,9 +102,56 @@ const useMessageStore = create((set, get) => ({
       // Replace the optimistic message with the real one
       set((state) => ({
         all_messages_by_id: state.all_messages_by_id.map((msg) =>
-          msg._id === optimistic_message._id ? res.data : msg
+          msg._id === optimistic_message._id ? res.data.sent_message : msg
         ),
       }));
+
+      // Update all_chat_partners with new conversation data
+      // Update all_chat_partners with new conversation data
+      set((state) => {
+        const conversation = res.data.conversation;
+        const existing_chat_index = state.all_chat_partners.findIndex(
+          (chat) => chat._id === conversation._id
+        );
+
+        if (existing_chat_index !== -1) {
+          // Update existing chat and move to top
+          const updated_chats = [...state.all_chat_partners];
+          updated_chats[existing_chat_index] = {
+            ...updated_chats[existing_chat_index],
+            last_message: conversation.last_message,
+            updated_at: conversation.updatedAt,
+          };
+          // Move to top
+          const [updated_chat] = updated_chats.splice(existing_chat_index, 1);
+          return { all_chat_partners: [updated_chat, ...updated_chats] };
+        } else {
+          // Add new chat at top
+          return {
+            all_chat_partners: [
+              {
+                _id: conversation._id,
+                partner: selected_user,
+                last_message: conversation.last_message,
+                updated_at: conversation.updatedAt,
+              },
+              ...state.all_chat_partners,
+            ],
+          };
+        }
+      });
+
+      // If it's a new conversation, remove from contacts and switch to All Chats
+      if (new_convo) {
+        set((state) => ({
+          all_contacts: state.all_contacts.filter(
+            (contact) => contact._id !== selected_user._id
+          ),
+        }));
+
+        const { switch_submenu } = useApplicationStore.getState();
+        switch_submenu("All Chats");
+      }
 
       if (enable_sound) {
         message_sent.currentTime = 0;
