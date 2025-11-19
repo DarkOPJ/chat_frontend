@@ -68,6 +68,7 @@ const MessagesWrapper = () => {
                   sentTime={formatTime(msg.createdAt)}
                   isSkeleton={false}
                   showProfilePic={isLastInGroup}
+                  isRead={msg.is_read}
                 />
               );
             })}

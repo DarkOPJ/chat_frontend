@@ -5,9 +5,10 @@ import useApplicationStore from "../../store/ApplicationStore";
 import useAuthStore from "../../store/AuthStore";
 import formatConversationTime from "../../lib/MessageTimeFormat";
 import { FaRegFileImage } from "react-icons/fa6";
+import Badge from "./Badge";
 
 const ChatUserBtn = ({ chat = {}, contact = {} }) => {
-  const { selected_user, select_a_user } = useMessageStore();
+  const { selected_user, select_a_user, unread_counts } = useMessageStore();
   const { is_compact } = useApplicationStore();
   const { online_users } = useAuthStore();
   const id = chat?.partner?._id || contact?._id;
@@ -52,18 +53,23 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
                 <></>
               ))}
           </div>
-          <div className="text-gray-500  flex items-center gap-1.5">
-            {chat?.last_message?.image && (
-              <p>
-                <FaRegFileImage />
+          <div className="flex items-center justify-between gap-2 text-xs">
+            <div className="text-gray-500 flex items-center gap-1.5">
+              {chat?.last_message?.image && (
+                <p>
+                  <FaRegFileImage />
+                </p>
+              )}
+              <p className="text- truncate max-w-[165px]">
+                {partner_details?._id
+                  ? chat?.last_message?.text || "photo"
+                  : contact?._id &&
+                    (online_users.includes(id) ? "online" : "offline")}
               </p>
+            </div>
+            {chat?.last_message && unread_counts[chat._id] > 0 && (
+              <Badge text={`${unread_counts[chat._id]}`} />
             )}
-            <p className="text-sm truncate">
-              {partner_details?._id
-                ? chat?.last_message?.text || "photo"
-                : contact?._id &&
-                  (online_users.includes(id) ? "online" : "offline")}
-            </p>
           </div>
         </div>
       )}

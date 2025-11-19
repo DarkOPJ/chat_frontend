@@ -8,6 +8,7 @@ import { createPortal } from "react-dom";
 import ExpandImageMessage from "./ExpandImageMessage";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { VscCheck } from "react-icons/vsc";
+import { VscCheckAll } from "react-icons/vsc";
 
 const Message = ({
   leftOrRight = "",
@@ -17,6 +18,7 @@ const Message = ({
   isSkeleton = false,
   showProfilePic,
   isStreaming = false,
+  isRead = false,
 }) => {
   const { authenticated_user } = useAuthStore();
   const { selected_user, handleDownloadImage } = useMessageStore();
@@ -125,9 +127,10 @@ const Message = ({
           </div>
           {sentTime && !isSkeleton ? (
             !isStreaming ? (
-              <div className="text-xs flex gap-1">
+              <div className="text-xs flex gap-1 items-center">
                 <p className="leading-none ml-auto w-fit">{sentTime}</p>
-                {leftOrRight === "right" && <VscCheck />}
+                {leftOrRight === "right" &&
+                  (isRead ? <VscCheckAll className="text-green-500" /> : <VscCheck />)}
               </div>
             ) : (
               <></>

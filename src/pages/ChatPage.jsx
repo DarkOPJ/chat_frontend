@@ -5,7 +5,7 @@ import useMessageStore from "../store/MessagesStore";
 import { useEffect } from "react";
 
 const ChatPage = () => {
-  const { open_sidebar, set_open_sidebar, selected_user } = useMessageStore();
+  const { open_sidebar, set_open_sidebar, selected_user, subscribe_to_new_message_notifications, unsubscribe_from_new_message_notifications } = useMessageStore();
 
   // ✅ GOOD - Run side effects in useEffect
   useEffect(() => {
@@ -13,6 +13,14 @@ const ChatPage = () => {
       set_open_sidebar(false);
     }
   }, [selected_user?._id, set_open_sidebar]);
+
+  useEffect(() => {
+    subscribe_to_new_message_notifications();
+
+    return () => {
+      unsubscribe_from_new_message_notifications();
+    };
+  }, []);
 
   return (
     <section className="flex h-screen bg-dark_purple overflow-x-hidden">

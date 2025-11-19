@@ -18,6 +18,7 @@ const useMessageStore = create((set, get) => ({
   selected_user: null,
   is_sending_message: false,
   streaming_message: null,
+  unread_counts: {}, // { conversation_id: count }
 
   draft_messages: {}, // { user_id: "draft text" }
   draft_images: {}, // { user_id: "image_preview_url" }
@@ -184,23 +185,22 @@ const useMessageStore = create((set, get) => ({
 
     const socket = useAuthStore.getState().socket;
 
-    socket.on("sent_message", (sent_message) => {
+    socket.on("sent_message", (data) => {
       const message_from_selected_user =
-        sent_message.sender_id === selected_user._id;
+        data.sent_message.sender_id === selected_user._id;
       if (!message_from_selected_user) return;
 
-      set((state) => {
-        // Check if message already exists (by real _id, not temp id)
-        const message_exists = state.all_messages_by_id.some(
-          (msg) => msg._id === sent_message._id && !msg.is_optimistic
-        );
+      const current_messages = get().all_messages_by_id;
+      set({ all_messages_by_id: [...current_messages, data.sent_message] });
 
-        if (message_exists) return state; // Don't add duplicate
+      // Mark as read since chat is open
+      const conversation = get().all_chat_partners.find(
+        (chat) => chat.partner._id === selected_user._id
+      );
 
-        return {
-          all_messages_by_id: [...state.all_messages_by_id, sent_message],
-        };
-      });
+      if (conversation?._id) {
+        get().mark_conversation_as_read(conversation._id);
+      }
 
       if (enable_sound) {
         message_received.currentTime = 0;
@@ -209,14 +209,34 @@ const useMessageStore = create((set, get) => ({
           .catch((error) => toast.error("Failed to play sound."));
       }
     });
+
+    // Add this listener for read receipts
+    socket.on("messages_marked_as_read", (data) => {
+      set((state) => ({
+        all_messages_by_id: state.all_messages_by_id.map((msg) =>
+          msg.receiver_id === data.reader_id ? { ...msg, is_read: true } : msg
+        ),
+      }));
+    });
   },
   unsubscribe_from_messages: () => {
-    const socket = useAuthStore.getState().socket;
+    const { socket } = useAuthStore.getState();
     socket.off("sent_message");
+    socket.off("messages_marked_as_read"); // Add this
   },
 
   select_a_user: (user) => {
     set({ selected_user: user });
+    if (user !== null) {
+      // Find conversation
+      const conversation = get().all_chat_partners.find(
+        (chat) => chat.partner._id === user._id
+      );
+
+      if (conversation) {
+        get().mark_conversation_as_read(conversation._id);
+      }
+    }
   },
 
   set_open_sidebar: (val) => {
@@ -326,6 +346,94 @@ const useMessageStore = create((set, get) => ({
 
     socket.off("ai_message_chunk");
     socket.off("ai_message_complete");
+  },
+
+  mark_conversation_as_read: async (conversation_id) => {
+    try {
+      await axiosInstance.post(`/messages/${conversation_id}/mark-read`);
+
+      set((state) => ({
+        unread_counts: {
+          ...state.unread_counts,
+          [conversation_id]: 0,
+        },
+      }));
+    } catch (error) {
+      console.error("Failed to mark as read:", error);
+    }
+  },
+
+  subscribe_to_new_message_notifications: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    socket.on("new_message", (data) => {
+      const { sent_message, conversation, sender } = data;
+      const { selected_user } = get();
+
+      // Update conversation list
+      set((state) => {
+        const conv_index = state.all_chat_partners.findIndex(
+          (chat) => chat._id === conversation._id
+        );
+
+        let updated_chats = [...state.all_chat_partners];
+
+        if (conv_index !== -1) {
+          updated_chats[conv_index] = {
+            ...updated_chats[conv_index],
+            last_message: conversation.last_message,
+            updated_at: conversation.updatedAt,
+          };
+          // Move to top
+          const [chat] = updated_chats.splice(conv_index, 1);
+          updated_chats = [chat, ...updated_chats];
+        } else {
+          // New conversation
+          updated_chats = [
+            {
+              _id: conversation._id,
+              partner: sender,
+              last_message: conversation.last_message,
+              updated_at: conversation.updatedAt,
+            },
+            ...updated_chats,
+          ];
+        }
+
+        return { all_chat_partners: updated_chats };
+      });
+
+      // If chat is NOT open, show toast and increment unread
+      if (selected_user?._id !== sent_message.sender_id) {
+        // Show toast notification
+        toast.info(`${sender.full_name}: ${sent_message.text || "📷 Photo"}`, {
+          onClick: () => {
+            // Open chat when clicked
+            get().select_a_user(sender);
+          },
+        });
+
+        // Update unread count
+        set((state) => ({
+          unread_counts: {
+            ...state.unread_counts,
+            [conversation._id]:
+              (state.unread_counts[conversation._id] || 0) + 1,
+          },
+        }));
+      } else {
+        // Chat is open, add message to current messages
+        set((state) => ({
+          all_messages_by_id: [...state.all_messages_by_id, sent_message],
+        }));
+      }
+    });
+  },
+  unsubscribe_from_new_message_notifications: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.off("new_message");
   },
 }));
 
