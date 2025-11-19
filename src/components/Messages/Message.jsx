@@ -7,6 +7,7 @@ import PortalBackground from "../Misc/PortalBackground";
 import { createPortal } from "react-dom";
 import ExpandImageMessage from "./ExpandImageMessage";
 import { AiOutlineCloudDownload } from "react-icons/ai";
+import { VscCheck } from "react-icons/vsc";
 
 const Message = ({
   leftOrRight = "",
@@ -15,6 +16,7 @@ const Message = ({
   sentTime = "",
   isSkeleton = false,
   showProfilePic,
+  isStreaming = false,
 }) => {
   const { authenticated_user } = useAuthStore();
   const { selected_user, handleDownloadImage } = useMessageStore();
@@ -104,7 +106,15 @@ const Message = ({
               </div>
             )}
 
-            {text && !isSkeleton && <p className="wrap-anywhere">{text}</p>}
+            {text && !isSkeleton && (
+              <p className="wrap-anywhere">
+                {text}
+
+                {isStreaming && (
+                  <span className="inline-block ml-1 animate-pulse">▋</span>
+                )}
+              </p>
+            )}
 
             {isSkeleton && (
               <div className=" space-y-1">
@@ -114,7 +124,14 @@ const Message = ({
             )}
           </div>
           {sentTime && !isSkeleton ? (
-            <p className="text-xs leading-none ml-auto w-fit">{sentTime}</p>
+            !isStreaming ? (
+              <div className="text-xs flex gap-1">
+                <p className="leading-none ml-auto w-fit">{sentTime}</p>
+                {leftOrRight === "right" && <VscCheck />}
+              </div>
+            ) : (
+              <></>
+            )
           ) : (
             <div className="w-5 p-1 animate-pulse bg-slate-600/70 rounded-xs ml-auto" />
           )}

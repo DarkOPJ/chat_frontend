@@ -51,11 +51,11 @@ const MainProfile = ({ openCloseHandler, setIsMainProfile, isChatPartner }) => {
                 ? selected_user.full_name
                 : authenticated_user.full_name}
             </p>
-            <p className=" text-gray-500 text-xs leading-none">
+            <div className=" text-gray-500 text-xs leading-none">
               {!isChatPartner
-                ? authenticated_user.username && <>@{authenticated_user.username}</>
+                ? authenticated_user.username && <p>@{authenticated_user.username}</p>
                 : selected_user.username && <p>@{selected_user.username}</p>}
-            </p>
+            </div>
             <p className="text-gray-500 text-xs leading-none">
               {isChatPartner
                 ? online_users.includes(selected_user._id)

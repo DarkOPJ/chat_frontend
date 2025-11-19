@@ -45,7 +45,7 @@ const SelectedUserBanner = () => {
             <p className="font-semibold text-white truncate">
               {selected_user.full_name}
             </p>
-            <p className="text-sm text-gray-500 truncate">
+            <p className="text-xs text-gray-500 truncate">
               {online_users.includes(selected_user._id) ? "online" : formatLastSeen(selected_user.last_seen).toLowerCase()}
             </p>
           </div>

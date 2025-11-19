@@ -17,6 +17,7 @@ const useMessageStore = create((set, get) => ({
   is_loading_messages: false,
   selected_user: null,
   is_sending_message: false,
+  streaming_message: null,
 
   draft_messages: {}, // { user_id: "draft text" }
   draft_images: {}, // { user_id: "image_preview_url" }
@@ -106,7 +107,6 @@ const useMessageStore = create((set, get) => ({
         ),
       }));
 
-      // Update all_chat_partners with new conversation data
       // Update all_chat_partners with new conversation data
       set((state) => {
         const conversation = res.data.conversation;
@@ -269,6 +269,63 @@ const useMessageStore = create((set, get) => ({
       delete new_images[user_id];
       return { draft_messages: new_drafts, draft_images: new_images };
     });
+  },
+
+  subscribe_to_ai_streaming: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    socket.on("ai_message_chunk", (data) => {
+      set({
+        streaming_message: {
+          _id: data.message_id,
+          text: data.full_text,
+          sender_id: data.sender_id,
+          receiver_id: data.receiver_id,
+          createdAt: new Date(),
+          is_streaming: true,
+        },
+      });
+    });
+
+    socket.on("ai_message_complete", (data) => {
+      const { final_message, conversation } = data;
+
+      set((state) => {
+        // Add final message to messages
+        const updated_messages = [...state.all_messages_by_id, final_message];
+
+        // Update conversation in chat list
+        const conversation_index = state.all_chat_partners.findIndex(
+          (chat) => chat._id === conversation._id
+        );
+
+        let updated_chats = [...state.all_chat_partners];
+        if (conversation_index !== -1) {
+          updated_chats[conversation_index] = {
+            ...updated_chats[conversation_index],
+            last_message: conversation.last_message,
+            updated_at: conversation.updatedAt,
+          };
+          // Move to top
+          const [updated_chat] = updated_chats.splice(conversation_index, 1);
+          updated_chats = [updated_chat, ...updated_chats];
+        }
+
+        return {
+          all_messages_by_id: updated_messages,
+          all_chat_partners: updated_chats,
+          streaming_message: null,
+        };
+      });
+    });
+  },
+  unsubscribe_from_ai_streaming: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    socket.off("ai_message_chunk");
+    socket.off("ai_message_complete");
   },
 }));
 
