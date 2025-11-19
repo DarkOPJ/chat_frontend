@@ -4,12 +4,12 @@ import useMessageStore from "../../store/MessagesStore";
 import useApplicationStore from "../../store/ApplicationStore";
 import useAuthStore from "../../store/AuthStore";
 import formatConversationTime from "../../lib/MessageTimeFormat";
-import { FaRegFileImage } from "react-icons/fa6";
+import { IoCamera } from "react-icons/io5";
 import Badge from "./Badge";
 
 const ChatUserBtn = ({ chat = {}, contact = {} }) => {
   const { selected_user, select_a_user, unread_counts } = useMessageStore();
-  const { is_compact } = useApplicationStore();
+  const { is_compact, theme } = useApplicationStore();
   const { online_users } = useAuthStore();
   const id = chat?.partner?._id || contact?._id;
   const partner_details = chat?.partner;
@@ -29,9 +29,13 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
         select_a_user(partner_details?._id ? partner_details : contact)
       }
       key={partner_details?._id || contact?._id}
-      className={`${id === selected_user?._id && "bg-purple-500/15"} ${
-        is_compact ? "px-3.5" : "px-4"
-      } py-4 hover:bg-gray-500/15 cursor-pointer flex items-center gap-3 rounded-xl duration-300`}
+      className={`${
+        id === selected_user?._id
+          ? "bg-sub-background/90 hover:bg-sub-background/90"
+          : "hover:bg-hover-background/50"
+      } ${
+        is_compact ? "px-3 py-2" : "px-2 py-3"
+      }  cursor-pointer flex items-center gap-3 rounded-xl duration-300`}
     >
       <ProfileAvatar
         seed={partner_details?.full_name || contact?.full_name}
@@ -41,26 +45,37 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
       {!is_compact && (
         <div className="flex-1 min-w-0 space-y-0.5">
           <div className="flex justify-between items-baseline">
-            <h3 className="font-semibold text-white truncate">
+            <h3
+              className={`font-medium text-text truncate ${
+                id === selected_user?._id && theme === "light"
+                  ? "text-text-opposite"
+                  : ""
+              }`}
+            >
               {partner_details?.full_name || contact?.full_name}
             </h3>
-            {!is_compact &&
-              (partner_details?._id ? (
-                <span className="text-xs text-gray-500 ml-2">
-                  {formatConversationTime(chat?.updated_at)}
-                </span>
-              ) : (
-                <></>
-              ))}
+            {!is_compact && partner_details?._id && (
+              <span
+                className={`text-xs ml-2 ${
+                  id === selected_user?._id && theme === "light"
+                    ? "text-text-opposite"
+                    : "text-gray-500"
+                }`}
+              >
+                {formatConversationTime(chat?.updated_at)}
+              </span>
+            )}
           </div>
-          <div className="flex items-center justify-between gap-2 text-xs">
-            <div className="text-gray-500 flex items-center gap-1.5">
-              {chat?.last_message?.image && (
-                <p>
-                  <FaRegFileImage />
-                </p>
-              )}
-              <p className="text- truncate max-w-[165px]">
+          <div className="flex items-center justify-between gap-2 text-x">
+            <div
+              className={`flex items-center gap-1.5 ${
+                id === selected_user?._id && theme === "light"
+                  ? "text-text-opposite"
+                  : "text-gray-500"
+              }`}
+            >
+              {chat?.last_message?.image && <IoCamera className="text-lg" />}
+              <p className="text-sm truncate max-w-[165px]">
                 {partner_details?._id
                   ? chat?.last_message?.text || "photo"
                   : contact?._id &&
@@ -68,7 +83,10 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
               </p>
             </div>
             {chat?.last_message && unread_counts[chat._id] > 0 && (
-              <Badge text={`${unread_counts[chat._id]}`} />
+              <Badge
+                selected={id === selected_user?._id}
+                text={`${unread_counts[chat._id]}`}
+              />
             )}
           </div>
         </div>

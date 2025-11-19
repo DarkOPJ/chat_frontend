@@ -31,7 +31,7 @@ const ChatSidebar = ({ smallScreen }) => {
     change_sidebar_width,
     is_compact,
     change_compact,
-    hydrate,
+    theme,
   } = useApplicationStore();
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef(null);
@@ -46,7 +46,6 @@ const ChatSidebar = ({ smallScreen }) => {
   useEffect(() => {
     get_all_chat_partners();
     get_all_contacts();
-    hydrate();
   }, []);
 
   useEffect(() => {
@@ -98,13 +97,15 @@ const ChatSidebar = ({ smallScreen }) => {
             : `${sidebar_width}px`
           : `${sidebar_width}px`,
       }}
-      className="shadow-lg flex flex-col transition-none relative bg-dark_purple text-white md:border-r  border-slate-800 duration-300"
+      className={`flex flex-col transition-none relative bg-background text-text md:border-r ${
+        theme === "light" ? "border-gray-300" : "border-slate-800"
+      } duration-300`}
     >
       {/* Header */}
       <div
-        className={`px-4 pt-4 ${
-          is_compact && "pb-4"
-        } border-b border-slate-800 flex items-center justify-between `}
+        className={`px-4 pt-4 ${is_compact && "pb-4"} border-b ${
+          theme === "light" ? "border-gray-300" : "border-slate-800"
+        } flex items-center justify-between `}
       >
         {!smallScreen &&
           (is_compact == false ? (
@@ -115,7 +116,7 @@ const ChatSidebar = ({ smallScreen }) => {
                     onClick={() => {
                       setMenuOpen((prev) => !prev);
                     }}
-                    className="cursor-pointer hover:bg-gray-500/15 text-stone-300 p-2 rounded-full duration-300 text-xl"
+                    className="cursor-pointer hover:bg-hover-background text-text p-2 rounded-full duration-300 text-xl"
                   >
                     <HiMenu />
                   </button>
@@ -138,7 +139,7 @@ const ChatSidebar = ({ smallScreen }) => {
                   onClick={() => {
                     setMenuOpen((prev) => !prev);
                   }}
-                  className="cursor-pointer hover:bg-gray-500/15 text-stone-300 p-2 rounded-full duration-300 text-xl"
+                  className="cursor-pointer hover:bg-hover-background text-text p-2 rounded-full duration-300 text-xl"
                 >
                   <HiMenu />
                 </button>
@@ -159,7 +160,7 @@ const ChatSidebar = ({ smallScreen }) => {
                   onClick={() => {
                     setMenuOpen((prev) => !prev);
                   }}
-                  className="cursor-pointer hover:bg-gray-500/15 text-stone-300 p-2 rounded-full duration-300 text-xl"
+                  className="cursor-pointer hover:bg-hover-background text-text p-2 rounded-full duration-300 text-xl"
                 >
                   <HiMenu />
                 </button>
@@ -178,7 +179,9 @@ const ChatSidebar = ({ smallScreen }) => {
       {/* All Chats */}
       <div className="flex-1 overflow-hidden relative">
         <div
-          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out overflow-y-auto hide-scrollbar
+          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out ${
+            !is_loading_chat_partners && "overflow-y-auto"
+          } hide-scrollbar
       ${current_submenu === "All Chats" ? "translate-x-0" : "-translate-x-full"}
     `}
         >
@@ -191,7 +194,9 @@ const ChatSidebar = ({ smallScreen }) => {
 
         {/* Contacts */}
         <div
-          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out overflow-y-scroll hide-scrollbar
+          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out ${
+            !is_loading_contacts && "overflow-y-auto"
+          } hide-scrollbar
       ${current_submenu === "Contacts" ? "translate-x-0" : "translate-x-full"}
     `}
         >
@@ -207,7 +212,7 @@ const ChatSidebar = ({ smallScreen }) => {
       {/* Resize Handle */}
       <div
         onMouseDown={handleMouseDown}
-        className="absolute top-0 -right-0.5 w-1 h-full cursor-ew-resize hover:bg-purple-800 bg-transparent duration-300 md:block hidden"
+        className="absolute top-0 -right-0.5 w-1 h-full cursor-ew-resize hover:bg-full-color bg-transparent duration-300 md:block hidden"
       />
     </div>
   );

@@ -9,6 +9,11 @@ import Profile from "./Profile/Profile";
 import { createPortal } from "react-dom";
 import ProfileAvatar from "./Profile/ProfileAvatar";
 import { toast } from "react-toastify";
+import { IoIosColorWand } from "react-icons/io";
+import { HiMiniChevronRight } from "react-icons/hi2";
+import Light from "../Misc/CustomIcons/Light";
+import Midnight from "../Misc/CustomIcons/Midnight";
+import Dark from "../Misc/CustomIcons/Dark";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
@@ -20,14 +25,16 @@ const Menu = ({
   positioningAndSize,
 }) => {
   const { authenticated_user, logout } = useAuthStore();
-  const { enable_sound, toggle_sound } = useApplicationStore();
+  const { enable_sound, toggle_sound, switch_theme, theme } =
+    useApplicationStore();
   const [toggleProfile, setToggleProfile] = useState(false);
+  const [toggleThemeMenu, setToggleThemeMenu] = useState(false);
 
   return (
     <div
-      className={`absolute  bg-gray-00 ${
-        isMainMenu ? "w-[420px] h-[400px] -top-4 -left-4" : positioningAndSize
-      }  z-20 transition-all duration-500 ease-in-out ${
+      className={`absolute ${
+        isMainMenu ? "w-[550px] h-[400px] -top-4 -left-4" : positioningAndSize
+      }  z-20 transition-all duration-300 ease-in-out ${
         !menuOpen
           ? "opacity-0 scale-95 pointer-events-none"
           : "opacity-100 scale-100"
@@ -36,12 +43,15 @@ const Menu = ({
         // Prevent closing when clicking inside the Menu component
         if (e.target === e.currentTarget) setMenuOpen(false);
       }}
-      onMouseLeave={() => setMenuOpen(false)}
+      onMouseLeave={() => {
+        setMenuOpen(false);
+        setToggleThemeMenu(false);
+      }}
     >
       <div
         className={`absolute  ${
           isMainMenu ? "top-16 left-5" : "bottom-16 left-16"
-        } w-60 rounded-lg shadow p-1 bg-normal_purple`}
+        } w-60 rounded-lg shadow-md p-1 bg-background/80 backdrop-blur-lg shadow-full-color/10`}
       >
         {isMainMenu && (
           <>
@@ -50,9 +60,10 @@ const Menu = ({
               func={() => {
                 setToggleProfile(true);
                 setMenuOpen(false);
+                setToggleThemeMenu(false);
               }}
             >
-              <div className="outline-2 outline-purple-600 outline-offset-1 rounded-full">
+              <div className="outline-2 outline-full-color outline-offset-1 rounded-full">
                 <ProfileAvatar
                   profile_pic={authenticated_user.profile_pic}
                   size={"small"}
@@ -63,6 +74,7 @@ const Menu = ({
 
               <p className="text-sm">{authenticated_user.full_name}</p>
             </MenuBtn>
+
             {/* Toggle sound */}
             <MenuBtn
               func={() => {
@@ -73,6 +85,7 @@ const Menu = ({
                     .catch((error) => toast.error("Failed to play sound."));
                 toggle_sound();
                 setMenuOpen(false);
+                setToggleThemeMenu(false);
               }}
             >
               {enable_sound ? (
@@ -84,6 +97,55 @@ const Menu = ({
                 {enable_sound ? "Disable" : "Enable"} Sound
               </p>
             </MenuBtn>
+
+            {/* Theme selection */}
+            <MenuBtn
+              func={() => {
+                setToggleThemeMenu((prev) => !prev);
+              }}
+            >
+              <IoIosColorWand className="text-xl" />
+              <div className="flex justify-between items-center w-full">
+                <p className="text-sm">Themes</p>
+                <HiMiniChevronRight className="text-lg" />
+              </div>
+            </MenuBtn>
+            {/* Lmao calling a react component within itself 🤣🤣🤣 */}
+            <Menu
+              menuOpen={toggleThemeMenu}
+              setMenuOpen={setToggleThemeMenu}
+              isMainMenu={false}
+              positioningAndSize={"w-60 top-[280px] -right-[178px]"}
+            >
+              <MenuBtn func={() => switch_theme("light")}>
+                <Light className={"size-5"} />
+                <div className="flex justify-between items-center gap-1 w-full">
+                  <p className="text-sm text-text">Light</p>
+                  {theme === "light" && (
+                    <div className="size-2 rounded-full bg-green-600 animate-pulse" />
+                  )}
+                </div>
+              </MenuBtn>
+              <MenuBtn func={() => switch_theme("midnight")}>
+                <Midnight className={"size-5"} />
+                <div className="flex justify-between items-center gap-1 w-full">
+                  <p className="text-sm text-text">Midnight</p>
+                  {theme === "midnight" && (
+                    <div className="size-2 rounded-full bg-green-600 animate-pulse" />
+                  )}
+                </div>
+              </MenuBtn>
+              <MenuBtn func={() => switch_theme("dark")}>
+                <Dark className={"size-5"} />
+                <div className="flex justify-between items-center gap-1 w-full">
+                  <p className="text-sm text-text">Dark</p>
+                  {theme === "dark" && (
+                    <div className="size-2 rounded-full bg-green-600 animate-pulse" />
+                  )}
+                </div>
+              </MenuBtn>
+            </Menu>
+
             {/* Logout */}
             <MenuBtn func={logout}>
               <FiLogOut className="text-xl text-red-700" />

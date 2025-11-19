@@ -21,10 +21,9 @@ const AuthLayout = () => {
         </div>
         <Outlet />
       </div>
-      <div className="hidden md:block absolute bottom-0 left-0 w-full h-[134px] bg-[linear-gradient(to_top,_#160430_0%,_rgba(0,0,0,0)_100%)] z-10"></div>
-      <div className="w-full h-16 md:bg-dark_purple bg-normal_purple"></div>
+      {/* <div className="hidden md:block absolute bottom-0 left-0 w-full h-[134px] bg-[linear-gradient(to_top,_#160430_0%,_rgba(0,0,0,0)_100%)] z-10"></div> */}
+      {/* <div className="w-full h-16 md:bg-dark_purple bg-normal_purple"></div> */}
     </section>
   );
 };
-
 export default AuthLayout;

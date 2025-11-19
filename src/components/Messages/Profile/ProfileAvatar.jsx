@@ -21,8 +21,10 @@ const ProfileAvatar = ({
       return "size-6 text-xs";
     } else if (sizeToUse === "large") {
       return "size-32 text-4xl";
+    } else if (sizeToUse === "mid") {
+      return "size-10";
     } else {
-      return "size-12";
+      return "size-[54px]";
     }
   };
 
@@ -48,7 +50,9 @@ const ProfileAvatar = ({
           className="size-full object-cover rounded-full"
         />
       ) : (
-        <p className={`duration-500 ease-in-out ${fullView && "text-6xl"}`}>{getAvatarInitials(name)}</p>
+        <p className={`duration-500 ease-in-out ${fullView && "text-6xl"}`}>
+          {getAvatarInitials(name)}
+        </p>
       )}
 
       {edit && (

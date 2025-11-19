@@ -24,7 +24,7 @@ const ChatInput = () => {
     clear_draft,
     all_messages_by_id,
   } = useMessageStore();
-  const { enable_sound } = useApplicationStore();
+  const { enable_sound, theme } = useApplicationStore();
   const message = draft_messages[selected_user?._id] || "";
   const imagePreview = draft_images[selected_user?._id] || null;
   const [showPicker, setShowPicker] = useState(false);
@@ -109,7 +109,7 @@ const ChatInput = () => {
         ref={buttonRef}
         type="button"
         onClick={() => setShowPicker((prev) => !prev)}
-        className="absolute z-10 left-5 bottom-6 text-xl text-gray-400 hover:text-white duration-300 cursor-pointer"
+        className="absolute z-10 left-3 bottom-4 text-lg text-text/70 hover:text-text hover:bg-hover-background p-2 rounded-full duration-300 cursor-pointer"
       >
         <BsEmojiSmile />
       </button>
@@ -120,7 +120,10 @@ const ChatInput = () => {
           ref={pickerRef}
           className="absolute bottom-16 left-0 z-20 bg-black/90 rounded-lg shadow-lg"
         >
-          <EmojiPicker onEmojiClick={handleEmojiClick} theme="dark" />
+          <EmojiPicker
+            onEmojiClick={handleEmojiClick}
+            theme={theme === "light" ? "light" : "dark"}
+          />
         </div>
       )}
 
@@ -145,7 +148,7 @@ const ChatInput = () => {
           </div>
         )}
 
-        <form className="flex items-end gap-3 " onSubmit={handleSend}>
+        <form className="flex items-end gap-3" onSubmit={handleSend}>
           <div className="w-full relative">
             <textarea
               ref={textareaRef}
@@ -156,14 +159,14 @@ const ChatInput = () => {
                 if (enable_sound) playRandomKeyStrokeSound();
               }}
               rows={1}
-              className="max-h-40 w-full px-[52px] py-4 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-500/30 focus:ring-2 ring rounded-3xl duration-300 text-white bg-black/65 resize-none hide-chat-input-scrollbar text-sm"
+              className="max-h-40 w-full px-[52px] py-4 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color/30 focus:ring-2 ring rounded-3xl duration-300 text-text bg-black/65 resize-none hide-chat-input-scrollbar text-sm"
             />
             {/* Media attachment menu button */}
-            <div className="absolute right-5 bottom-6 flex items-center justify-center">
+            <div className="absolute right-3 bottom-4 flex items-center justify-center">
               <button
                 type="button"
                 onClick={() => setMenuOpen((prev) => !prev)}
-                className="text-xl text-gray-400 hover:text-white duration-300 cursor-pointer"
+                className="text-lg hover:text-text duration-300 cursor-pointer text-text/70 hover:bg-hover-background p-2 rounded-full"
               >
                 <GrAttachment />
               </button>
@@ -200,7 +203,7 @@ const ChatInput = () => {
             type="submit"
             className="mb-3 text-xl size-10 bg-blue-400/80 p-2.5 rounded-full cursor-pointer hover:scale-110 duration-300"
           >
-            <img src={logo} alt="" />
+            <img src={logo} alt="Telejam logo." />
           </button>
         </form>
       </div>

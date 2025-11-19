@@ -11,7 +11,7 @@ const MenuBtn = ({ children, func, args }) => {
           func();
         }
       }}
-      className="w-full cursor-pointer hover:bg-gray-500/20 text-stone-300 px-4 py-2.5 rounded-lg duration-300 flex items-center gap-5"
+      className="w-full cursor-pointer hover:bg-hover-background text-text px-4 py-2.5 rounded-lg duration-300 flex items-center gap-5"
     >
       {children}
     </button>

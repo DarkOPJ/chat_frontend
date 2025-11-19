@@ -1,16 +1,13 @@
 import React from "react";
 import LottieAnimation from "../Misc/LottieAnimation";
-import loading from "../../assets/animations/telejam_plane.json"
+import loading from "../../assets/animations/telejam_plane.json";
 
-const AuthenticatingLoader = () => {
+const AuthenticatingLoader = ({ className }) => {
   return (
-    <div className=" h-screen flex justify-center items-center overflow-hidden">
-    
-      <LottieAnimation
-        animationLocation={loading}
-        width={400}
-        height={400}
-      />
+    <div
+      className={`${className} h-screen flex justify-center items-center overflow-hidden bg-background`}
+    >
+      <LottieAnimation animationLocation={loading} width={400} height={400} />
     </div>
   );
 };

@@ -5,7 +5,70 @@ body {
   font-family: "Poppins", sans-serif;
 }
 
-@theme {
+/* .light {
+  --background: 165, 216, 255;
+  --border: 212, 212, 212;
+  --card: 255, 255, 255;
+  background: rgba(var(--background));
+}
+
+.dark {
+  --background: 0, 0, 0;
+  --border: 38, 38, 38;
+  --card: 23, 23, 23;
+  background: rgba(var(--background));
+}
+
+.red {
+  --background: 254, 202, 202;
+  --border: 185, 28, 28;
+  --card: 239, 68, 68;
+  background: rgba(var(--background));
+} */
+
+.light {
+  --background: #ffffff;
+  --sub-background: #2e7ecf;
+  --hover-background: #92caff26;
+  --text: #000000;
+  --full-color: #2e7ecf;
+  --left-bubble: #fffadc;
+  --right-bubble: #e3fee0;
+  --text-opposite: #ffffff;
+}
+
+.dark {
+  --background: #212121;
+  --sub-background: #2f2e2e;
+  --hover-background: #6a728226;
+  --text: #ffffff;
+  --full-color: #c7596f;
+  --left-bubble: #3b2643;
+  --right-bubble: #c7596f;
+  --text-opposite: #000000;
+}
+
+.midnight {
+  --background: #160430;
+  --sub-background: #300e5f;
+  --hover-background: #a15fff26;
+  --text: #ffffff;
+  --full-color: #8774e1;
+  --left-bubble: #15283a;
+  --right-bubble: #8774e1;
+  --text-opposite: #000000;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-sub-background: var(--sub-background);
+  --color-hover-background: var(--hover-background);
+  --color-text: var(--text);
+  --color-full-color: var(--full-color);
+  --color-left-bubble: var(--left-bubble);
+  --color-right-bubble: var(--right-bubble);
+  --color-text-opposite: var(--text-opposite);
+
   --breakpoint-sm: 23.4375rem; /* 375px */
   --breakpoint-custom-md: 35.75rem; /* 572px */
   --breakpoint-md: 48rem; /* 768px */
@@ -14,8 +77,6 @@ body {
 
   --color-dark_purple: #160430;
   --color-normal_purple: #240b48;
-  --color-dark_shadow: #212121;
-  --color-dark_pink: #35012c;
 }
 
 /* Change scrollbar background and thumb */
@@ -25,8 +86,7 @@ body {
 
 ::-webkit-scrollbar-track {
   background: transparent; /* or any color you want */
-    padding: 2px;
-
+  padding: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -36,7 +96,7 @@ body {
 
 /* Hide scrollbar by default, show on hover */
 .hide-scrollbar::-webkit-scrollbar-thumb {
-    background-color: transparent;
+  background-color: transparent;
 }
 .hide-scrollbar:hover::-webkit-scrollbar-thumb {
   background-color: rgba(100, 100, 100, 0.6);
@@ -46,10 +106,10 @@ body {
   width: 5px;
 }
 .hide-chat-input-scrollbar::-webkit-scrollbar-thumb {
-    background-color: transparent;
+  background-color: transparent;
 }
 
-.chat-left-bottom{
+.chat-left-bottom {
   background-color: black;
   width: 20px;
   aspect-ratio: 1/1;

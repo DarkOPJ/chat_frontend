@@ -20,7 +20,6 @@ const Signup = () => {
       <div className="md:bg-dark_purple bg-normal_purple w-full relative">
         <SignupSection />
       </div>
-
     </div>
   );
 };

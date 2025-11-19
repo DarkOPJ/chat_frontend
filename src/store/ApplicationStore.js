@@ -5,6 +5,12 @@ const useApplicationStore = create((set, get) => ({
   sidebar_width: 310,
   is_compact: false,
   enable_sound: true,
+  theme: "light",
+
+  switch_theme: (theme) => {
+    localStorage.setItem("theme", theme);
+    set({ theme: theme });
+  },
 
   switch_submenu: (menu_selected) => {
     localStorage.setItem("current_submenu", menu_selected);
@@ -32,8 +38,10 @@ const useApplicationStore = create((set, get) => ({
     const savedWidth = localStorage.getItem("sidebar_width");
     const savedCompact = localStorage.getItem("is_compact");
     const savedSound = localStorage.getItem("enable_sound");
+    const savedTheme = localStorage.getItem("theme");
 
     set({
+      theme: savedTheme || "light",
       current_submenu: savedMenu || "All Chats",
       sidebar_width: savedWidth ? Number(savedWidth) : 310,
       is_compact: savedCompact ? JSON.parse(savedCompact) : false,
