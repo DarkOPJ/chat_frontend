@@ -19,7 +19,7 @@ const NoMessageSent = () => {
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className="text-center text-white py-6 px-6 bg-[rgba(49,36,65,0.32)] rounded-4xl space-y-3 leading-none animate-pulse">
+      <div className="text-center text-text py-6 px-6 bg-[#31244134] rounded-2xl space-y-3 leading-none animate-pulse">
         <p>No messages here yet...</p>
         <p className="font-light text-sm">
           Send a message or select a quick message starter!

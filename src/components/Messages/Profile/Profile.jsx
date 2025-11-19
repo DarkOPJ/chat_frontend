@@ -15,7 +15,7 @@ const Profile = ({ openCloseHandler, isChatPartner = false }) => {
 
   return (
     <div onClick={(e) => e.stopPropagation()}>
-      <ModalWrapper className={"bg-dark_shadow h-full overflow-hidden"}>
+      <ModalWrapper className={"bg-background h-full overflow-hidden"}>
         <div className="relative w-full h-full">
           {/* MainProfile */}
           <div

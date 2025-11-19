@@ -30,32 +30,32 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
   };
 
   return (
-    <div className={` ${editProfile && "space-y-1"}`}>
+    <div className={`${editProfile && "space-y-1"}`}>
       {editProfile ? (
         <div className="w-full py-3 px-4 rounded-xl relative">
           <div className="relative">
             <label
               htmlFor="email"
-              className="text-xs text-gray-400 bg-dark_shadow px-1.5 absolute -top-2 left-2.5 font-light"
+              className="text-xs text-gray-500 bg-background px-1.5 absolute -top-2 left-2.5 font-light"
             >
               Email
             </label>
             <input
               type="text"
-              id=""
+              id="email"
               name="email"
               placeholder="Email"
               value={authenticated_user.email}
-              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              className="w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm"
               disabled={true}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-hover-background rounded-xl">
           <MdOutlineMarkEmailRead size={30} />
           <div className="space-y-1">
-            <p className="text-white">
+            <p className="text-text">
               {isChatPartner ? selected_user.email : authenticated_user.email}
             </p>
             <p className="text-xs">Email</p>
@@ -68,28 +68,28 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
           <div className="relative">
             <label
               htmlFor="full_name"
-              className="text-xs text-gray-400 bg-dark_shadow px-1.5 absolute -top-2 left-2.5 font-light"
+              className="text-xs text-gray-500 bg-background px-1.5 absolute -top-2 left-2.5 font-light"
             >
               Name
             </label>
             <input
               type="text"
-              id="fullName"
+              id="full_name"
               name="full_name"
               placeholder="Name"
               value={formData.full_name}
               maxLength={30}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              className="w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm"
               disabled={is_updating_profile_info}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-hover-background rounded-xl">
           <PiUserCircleCheck size={30} />
           <div className="space-y-1">
-            <p className="text-white">
+            <p className="text-text">
               {isChatPartner
                 ? selected_user.full_name
                 : authenticated_user.full_name}
@@ -100,11 +100,11 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
       )}
 
       {editProfile ? (
-        <div className="w-full py-3 px-4  rounded-xl">
+        <div className="w-full py-3 px-4 rounded-xl">
           <div className="relative">
             <label
               htmlFor="username"
-              className="text-xs text-gray-400 bg-dark_shadow px-1.5 absolute -top-2 left-2.5 font-light "
+              className="text-xs text-gray-500 bg-background px-1.5 absolute -top-2 left-2.5 font-light"
             >
               Username (optional)
             </label>
@@ -116,16 +116,16 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
               value={formData?.username}
               onChange={handleInputChange}
               maxLength={16}
-              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              className="w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm"
               disabled={is_updating_profile_info}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-hover-background rounded-xl">
           <IoAtOutline size={30} />
           <div className="space-y-1">
-            <p className="text-white">
+            <p className="text-text">
               {isChatPartner
                 ? selected_user.username || (
                     <span className="text-xs">Set your username</span>
@@ -140,11 +140,11 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
       )}
 
       {editProfile ? (
-        <div className="w-full py-3 px-4  rounded-xl">
+        <div className="w-full py-3 px-4 rounded-xl">
           <div className="relative">
             <label
               htmlFor="bio"
-              className="text-xs text-gray-400 bg-dark_shadow px-1.5 absolute -top-2 left-2.5 font-light "
+              className="text-xs text-gray-500 bg-background px-1.5 absolute -top-2 left-2.5 font-light"
             >
               Bio (optional)
             </label>
@@ -156,16 +156,16 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
               value={formData?.bio}
               onChange={handleInputChange}
               maxLength={200}
-              className="w-full px-4 py-3 hover:ring-white/30 outline-none ring-white/10 focus:ring-purple-700 focus:ring-2 ring rounded-lg duration-300 text-white placeholder:text-xs text-sm"
+              className="w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm"
               disabled={is_updating_profile_info}
             />
           </div>
         </div>
       ) : (
-        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-gray-600/20 rounded-xl">
+        <div className="w-full py-2 text-sm px-4 flex items-center text-gray-500 gap-6 hover:bg-hover-background rounded-xl">
           <IoIosInformationCircleOutline size={30} />
           <div className="space-y-1">
-            <p className="text-white">
+            <p className="text-text">
               {isChatPartner
                 ? selected_user.bio || (
                     <span className="text-xs">Set your bio</span>

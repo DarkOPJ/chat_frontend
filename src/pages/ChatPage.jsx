@@ -5,7 +5,13 @@ import useMessageStore from "../store/MessagesStore";
 import { useEffect } from "react";
 
 const ChatPage = () => {
-  const { open_sidebar, set_open_sidebar, selected_user, subscribe_to_new_message_notifications, unsubscribe_from_new_message_notifications } = useMessageStore();
+  const {
+    open_sidebar,
+    set_open_sidebar,
+    selected_user,
+    subscribe_to_new_message_notifications,
+    unsubscribe_from_new_message_notifications,
+  } = useMessageStore();
 
   // ✅ GOOD - Run side effects in useEffect
   useEffect(() => {
@@ -23,7 +29,7 @@ const ChatPage = () => {
   }, []);
 
   return (
-    <section className="flex h-screen bg-dark_purple overflow-x-hidden">
+    <section className="flex h-screen bg-background overflow-x-hidden">
       <div
         className={`hidden md:flex duration-300 md:w-auto ${
           open_sidebar ? "w-full" : "w-0"

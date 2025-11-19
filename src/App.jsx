@@ -41,6 +41,7 @@ import ChatPage from "./pages/ChatPage";
 import Login from "./pages/Login";
 import useAuthStore from "./store/AuthStore";
 import AuthenticatingLoader from "./components/Auth/AuthenticatingLoader";
+import useApplicationStore from "./store/ApplicationStore";
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }) => {
@@ -94,15 +95,18 @@ const router = createBrowserRouter([
 
 const App = () => {
   const { check_authentication_state, is_authenticating } = useAuthStore();
+  const { hydrate, theme } = useApplicationStore();
 
   useEffect(() => {
     check_authentication_state();
+
+    hydrate();
   }, []);
 
-  if (is_authenticating) return <AuthenticatingLoader />;
+  if (is_authenticating) return <AuthenticatingLoader className={`${theme}`} />;
 
   return (
-    <>
+    <section className={`${theme} transition-colors duration-300`}>
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -111,10 +115,10 @@ const App = () => {
         closeOnClick
         pauseOnHover
         draggable
-        theme="dark"
+        theme={theme === "light" ? "light" : "dark"}
       />
       <RouterProvider router={router} />
-    </>
+    </section>
   );
 };
 

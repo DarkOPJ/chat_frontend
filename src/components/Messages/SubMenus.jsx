@@ -14,8 +14,8 @@ const SubMenus = () => {
         }}
         className={`${
           current_submenu === "All Chats"
-            ? "text-purple-500 hover:bg-purple-500/15"
-            : "text-gray-500 hover:bg-gray-500/15"
+            ? "text-full-color hover:bg-full-color/15"
+            : "text-gray-600 hover:bg-gray-500/15"
         } flex items-center gap-1.5 text-sm cursor-pointer  p-3 rounded-t-xl truncate font-medium`}
       >
         All Chats <Badge text={all_chat_partners.length} />
@@ -26,8 +26,8 @@ const SubMenus = () => {
         }}
         className={`${
           current_submenu === "Contacts"
-            ? "text-purple-500 hover:bg-purple-500/15"
-            : "text-gray-500 hover:bg-gray-500/15"
+            ? "text-full-color hover:bg-full-color/15"
+            : "text-gray-600 hover:bg-gray-500/15"
         } flex items-center gap-1.5 text-sm cursor-pointer  p-3 rounded-t-xl truncate font-medium`}
       >
         Contacts <Badge text={all_contacts.length} />

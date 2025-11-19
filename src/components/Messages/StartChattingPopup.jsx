@@ -4,8 +4,7 @@ import textingAnimation from "../../assets/animations/texting.json";
 const StartChattingPopup = () => {
   return (
     <div className="flex-1 flex items-center justify-center h-full ">
-      <div className="text-center text-white py-6 px-6 bg-[rgba(49,36,65,0.32)] rounded-4xl  flex justify-center items-center animate-pulse">
-        {/* <p>💬</p> */}
+      <div className="text-center text-text p-8 bg-[#31244134] rounded-2xl flex justify-center items-center animate-pulse">
         <LottieAnimation
           animationLocation={textingAnimation}
           width={130}

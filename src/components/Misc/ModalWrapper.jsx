@@ -1,9 +1,11 @@
 import React from "react";
+import useApplicationStore from "../../store/ApplicationStore";
 
 const ModalWrapper = ({ children, className }) => {
+  const { theme } = useApplicationStore();
   return (
     <section
-      className="fixed inset-0 z-40 md:py-16 px-4 py-6 flex justify-center items-center transition-opacity duration-300"
+      className={`${theme} fixed inset-0 z-40 md:py-16 px-4 py-6 flex justify-center items-center transition-opacity duration-300 backdrop-blur-xs`}
       style={{ pointerEvents: "none" }}
     >
       <div

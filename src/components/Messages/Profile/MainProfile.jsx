@@ -13,7 +13,7 @@ const MainProfile = ({ openCloseHandler, setIsMainProfile, isChatPartner }) => {
   const [fullView, setFullView] = useState(false);
 
   return (
-    <div className="space-y-11">
+    <div className="space-y-12">
       <ProfileHeader
         openCloseHandler={openCloseHandler}
         title={"Profile"}
@@ -21,10 +21,10 @@ const MainProfile = ({ openCloseHandler, setIsMainProfile, isChatPartner }) => {
         isChatPartner={isChatPartner}
       />
 
-      <div className="w-full h-60 flex justify-center items-center text-center  ">
+      <div className="w-full h-60 flex justify-center items-center text-center">
         <div
           onClick={() => setFullView((prev) => !prev)}
-          className=" h-full aspect-square  flex flex-col gap-3 justify-center items-center duration-300  relative"
+          className="h-full aspect-square flex flex-col gap-3 justify-center items-center duration-300  relative"
         >
           <ProfileAvatar
             profile_pic={
@@ -46,7 +46,7 @@ const MainProfile = ({ openCloseHandler, setIsMainProfile, isChatPartner }) => {
             }
           />
           <div className="space-y-1">
-            <p className="text-white text-xl text-center">
+            <p className="text-text text-xl text-center">
               {isChatPartner
                 ? selected_user.full_name
                 : authenticated_user.full_name}
@@ -59,9 +59,9 @@ const MainProfile = ({ openCloseHandler, setIsMainProfile, isChatPartner }) => {
             <p className="text-gray-500 text-xs leading-none">
               {isChatPartner
                 ? online_users.includes(selected_user._id)
-                  ? "Online"
+                  ? "online"
                   : formatLastSeen(selected_user.last_seen).toLowerCase()
-                : "Online"}
+                : "online"}
             </p>{" "}
           </div>
         </div>

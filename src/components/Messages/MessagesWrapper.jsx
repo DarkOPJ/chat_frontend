@@ -96,8 +96,8 @@ const MessagesWrapper = () => {
             key={idx}
             leftOrRight={idx % 2 == 1 ? "left" : "right"}
             image={""}
-            text={"Hello"}
-            sentTime={"10:28"}
+            text={""}
+            sentTime={""}
             isSkeleton={true}
           />
         ))

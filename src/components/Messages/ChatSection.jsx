@@ -1,18 +1,26 @@
 import React, { useEffect } from "react";
-import background1 from "../../assets/images/chatbg1.png";
 import StartChattingPopup from "./StartChattingPopup";
 
 import useMessageStore from "../../store/MessagesStore";
 import SelectedUserBanner from "./SelectedUserBanner";
 import ChatInput from "./ChatInput";
 import MessagesWrapper from "./MessagesWrapper";
+import useApplicationStore from "../../store/ApplicationStore";
+
+import chatbglight from "../../assets/images/chatbglight.png";
+import chatbgmidnight from "../../assets/images/chatbgmidnight.png";
+import chatbgdark from "../../assets/images/chatbgdark.png";
 
 const ChatSection = () => {
-  const {
-    open_sidebar,
-    selected_user,
-    select_a_user,
-  } = useMessageStore();
+  const { open_sidebar, selected_user, select_a_user } = useMessageStore();
+  const { theme } = useApplicationStore();
+
+  const backgrounds = {
+    light: chatbglight,
+    midnight: chatbgmidnight,
+    dark: chatbgdark,
+  };
+  const background = backgrounds[theme] ?? null;
 
   // Escape key
   useEffect(() => {
@@ -32,11 +40,14 @@ const ChatSection = () => {
         open_sidebar ? "w-0 md:w-full" : "w-full"
       } duration-300`}
       style={{
-        backgroundImage: `url(${background1})`,
+        backgroundImage: background ? `url(${background})` : "none",
       }}
     >
       {selected_user ? (
-        <div className="w-full h-screen bg-[linear-gradient(135deg,rgba(99,102,241,0.1),rgba(10,10,10,0.2),rgba(200,197,94,0.1))] flex flex-col ">
+        <div className="w-full h-screen bg-[linear-gradient(135deg,rgba(140,102,241,0.1),rgba(10,10,10,0.2),rgba(190,30,94,0.1))] flex flex-col ">
+
+          {/* midnight bg-[linear-gradient(135deg,rgba(99,102,241,0.1),rgba(10,10,10,0.2),rgba(200,197,94,0.1))] */}
+
           {/* Selected user header */}
           <SelectedUserBanner />
 
@@ -53,7 +64,6 @@ const ChatSection = () => {
       ) : (
         <StartChattingPopup />
       )}
-
     </div>
   );
 };

@@ -16,19 +16,19 @@ const ProfileHeader = ({
     <div className="flex items-center justify-between px-2">
       <div className="flex items-center gap-10">
         <button
-          className="cursor-pointer hover:bg-gray-600/20 p-2 rounded-full text-gray-400 text-xl duration-300 "
+          className="cursor-pointer hover:bg-hover-background p-2 rounded-full text-text text-xl duration-300 "
           onClick={title === "Profile" ? openCloseHandler : setIsMainProfile}
         >
           <IoArrowBackOutline />
         </button>
-        <p className="text-white text-xl">{title}</p>
+        <p className="text-text text-xl">{title}</p>
       </div>
       {title === "Profile" ? (
         isChatPartner ? (
           <></>
         ) : (
           <button
-            className="cursor-pointer hover:bg-gray-600/20 p-2 rounded-full text-gray-400 text-xl duration-300 "
+            className="cursor-pointer hover:bg-hover-background p-2 rounded-full text-text text-xl duration-300 "
             onClick={setIsMainProfile}
           >
             <FiEdit3 />
@@ -36,9 +36,9 @@ const ProfileHeader = ({
         )
       ) : (
         <button
-          className={`  p-2 rounded-full ${
+          className={`p-2 rounded-full ${
             profile_editted && !is_updating_profile_info
-              ? "hover:bg-gray-600/20 text-green-400 cursor-pointer"
+              ? "hover:bg-hover-background text-green-400 cursor-pointer"
               : "text-gray-500/50 cursor-not-allowed"
           } text-2xl duration-300 `}
           onClick={handleSubmit}

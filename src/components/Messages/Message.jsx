@@ -7,8 +7,8 @@ import PortalBackground from "../Misc/PortalBackground";
 import { createPortal } from "react-dom";
 import ExpandImageMessage from "./ExpandImageMessage";
 import { AiOutlineCloudDownload } from "react-icons/ai";
-import { VscCheck } from "react-icons/vsc";
-import { VscCheckAll } from "react-icons/vsc";
+import { PiChecksBold } from "react-icons/pi";
+import { PiCheckBold } from "react-icons/pi";
 
 const Message = ({
   leftOrRight = "",
@@ -57,26 +57,26 @@ const Message = ({
               <div className="size-6" />
             )
           ) : (
-            <div className="size-6 rounded-full animate-pulse bg-slate-700/70" />
+            <div className="size-6 rounded-full animate-pulse bg-sub-background/70" />
           )}
         </div>
 
         <div
           className={`${
-            isSkeleton && "bg-slate-800/60 animate-pulse"
-          } text-white px-2 py-2 rounded-t-2xl space-y-1 text-sm ${
+            isSkeleton && "bg-sub-background/60 animate-pulse"
+          } text-text px-0.5 py-0.5 rounded-t-[15px] space-y-0.5 text-sm ${
             leftOrRight === "left"
-              ? "rounded-r-2xl bg-dark_shadow/80"
-              : "rounded-l-2xl bg-purple-800/80 ml-auto"
+              ? "rounded-r-[15px] bg-left-bubble"
+              : "rounded-l-[15px] bg-right-bubble ml-auto"
           } relative`}
         >
           {leftOrRight === "left" &&
             (!isSkeleton ? (
-              <p className={`text-xs leading-none ${textColor}`}>
+              <p className={`text-xs min-w-20 px-2 pt-1 leading-none ${textColor}`}>
                 {selected_user.full_name}
               </p>
             ) : (
-              <div className="w-16 p-1.5 animate-pulse bg-slate-600/70 rounded-sm" />
+              <div className="w-16 p-1.5 animate-pulse bg-sub-background/70 rounded-sm" />
             ))}
           <div>
             {/* Portal for displaying full image */}
@@ -93,14 +93,14 @@ const Message = ({
             {image && !isSkeleton && (
               <div className="relative">
                 <img
-                  className="w-full rounded-xl object-contain mb-1.5 cursor-pointer"
+                  className="w-full rounded-t-[14px] object-contain mb-1.5 cursor-pointer"
                   src={image}
                   alt="Shared image."
                   onClick={() => setToggleFullScreen(true)}
                 />
                 <button
                   type="button"
-                  className="absolute top-2 right-2 duration-300 bg-black/35 text-white/35 hover:bg-black hover:text-white p-1 rounded-full cursor-pointer"
+                  className="absolute top-2 right-2 duration-300 bg-background/35 text-text/35 hover:bg-background hover:text-text p-1 rounded-full cursor-pointer"
                   onClick={() => handleDownloadImage(image)}
                 >
                   <AiOutlineCloudDownload />
@@ -109,7 +109,7 @@ const Message = ({
             )}
 
             {text && !isSkeleton && (
-              <p className="wrap-anywhere">
+              <p className={`${leftOrRight === "right" && !image && "pt-1.5"} wrap-anywhere text-text min-w-20 px-2 py-1 leading-none`}>
                 {text}
 
                 {isStreaming && (
@@ -119,24 +119,24 @@ const Message = ({
             )}
 
             {isSkeleton && (
-              <div className=" space-y-1">
-                <div className="w-40 p-1.5 animate-pulse bg-slate-600/70 rounded-sm" />
-                <div className="w-32 p-1.5 animate-pulse bg-slate-600/70 rounded-sm" />
+              <div className="space-y-1">
+                <div className="w-40 p-1.5 animate-pulse bg-sub-background/70 rounded-sm" />
+                <div className="w-32 p-1.5 animate-pulse bg-sub-background/70 rounded-sm" />
               </div>
             )}
           </div>
           {sentTime && !isSkeleton ? (
             !isStreaming ? (
-              <div className="text-xs flex gap-1 items-center">
-                <p className="leading-none ml-auto w-fit">{sentTime}</p>
+              <div className="flex gap-1.5 items-center min-w-20 px-1">
+                <p className={`${leftOrRight === "left" && "px-1"} ml-auto w-fit text-[10px]`}>{sentTime}</p>
                 {leftOrRight === "right" &&
-                  (isRead ? <VscCheckAll className="text-green-500" /> : <VscCheck />)}
+                  (isRead ? <PiChecksBold className="text-sub-background text-base duration-300" /> : <PiCheckBold />)}
               </div>
             ) : (
               <></>
             )
           ) : (
-            <div className="w-5 p-1 animate-pulse bg-slate-600/70 rounded-xs ml-auto" />
+            <div className="w-5 p-1 animate-pulse bg-sub-background/70 rounded-xs ml-auto" />
           )}
         </div>
       </div>
