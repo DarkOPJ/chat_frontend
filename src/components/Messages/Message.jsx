@@ -148,7 +148,7 @@ const Message = ({
                 {leftOrRight === "right" &&
                   (isOptimistic ? (
                     <PiClockCountdownBold />
-                  ) : isRead ? (
+                  ) : selected_user.full_name === "Orion✨" || isRead ? (
                     <PiChecksBold className="text-sub-background text-base duration-300" />
                   ) : (
                     <PiCheckBold />
