@@ -4,12 +4,15 @@ import { TbEye, TbEyeClosed } from "react-icons/tb";
 import SignupLoginSwitch from "./SignupLoginSwitch";
 import { PiSpinnerBallDuotone } from "react-icons/pi";
 import useAuthStore from "../../store/AuthStore";
+import { TbLockPassword } from "react-icons/tb";
 
 const SignupPassword = ({ signup }) => {
   const { is_signing_up } = useAuthStore();
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordValid, setPasswordValid] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,10 +33,12 @@ const SignupPassword = ({ signup }) => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setPasswordValid(password ? checkPassword(password) : null);
+      const validStrength = checkPassword(password);
+      const matches = password && confirmPassword ? password === confirmPassword : false;
+      setPasswordValid(password && confirmPassword ? validStrength && matches : null);
     }, 500);
     return () => clearTimeout(timeout);
-  }, [password]);
+  }, [password, confirmPassword]);
 
   return (
     <form
@@ -68,6 +73,43 @@ const SignupPassword = ({ signup }) => {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <label
+          htmlFor="confirm_password"
+          className="text-sm block leading-none"
+        >
+          Confirm Password
+        </label>
+
+        <div className="w-full relative">
+          <div className="absolute top-1/2 -translate-y-1/2 left-4 text-xl text-stone-400">
+            <TbLockPassword />
+          </div>
+          <div className="absolute flex justify-center items-center top-1/2 -translate-y-1/2 right-4 text-xl text-stone-400">
+            <button
+              className="cursor-pointer hover:text-blue-400 duration-300 ease-in-out"
+              onClick={() => {
+                setConfirmPasswordVisible((prevState) => !prevState);
+              }}
+              type="button"
+            >
+              {confirmPasswordVisible ? <TbEyeClosed /> : <TbEye />}
+            </button>
+          </div>
+
+          <input
+            className="md:bg-[#261046] bg-[#190733] w-full custom-md:py-4 py-3 px-12 outline-0 rounded-xl leading-0 text-sm block"
+            type={confirmPasswordVisible ? "text" : "password"}
+            id="confirm_password"
+            name="confirm_password"
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
           />
         </div>

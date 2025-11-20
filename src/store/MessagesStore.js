@@ -43,13 +43,19 @@ const useMessageStore = create((set, get) => ({
     set({ is_loading_chat_partners: true });
     try {
       const res = await axiosInstance.get("/messages/chats");
-      set({ all_chat_partners: res.data });
+      set({
+        all_chat_partners: res.data,
+        unread_counts: res.data.reduce((acc, chat) => {
+          acc[chat._id] = chat.unread_count;
+          return acc;
+        }, {}),
+      });
     } catch (error) {
       toast.error(
         error?.response?.data?.message ||
           "There was an error loading your chats."
       );
-      set({ all_chat_partners: [] });
+      set({ all_chat_partners: [], unread_counts: {} });
     } finally {
       set({ is_loading_chat_partners: false });
     }
@@ -77,7 +83,7 @@ const useMessageStore = create((set, get) => ({
   send_message_by_id: async (data, new_convo = false) => {
     const { authenticated_user } = useAuthStore.getState();
     const { enable_sound } = useApplicationStore.getState();
-    const { selected_user } = get(); // Don't get all_messages_by_id here
+    const { selected_user } = get();
 
     // Optimistic update
     const optimistic_message = {

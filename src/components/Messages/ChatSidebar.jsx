@@ -188,7 +188,7 @@ const ChatSidebar = ({ smallScreen }) => {
           {is_loading_chat_partners && <UsersLoadingSkeleton />}
           {all_chat_partners &&
             all_chat_partners.map((chat) => (
-              <ChatUserBtn key={chat._id} chat={chat} />
+              <ChatUserBtn key={chat._id} chat={chat} unread=""/>
             ))}
         </div>
 
