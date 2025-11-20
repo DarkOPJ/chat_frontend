@@ -43,8 +43,8 @@ const EditProfile = ({ openCloseHandler, setIsMainProfile }) => {
       showError("Name is required.", setError);
       return;
     }
-    if (processed_name.length < 3 || processed_name.length > 30) {
-      showError("Name must be 3 - 30 characters.", setError);
+    if (processed_name.length < 3 || processed_name.length > 20) {
+      showError("Name must be 3 - 20 characters.", setError);
       return;
     }
     const nameRegex = /^[\p{L}\p{N}' \-\p{Emoji}\p{Emoji_Component}]+$/u;
@@ -93,8 +93,8 @@ const EditProfile = ({ openCloseHandler, setIsMainProfile }) => {
         handleSubmit={handleSubmit}
       />
 
-      <div className="w-full h-60 flex justify-center items-center text-center  ">
-        <div className=" h-full aspect-square  flex flex-col gap-3 justify-center items-center duration-300 relative">
+      <div className="w-full h-60 flex justify-center items-center text-center">
+        <div className=" h-full aspect-square flex flex-col gap-3 justify-center items-center duration-300 relative">
           <div className="relative">
             <ProfileAvatar
               profile_pic={authenticated_user.profile_pic}
@@ -119,7 +119,7 @@ const EditProfile = ({ openCloseHandler, setIsMainProfile }) => {
           </div>
 
           <div>
-            <p className="text-white text-xl text-center">
+            <p className="text-text text-xl text-center">
               {authenticated_user.full_name}
             </p>
           </div>
