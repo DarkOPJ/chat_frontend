@@ -23,6 +23,12 @@ const useMessageStore = create((set, get) => ({
   draft_messages: {}, // { user_id: "draft text" }
   draft_images: {}, // { user_id: "image_preview_url" }
 
+  search_query: "",
+
+  set_search_query: (query) => {
+    set({ search_query: query });
+  },
+
   get_all_contacts: async () => {
     set({ is_loading_contacts: true });
     try {
@@ -78,6 +84,30 @@ const useMessageStore = create((set, get) => ({
     } finally {
       set({ is_loading_messages: false });
     }
+  },
+
+  get_filtered_results: () => {
+    const { current_submenu } = useApplicationStore.getState();
+    const { search_query, all_chat_partners, all_contacts } = get();
+
+    if (!search_query.trim()) {
+      // Return normal lists if no search query
+      return current_submenu === "All Chats" ? all_chat_partners : all_contacts;
+    }
+
+    const query = get().search_query.toLowerCase();
+
+    if (current_submenu === "All Chats") {
+      return all_chat_partners.filter((chat) =>
+        chat.partner.full_name.toLowerCase().includes(query)
+      );
+    } else if (current_submenu === "Contacts") {
+      return all_contacts.filter((contact) =>
+        contact.full_name.toLowerCase().includes(query)
+      );
+    }
+
+    return [];
   },
 
   send_message_by_id: async (data, new_convo = false) => {

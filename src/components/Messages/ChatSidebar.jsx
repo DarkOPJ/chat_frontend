@@ -23,6 +23,7 @@ const ChatSidebar = ({ smallScreen }) => {
     all_chat_partners,
     open_sidebar,
     set_open_sidebar,
+    get_filtered_results,
   } = useMessageStore();
 
   const {
@@ -86,6 +87,8 @@ const ChatSidebar = ({ smallScreen }) => {
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isResizing, is_compact]);
+
+  const filtered_results = get_filtered_results();
 
   return (
     <div
@@ -177,7 +180,8 @@ const ChatSidebar = ({ smallScreen }) => {
 
       {/* Chat List */}
       {/* All Chats */}
-      <div className="flex-1 overflow-hidden relative">
+      {/* Contacts */}
+      {/* <div className="flex-1 overflow-hidden relative">
         <div
           className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out ${
             !is_loading_chat_partners && "overflow-y-auto"
@@ -188,11 +192,10 @@ const ChatSidebar = ({ smallScreen }) => {
           {is_loading_chat_partners && <UsersLoadingSkeleton />}
           {all_chat_partners &&
             all_chat_partners.map((chat) => (
-              <ChatUserBtn key={chat._id} chat={chat} unread=""/>
+              <ChatUserBtn key={chat._id} chat={chat} unread="" />
             ))}
         </div>
 
-        {/* Contacts */}
         <div
           className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out ${
             !is_loading_contacts && "overflow-y-auto"
@@ -204,6 +207,41 @@ const ChatSidebar = ({ smallScreen }) => {
 
           {all_contacts &&
             all_contacts.map((contact) => (
+              <ChatUserBtn key={contact._id} contact={contact} />
+            ))}
+        </div>
+      </div> */}
+
+      {/* All Chats */}
+      <div className="flex-1 overflow-hidden relative">
+        <div
+          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out hide-scrollbar ${
+            !is_loading_chat_partners && "overflow-y-auto"
+          } ${
+            current_submenu === "All Chats"
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }`}
+        >
+          {is_loading_chat_partners && <UsersLoadingSkeleton />}
+          {current_submenu === "All Chats" &&
+            filtered_results.map((chat) => (
+              <ChatUserBtn key={chat._id} chat={chat} unread="" />
+            ))}
+        </div>
+        {/* Contacts */}
+        <div
+          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out hide-scrollbar ${
+            !is_loading_contacts && "overflow-y-auto"
+          } ${
+            current_submenu === "Contacts"
+              ? "translate-x-0"
+              : "translate-x-full"
+          }`}
+        >
+          {is_loading_contacts && <UsersLoadingSkeleton />}
+          {current_submenu === "Contacts" &&
+            filtered_results.map((contact) => (
               <ChatUserBtn key={contact._id} contact={contact} />
             ))}
         </div>

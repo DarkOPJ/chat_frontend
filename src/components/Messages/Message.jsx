@@ -9,6 +9,7 @@ import ExpandImageMessage from "./ExpandImageMessage";
 import { AiOutlineCloudDownload } from "react-icons/ai";
 import { PiChecksBold } from "react-icons/pi";
 import { PiCheckBold } from "react-icons/pi";
+import { TbClock2 } from "react-icons/tb";
 
 const Message = ({
   leftOrRight = "",
