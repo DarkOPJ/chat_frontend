@@ -69,6 +69,7 @@ const MessagesWrapper = () => {
                   isSkeleton={false}
                   showProfilePic={isLastInGroup}
                   isRead={msg.is_read}
+                  isOptimistic={msg.is_optimistic || false}
                 />
               );
             })}

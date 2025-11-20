@@ -180,39 +180,6 @@ const ChatSidebar = ({ smallScreen }) => {
 
       {/* Chat List */}
       {/* All Chats */}
-      {/* Contacts */}
-      {/* <div className="flex-1 overflow-hidden relative">
-        <div
-          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out ${
-            !is_loading_chat_partners && "overflow-y-auto"
-          } hide-scrollbar
-      ${current_submenu === "All Chats" ? "translate-x-0" : "-translate-x-full"}
-    `}
-        >
-          {is_loading_chat_partners && <UsersLoadingSkeleton />}
-          {all_chat_partners &&
-            all_chat_partners.map((chat) => (
-              <ChatUserBtn key={chat._id} chat={chat} unread="" />
-            ))}
-        </div>
-
-        <div
-          className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out ${
-            !is_loading_contacts && "overflow-y-auto"
-          } hide-scrollbar
-      ${current_submenu === "Contacts" ? "translate-x-0" : "translate-x-full"}
-    `}
-        >
-          {is_loading_contacts && <UsersLoadingSkeleton />}
-
-          {all_contacts &&
-            all_contacts.map((contact) => (
-              <ChatUserBtn key={contact._id} contact={contact} />
-            ))}
-        </div>
-      </div> */}
-
-      {/* All Chats */}
       <div className="flex-1 overflow-hidden relative">
         <div
           className={`absolute top-0 left-0 w-full h-full p-2 transition-transform duration-300 ease-in-out hide-scrollbar ${

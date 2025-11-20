@@ -458,12 +458,8 @@ const useMessageStore = create((set, get) => ({
               (state.unread_counts[conversation._id] || 0) + 1,
           },
         }));
-      } else {
-        // Chat is open, add message to current messages
-        set((state) => ({
-          all_messages_by_id: [...state.all_messages_by_id, sent_message],
-        }));
       }
+      // Note: Message adding when chat is open is handled by subscribe_to_messages
     });
   },
   unsubscribe_from_new_message_notifications: () => {

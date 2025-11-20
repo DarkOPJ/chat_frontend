@@ -7,9 +7,11 @@ import PortalBackground from "../Misc/PortalBackground";
 import { createPortal } from "react-dom";
 import ExpandImageMessage from "./ExpandImageMessage";
 import { AiOutlineCloudDownload } from "react-icons/ai";
-import { PiChecksBold } from "react-icons/pi";
-import { PiCheckBold } from "react-icons/pi";
-import { TbClock2 } from "react-icons/tb";
+import {
+  PiChecksBold,
+  PiCheckBold,
+  PiClockCountdownBold,
+} from "react-icons/pi";
 
 const Message = ({
   leftOrRight = "",
@@ -20,6 +22,7 @@ const Message = ({
   showProfilePic,
   isStreaming = false,
   isRead = false,
+  isOptimistic = false,
 }) => {
   const { authenticated_user } = useAuthStore();
   const { selected_user, handleDownloadImage } = useMessageStore();
@@ -65,7 +68,7 @@ const Message = ({
         <div
           className={`${
             isSkeleton && "bg-sub-background/60 animate-pulse"
-          } text-text px-0.5 py-0.5 rounded-t-[15px] space-y-0.5 text-sm ${
+          } text-text px-0.5 pt-0.5 pb-1 rounded-t-[15px] space-y-0.5 text-sm ${
             leftOrRight === "left"
               ? "rounded-r-[15px] bg-left-bubble"
               : "rounded-l-[15px] bg-right-bubble ml-auto"
@@ -73,7 +76,9 @@ const Message = ({
         >
           {leftOrRight === "left" &&
             (!isSkeleton ? (
-              <p className={`text-xs min-w-20 px-2 pt-1 leading-none ${textColor}`}>
+              <p
+                className={`text-xs min-w-20 px-2 pt-1 leading-none ${textColor}`}
+              >
                 {selected_user.full_name}
               </p>
             ) : (
@@ -110,7 +115,11 @@ const Message = ({
             )}
 
             {text && !isSkeleton && (
-              <p className={`${leftOrRight === "right" && !image && "pt-1.5"} wrap-anywhere text-text min-w-20 px-2 py-1 leading-none`}>
+              <p
+                className={`${
+                  leftOrRight === "right" && !image && "pt-1.5"
+                } wrap-anywhere whitespace-pre-wrap text-text min-w-20 px-2 py-1 leading-[18px]`}
+              >
                 {text}
 
                 {isStreaming && (
@@ -127,14 +136,24 @@ const Message = ({
             )}
           </div>
           {sentTime && !isSkeleton ? (
-            !isStreaming ? (
+            !isStreaming && (
               <div className="flex gap-1.5 items-center min-w-20 px-1">
-                <p className={`${leftOrRight === "left" && "px-1"} ml-auto w-fit text-[10px]`}>{sentTime}</p>
+                <p
+                  className={`${
+                    leftOrRight === "left" && "px-1"
+                  } ml-auto w-fit text-[10px]`}
+                >
+                  {sentTime}
+                </p>
                 {leftOrRight === "right" &&
-                  (isRead ? <PiChecksBold className="text-sub-background text-base duration-300" /> : <PiCheckBold />)}
+                  (isOptimistic ? (
+                    <PiClockCountdownBold />
+                  ) : isRead ? (
+                    <PiChecksBold className="text-sub-background text-base duration-300" />
+                  ) : (
+                    <PiCheckBold />
+                  ))}
               </div>
-            ) : (
-              <></>
             )
           ) : (
             <div className="w-5 p-1 animate-pulse bg-sub-background/70 rounded-xs ml-auto" />

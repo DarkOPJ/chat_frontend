@@ -158,6 +158,13 @@ const ChatInput = () => {
                 setMessage(e.target.value);
                 if (enable_sound) playRandomKeyStrokeSound();
               }}
+              // Press enter to send, shift+enter for new line
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend(e);
+                }
+              }}
               rows={1}
               className="max-h-40 w-full px-[52px] py-4 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color/40 focus:ring-2 ring rounded-3xl duration-300 text-text placeholder:text-text/50 bg-background/50 resize-none hide-chat-input-scrollbar text-sm backdrop-blur-sm"
             />
