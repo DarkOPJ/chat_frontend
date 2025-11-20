@@ -13,11 +13,12 @@ const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
     const trimmed = name.trim();
 
     // Must contain at least two alphabetic parts, separated by exactly one space, hyphen, or apostrophe
-    const nameRegex =
-      /^[\p{L}\p{N}' \-\p{Emoji}\p{Emoji_Component}]+$/u;
+    const nameRegex = /^[\p{L}\p{N}' \-\p{Emoji}\p{Emoji_Component}]+$/u;
 
     // Reject consecutive spaces, hyphens, or apostrophes
-    if (/([ '\-])\1/.test(trimmed)) return false;
+    // if (/([ '\-])\1/.test(trimmed)) return false;
+
+    if (!/^.{3,20}$/.test(trimmed)) return false;
 
     return nameRegex.test(trimmed);
   };
@@ -70,7 +71,7 @@ const SignupNameAndEmail = ({ nameAndEmailHandler }) => {
     >
       <div className="space-y-2">
         <label htmlFor="full_name" className="text-sm block leading-none">
-          Full Name
+          Name
         </label>
         <div className="w-full relative">
           <div className="absolute top-1/2 -translate-y-1/2 left-4 text-xl text-stone-400">

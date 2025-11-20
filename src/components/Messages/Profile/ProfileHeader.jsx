@@ -38,7 +38,7 @@ const ProfileHeader = ({
         <button
           className={`p-2 rounded-full ${
             profile_editted && !is_updating_profile_info
-              ? "hover:bg-hover-background text-green-400 cursor-pointer"
+              ? "hover:bg-hover-background text-full-color cursor-pointer"
               : "text-gray-500/50 cursor-not-allowed"
           } text-2xl duration-300 `}
           onClick={handleSubmit}

@@ -14,6 +14,7 @@ import { HiMiniChevronRight } from "react-icons/hi2";
 import Light from "../Misc/CustomIcons/Light";
 import Midnight from "../Misc/CustomIcons/Midnight";
 import Dark from "../Misc/CustomIcons/Dark";
+import useMessageStore from "../../store/MessagesStore";
 
 const mouseClickSound = new Audio("/sounds/mouse-click.mp3");
 
@@ -27,6 +28,7 @@ const Menu = ({
   const { authenticated_user, logout } = useAuthStore();
   const { enable_sound, toggle_sound, switch_theme, theme } =
     useApplicationStore();
+  const { select_a_user } = useMessageStore();
   const [toggleProfile, setToggleProfile] = useState(false);
   const [toggleThemeMenu, setToggleThemeMenu] = useState(false);
 
@@ -147,7 +149,12 @@ const Menu = ({
             </Menu>
 
             {/* Logout */}
-            <MenuBtn func={logout}>
+            <MenuBtn
+              func={() => {
+                select_a_user(null);
+                logout();
+              }}
+            >
               <FiLogOut className="text-xl text-red-700" />
               <p className="text-sm text-red-700">Logout</p>
             </MenuBtn>

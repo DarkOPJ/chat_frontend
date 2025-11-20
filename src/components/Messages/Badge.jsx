@@ -12,7 +12,7 @@ const Badge = ({ text, selected = false }) => {
             : "bg-full-color text-text-opposite"
           : selected
           ? "bg-white text-full-color"
-          : "bg-full-color"
+          : "bg-full-color text-text"
       }  text-center min-w-8 rounded-full py-1 px-1 leading-none font-normal text-xs truncate`}
     >
       {text}

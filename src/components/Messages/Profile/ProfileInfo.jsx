@@ -80,7 +80,9 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
               value={formData.full_name}
               maxLength={30}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm"
+              className={`w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm ${
+                is_updating_profile_info && "hover:cursor-not-allowed"
+              }`}
               disabled={is_updating_profile_info}
             />
           </div>
@@ -116,7 +118,9 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
               value={formData?.username}
               onChange={handleInputChange}
               maxLength={16}
-              className="w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm"
+              className={`w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm ${
+                is_updating_profile_info && "hover:cursor-not-allowed"
+              }`}
               disabled={is_updating_profile_info}
             />
           </div>
@@ -156,7 +160,9 @@ const ProfileInfo = ({ editProfile, formData, setFormData, isChatPartner }) => {
               value={formData?.bio}
               onChange={handleInputChange}
               maxLength={200}
-              className="w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color hover:cursor-not-allowed focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm"
+              className={`w-full px-4 py-3 hover:ring-text/30 outline-none ring-text/10 focus:ring-full-color focus:ring-2 ring rounded-lg duration-300 text-text placeholder:text-xs text-sm ${
+                is_updating_profile_info && "hover:cursor-not-allowed"
+              }`}
               disabled={is_updating_profile_info}
             />
           </div>
