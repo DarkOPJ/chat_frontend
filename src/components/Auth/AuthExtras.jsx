@@ -16,7 +16,6 @@ const AuthExtras = () => {
     onError: () => {
       toast.error("There was a problem with the Google login.");
     },
-    useOneTap: true,
     flow: "auth-code",
   });
 
@@ -25,7 +24,6 @@ const AuthExtras = () => {
       <p className="text-stone-400 text-xs text-center">Or continue with</p>
 
       <div className="flex gap-2 text-center">
-        {/* <div className="w-full flex items-center justify-center"> */}
         <button
           type="button"
           onClick={login}
@@ -34,20 +32,6 @@ const AuthExtras = () => {
           <FcGoogle className="inline text-xl mr-2 -mt-1" />
           Google
         </button>
-        {/* <div>
-          <GoogleLogin
-            onSuccess={(credentialResponse) => {
-              console.log(credentialResponse);
-              console.log(jwtDecode(credentialResponse.credential));
-            }}
-            onError={() => {
-              toast.error("There was a problem with the Google login.");
-            }}
-            useOneTap
-            // shape="pill"
-            theme="filled_black"
-          />
-        </div> */}
         <button
           type="button"
           onClick={() => console.log("Facebook login.")}
