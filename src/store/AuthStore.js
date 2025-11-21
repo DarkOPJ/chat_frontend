@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/Axios";
 import { toast } from "react-toastify";
 import { io } from "socket.io-client";
+import { googleLogout } from "@react-oauth/google";
 
 // Change the production url
 const BASE_URL =
@@ -124,11 +125,37 @@ const useAuthStore = create((set, get) => ({
       set({ is_logging_in: false });
     }
   },
+  user_oauth: async (code) => {
+    const { connect_socket } = get();
+
+    set({ is_logging_in: true });
+    try {
+      const res = await axiosInstance.post("/auth/google", { code });
+
+      if (res.data.success) {
+        set({ authenticated_user: res.data });
+        toast.success("Keep chatting with us! 😉");
+      } else {
+        toast.error(res.data.message || "Your request could not be processed.");
+        set({ authenticated_user: null });
+      }
+
+      connect_socket();
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message || "Your request could not be processed."
+      );
+      set({ authenticated_user: null });
+    } finally {
+      set({ is_logging_in: false });
+    }
+  },
 
   logout: async () => {
     const { disconnect_socket } = get();
 
     try {
+      googleLogout();
       const res = await axiosInstance.post("/auth/logout");
       disconnect_socket();
       set({ authenticated_user: null });
