@@ -12,7 +12,13 @@ import chatbgmidnight from "../../assets/images/chatbgmidnight.png";
 import chatbgdark from "../../assets/images/chatbgdark.png";
 
 const ChatSection = () => {
-  const { open_sidebar, selected_user, select_a_user } = useMessageStore();
+  const {
+    open_sidebar,
+    selected_user,
+    select_a_user,
+    subscribe_to_typing,
+    unsubscribe_from_typing,
+  } = useMessageStore();
   const { theme } = useApplicationStore();
 
   const backgrounds = {
@@ -21,6 +27,13 @@ const ChatSection = () => {
     dark: chatbgdark,
   };
   const background = backgrounds[theme] ?? null;
+
+  // typing animation
+  useEffect(() => {
+    subscribe_to_typing();
+
+    return () => unsubscribe_from_typing();
+  }, []);
 
   // Escape key
   useEffect(() => {
@@ -45,7 +58,6 @@ const ChatSection = () => {
     >
       {selected_user ? (
         <div className="w-full h-screen bg-[linear-gradient(135deg,rgba(140,102,241,0.1),rgba(10,10,10,0.2),rgba(190,30,94,0.1))] flex flex-col ">
-
           {/* midnight bg-[linear-gradient(135deg,rgba(99,102,241,0.1),rgba(10,10,10,0.2),rgba(200,197,94,0.1))] */}
 
           {/* Selected user header */}

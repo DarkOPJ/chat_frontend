@@ -14,8 +14,10 @@ import useAuthStore from "../../store/AuthStore";
 import formatLastSeen from "../../lib/LastSeen";
 
 const SelectedUserBanner = () => {
-  const { set_open_sidebar, selected_user, select_a_user } = useMessageStore();
-  const {online_users} = useAuthStore()
+  const { set_open_sidebar, selected_user, select_a_user, is_typing } =
+    useMessageStore();
+  const userIsTyping = is_typing[selected_user._id];
+  const { online_users } = useAuthStore();
   const [toggleProfile, setToggleProfile] = useState(false);
 
   return (
@@ -46,7 +48,9 @@ const SelectedUserBanner = () => {
               {selected_user.full_name}
             </p>
             <p className="text-xs text-gray-400 truncate">
-              {online_users.includes(selected_user._id) ? "online" : formatLastSeen(selected_user.last_seen).toLowerCase()}
+              {online_users.includes(selected_user._id)
+                ? (userIsTyping ? `${selected_user.full_name} is typing...` : "online")
+                : formatLastSeen(selected_user.last_seen).toLowerCase()}
             </p>
           </div>
         </button>

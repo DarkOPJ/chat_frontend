@@ -65,6 +65,7 @@ const MessagesWrapper = () => {
                   }
                   image={msg.image}
                   text={msg.text}
+                  audio={msg.audio}
                   sentTime={formatTime(msg.createdAt)}
                   isSkeleton={false}
                   showProfilePic={isLastInGroup}

@@ -113,40 +113,40 @@ const Menu = ({
               </div>
             </MenuBtn>
             {/* Lmao calling a react component within itself 🤣🤣🤣 */}
-            <Menu
-              menuOpen={toggleThemeMenu}
-              setMenuOpen={setToggleThemeMenu}
-              isMainMenu={false}
-              positioningAndSize={"w-60 top-[280px] -right-[178px]"}
-            >
-              <MenuBtn func={() => switch_theme("light")}>
-                <Light className={"size-5"} />
-                <div className="flex justify-between items-center gap-1 w-full">
-                  <p className="text-sm text-text">Light</p>
-                  {theme === "light" && (
-                    <div className="size-2 rounded-full bg-green-600 animate-pulse" />
-                  )}
-                </div>
-              </MenuBtn>
-              <MenuBtn func={() => switch_theme("midnight")}>
-                <Midnight className={"size-5"} />
-                <div className="flex justify-between items-center gap-1 w-full">
-                  <p className="text-sm text-text">Midnight</p>
-                  {theme === "midnight" && (
-                    <div className="size-2 rounded-full bg-green-600 animate-pulse" />
-                  )}
-                </div>
-              </MenuBtn>
-              <MenuBtn func={() => switch_theme("dark")}>
-                <Dark className={"size-5"} />
-                <div className="flex justify-between items-center gap-1 w-full">
-                  <p className="text-sm text-text">Dark</p>
-                  {theme === "dark" && (
-                    <div className="size-2 rounded-full bg-green-600 animate-pulse" />
-                  )}
-                </div>
-              </MenuBtn>
-            </Menu>
+              <Menu
+                menuOpen={toggleThemeMenu}
+                setMenuOpen={setToggleThemeMenu}
+                isMainMenu={false}
+                positioningAndSize={"w-60 top-[280px] -right-[178px]"}
+              >
+                <MenuBtn func={() => switch_theme("light")}>
+                  <Light className={"size-5"} />
+                  <div className="flex justify-between items-center gap-1 w-full">
+                    <p className="text-sm text-text">Light</p>
+                    {theme === "light" && (
+                      <div className="size-2 rounded-full bg-green-600 animate-pulse" />
+                    )}
+                  </div>
+                </MenuBtn>
+                <MenuBtn func={() => switch_theme("midnight")}>
+                  <Midnight className={"size-5"} />
+                  <div className="flex justify-between items-center gap-1 w-full">
+                    <p className="text-sm text-text">Midnight</p>
+                    {theme === "midnight" && (
+                      <div className="size-2 rounded-full bg-green-600 animate-pulse" />
+                    )}
+                  </div>
+                </MenuBtn>
+                <MenuBtn func={() => switch_theme("dark")}>
+                  <Dark className={"size-5"} />
+                  <div className="flex justify-between items-center gap-1 w-full">
+                    <p className="text-sm text-text">Dark</p>
+                    {theme === "dark" && (
+                      <div className="size-2 rounded-full bg-green-600 animate-pulse" />
+                    )}
+                  </div>
+                </MenuBtn>
+              </Menu>
 
             {/* Logout */}
             <MenuBtn

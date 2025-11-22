@@ -13,10 +13,14 @@ import {
   PiClockCountdownBold,
 } from "react-icons/pi";
 
+import useApplicationStore from "../../store/ApplicationStore";
+import AudioPlayer from "./AudioPlayer";
+
 const Message = ({
   leftOrRight = "",
   text = "",
   image = "",
+  audio = "",
   sentTime = "",
   isSkeleton = false,
   showProfilePic,
@@ -26,13 +30,14 @@ const Message = ({
 }) => {
   const { authenticated_user } = useAuthStore();
   const { selected_user, handleDownloadImage } = useMessageStore();
+  const { theme } = useApplicationStore();
   const [toggleFullScreen, setToggleFullScreen] = useState(false);
   const textColor = getTextColorFromSeed(selected_user.full_name);
 
   return (
     <div className={`w-[80%] ${leftOrRight === "right" && "ml-auto"}`}>
       <div
-        className={`flex gap-1.5 items-end max-w-[350px] ${
+        className={`flex gap-1.5 items-end max-w-[350px] relative ${
           leftOrRight === "right" && "ml-auto"
         }`}
       >
@@ -61,17 +66,30 @@ const Message = ({
               <div className="size-6" />
             )
           ) : (
-            <div className="size-6 rounded-full animate-pulse bg-sub-background/70" />
+            <div
+              className={`size-6 rounded-full animate-pulse ${
+                theme === "light" ? "bg-text/30" : "bg-full-color/40"
+              }`}
+            />
           )}
         </div>
 
         <div
-          className={`${
-            isSkeleton && "bg-sub-background/60 animate-pulse"
-          } text-text px-0.5 pt-0.5 pb-1 rounded-t-[15px] space-y-0.5 text-sm ${
-            leftOrRight === "left"
-              ? "rounded-r-[15px] bg-left-bubble"
-              : "rounded-l-[15px] bg-right-bubble ml-auto"
+          className={`
+            ${
+              isSkeleton &&
+              ` ${
+                theme === "light" ? "bg-text/30" : "bg-full-color/40"
+              } animate-pulse`
+            } 
+          text-text rounded-t-[15px] space-y-0.5 text-sm ${
+            isSkeleton
+              ? leftOrRight === "left"
+                ? "rounded-r-[15px] p-2"
+                : "rounded-l-[15px] ml-auto p-2"
+              : leftOrRight === "left"
+              ? "rounded-r-[15px] bg-left-bubble px-0.5 pt-0.5 pb-1"
+              : "rounded-l-[15px] bg-right-bubble ml-auto px-0.5 pt-0.5 pb-1"
           } relative`}
         >
           {leftOrRight === "left" &&
@@ -82,8 +100,15 @@ const Message = ({
                 {selected_user.full_name}
               </p>
             ) : (
-              <div className="w-16 p-1.5 animate-pulse bg-sub-background/70 rounded-sm" />
+              <div
+                className={`w-16 p-1.5 mb-1 animate-pulse ${
+                  theme === "light"
+                    ? "bg-left-bubble/25"
+                    : "bg-sub-background/45"
+                }  rounded-sm`}
+              />
             ))}
+
           <div>
             {/* Portal for displaying full image */}
             {toggleFullScreen &&
@@ -128,16 +153,35 @@ const Message = ({
               </p>
             )}
 
+            {audio && !isSkeleton && <AudioPlayer leftOrRight={leftOrRight} audioUrl={audio} />}
+
             {isSkeleton && (
               <div className="space-y-1">
-                <div className="w-40 p-1.5 animate-pulse bg-sub-background/70 rounded-sm" />
-                <div className="w-32 p-1.5 animate-pulse bg-sub-background/70 rounded-sm" />
+                <div
+                  className={`w-40 p-1.5 animate-pulse ${
+                    theme === "light"
+                      ? "bg-left-bubble/45"
+                      : "bg-sub-background/60"
+                  } rounded-sm`}
+                />
+                <div
+                  className={`w-32 p-1.5 animate-pulse ${
+                    theme === "light"
+                      ? "bg-left-bubble/45"
+                      : "bg-sub-background/60"
+                  } rounded-sm`}
+                />
               </div>
             )}
           </div>
+
           {sentTime && !isSkeleton ? (
             !isStreaming && (
-              <div className="flex gap-1.5 items-center min-w-20 px-1">
+              <div
+                className={`flex gap-1.5 items-center min-w-20 px-1 ${
+                  audio && "absolute right-0.5 bottom-1"
+                }`}
+              >
                 <p
                   className={`${
                     leftOrRight === "left" && "px-1"
@@ -149,14 +193,18 @@ const Message = ({
                   (isOptimistic ? (
                     <PiClockCountdownBold />
                   ) : selected_user.full_name === "Orion✨" || isRead ? (
-                    <PiChecksBold className="text-sub-background text-base duration-300" />
+                    <PiChecksBold className="text-deep text-base duration-300" />
                   ) : (
                     <PiCheckBold />
                   ))}
               </div>
             )
           ) : (
-            <div className="w-5 p-1 animate-pulse bg-sub-background/70 rounded-xs ml-auto" />
+            <div
+              className={`w-5 p-1 animate-pulse ${
+                theme === "light" ? "bg-left-bubble/25" : "bg-sub-background/45"
+              } rounded-xs ml-auto`}
+            />
           )}
         </div>
       </div>

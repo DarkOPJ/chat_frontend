@@ -8,8 +8,7 @@ const UsersLoadingSkeleton = () => {
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item) => (
         <div
           key={item}
-          // bg-sub-background/50
-          className="backdrop-blur-md p-4 rounded-lg animate-pulse"
+          className="p-4 rounded-lg animate-pulse"
         >
           <div className="flex items-center justify-center space-x-3">
             <div className="w-11 h-11 bg-full-color/30 rounded-full"></div>

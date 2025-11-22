@@ -19,8 +19,6 @@ const ChatSidebar = ({ smallScreen }) => {
     is_loading_chat_partners,
     get_all_contacts,
     get_all_chat_partners,
-    all_contacts,
-    all_chat_partners,
     open_sidebar,
     set_open_sidebar,
     get_filtered_results,

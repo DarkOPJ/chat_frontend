@@ -5,6 +5,7 @@ import useApplicationStore from "../../store/ApplicationStore";
 import useAuthStore from "../../store/AuthStore";
 import formatConversationTime from "../../lib/MessageTimeFormat";
 import { IoCamera } from "react-icons/io5";
+import { LuAudioLines } from "react-icons/lu";
 import Badge from "./Badge";
 
 const ChatUserBtn = ({ chat = {}, contact = {} }) => {
@@ -30,26 +31,32 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
       }
       key={partner_details?._id || contact?._id}
       className={`${
-        id === selected_user?._id
-          ? "bg-sub-background/90 hover:bg-sub-background/90"
-          : "hover:bg-hover-background/50"
+        id === selected_user?._id ? "bg-full-color/90" : "hover:bg-gray-500/22"
       } ${
         is_compact ? "px-3 py-2" : "px-2 py-3"
       }  cursor-pointer flex items-center gap-3 rounded-xl duration-300`}
     >
-      <ProfileAvatar
-        seed={partner_details?.full_name || contact?.full_name}
-        name={partner_details?.full_name || contact?.full_name}
-        profile_pic={partner_details?.profile_pic || contact?.profile_pic}
-      />
+      <div className="relative">
+        <ProfileAvatar
+          seed={partner_details?.full_name || contact?.full_name}
+          name={partner_details?.full_name || contact?.full_name}
+          profile_pic={partner_details?.profile_pic || contact?.profile_pic}
+        />
+        {is_compact && chat?.last_message && unread_counts[chat._id] > 0 && (
+          <div className="absolute -top-0.5 -right-2.5">
+            <Badge
+              selected={id === selected_user?._id}
+              text={`${unread_counts[chat._id]}`}
+            />
+          </div>
+        )}
+      </div>
       {!is_compact && (
         <div className="flex-1 min-w-0 space-y-0.5">
           <div className="flex justify-between items-baseline">
             <h3
               className={`font-medium text-text truncate ${
-                id === selected_user?._id && theme === "light"
-                  ? "text-text-opposite"
-                  : ""
+                id === selected_user?._id ? "text-white" : ""
               }`}
             >
               {partner_details?.full_name || contact?.full_name}
@@ -57,9 +64,7 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
             {!is_compact && partner_details?._id && (
               <span
                 className={`text-xs ml-2 ${
-                  id === selected_user?._id && theme === "light"
-                    ? "text-text-opposite"
-                    : "text-gray-500"
+                  id === selected_user?._id ? "text-white" : "text-gray-500"
                 }`}
               >
                 {formatConversationTime(chat?.updated_at)}
@@ -69,15 +74,20 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
           <div className="flex items-center justify-between gap-2 text-x">
             <div
               className={`flex items-center gap-1.5 ${
-                id === selected_user?._id && theme === "light"
-                  ? "text-text-opposite"
-                  : "text-gray-500"
+                id === selected_user?._id ? "text-white" : "text-gray-500"
               }`}
             >
               {chat?.last_message?.image && <IoCamera className="text-lg" />}
+              {chat?.last_message?.audio && (
+                <LuAudioLines className="text-lg" />
+              )}
               <p className="text-sm truncate max-w-[165px]">
                 {partner_details?._id
-                  ? chat?.last_message?.text || "photo"
+                  ? chat?.last_message?.text
+                    ? chat?.last_message?.text
+                    : chat?.last_message?.image
+                    ? "photo"
+                    : chat?.last_message?.audio && "audio"
                   : contact?._id &&
                     (online_users.includes(id) ? "online" : "offline")}
               </p>

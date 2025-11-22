@@ -18,10 +18,14 @@ const useMessageStore = create((set, get) => ({
   selected_user: null,
   is_sending_message: false,
   streaming_message: null,
+  is_recording: false,
   unread_counts: {}, // { conversation_id: count }
+
+  is_typing: {}, // { user_id: true/false }
 
   draft_messages: {}, // { user_id: "draft text" }
   draft_images: {}, // { user_id: "image_preview_url" }
+  // draft_voice_recordings: {}, // { user_id: { blob, duration, waveform } }
 
   search_query: "",
 
@@ -213,6 +217,82 @@ const useMessageStore = create((set, get) => ({
     }
   },
 
+  send_voice_message: async (voiceBlob) => {
+    const { selected_user, clear_draft } = get();
+    const { authenticated_user } = useAuthStore.getState();
+    const { enable_sound } = useApplicationStore.getState();
+
+    if (!voiceBlob) return;
+
+    const optimistic_message = {
+      _id: `temp-${Date.now()}`,
+      sender_id: authenticated_user._id,
+      receiver_id: selected_user._id,
+      audio: URL.createObjectURL(voiceBlob), // Blob URL for playback
+      audio_blob: voiceBlob,
+      createdAt: new Date().toISOString(),
+      is_optimistic: true,
+    };
+
+    // Add optimistic message immediately
+    set((state) => ({
+      all_messages_by_id: [...state.all_messages_by_id, optimistic_message],
+    }));
+
+    set({ is_sending_message: true });
+
+    try {
+      // Convert blob to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(voiceBlob);
+
+      reader.onload = async () => {
+        const base64Audio = reader.result;
+
+        const res = await axiosInstance.post(
+          `/messages/send/${selected_user._id}`,
+          { audio: base64Audio }
+        );
+
+        // Replace optimistic message
+        set((state) => ({
+          all_messages_by_id: state.all_messages_by_id.map((msg) =>
+            msg._id === optimistic_message._id ? res.data.sent_message : msg
+          ),
+        }));
+
+        if (enable_sound) {
+          message_sent.currentTime = 0;
+          message_sent
+            .play()
+            .catch((error) => toast.error("Failed to play sound."));
+        }
+      };
+
+      // Clear draft
+      clear_draft(selected_user._id);
+    } catch (error) {
+      // Remove optimistic message on error
+      set((state) => ({
+        all_messages_by_id: state.all_messages_by_id.filter(
+          (msg) => msg._id !== optimistic_message._id
+        ),
+      }));
+
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to send voice message"
+      );
+    } finally {
+      set({ is_sending_message: false });
+    }
+  },
+
+  set_is_recording: (state) => {
+    set({ is_recording: state });
+  },
+
   subscribe_to_messages: () => {
     const { selected_user } = get();
     const { enable_sound } = useApplicationStore.getState();
@@ -317,13 +397,30 @@ const useMessageStore = create((set, get) => ({
     }));
   },
 
+  // set_draft_voice: (user_id, voiceData) => {
+  //   set((state) => ({
+  //     draft_voice_recordings: {
+  //       ...state.draft_voice_recordings,
+  //       [user_id]: voiceData,
+  //     },
+  //   }));
+  // },
+
   clear_draft: (user_id) => {
     set((state) => {
       const new_drafts = { ...state.draft_messages };
       const new_images = { ...state.draft_images };
+      const new_voice = { ...state.draft_voice_recordings };
+
       delete new_drafts[user_id];
       delete new_images[user_id];
-      return { draft_messages: new_drafts, draft_images: new_images };
+      delete new_voice[user_id];
+
+      return {
+        draft_messages: new_drafts,
+        draft_images: new_images,
+        draft_voice_recordings: new_voice,
+      };
     });
   },
 
@@ -466,6 +563,30 @@ const useMessageStore = create((set, get) => ({
     const socket = useAuthStore.getState().socket;
     if (!socket) return;
     socket.off("new_message");
+  },
+
+  set_is_typing: (user_id, typing) => {
+    set((state) => ({
+      is_typing: {
+        ...state.is_typing,
+        [user_id]: typing,
+      },
+    }));
+  },
+
+  subscribe_to_typing: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+
+    socket.on("user_typing", (data) => {
+      set_is_typing(data.from, data.is_typing);
+    });
+  },
+
+  unsubscribe_from_typing: () => {
+    const socket = useAuthStore.getState().socket;
+    if (!socket) return;
+    socket.off("user_typing");
   },
 }));
 

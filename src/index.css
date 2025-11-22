@@ -28,13 +28,14 @@ body {
 
 .light {
   --background: #ffffff;
-  --sub-background: #2e7ecf;
-  --hover-background: #92caff26;
+  --sub-background: #5da853;
+  --hover-background: #76bafa63;
   --text: #000000;
   --full-color: #2e7ecf;
   --left-bubble: #fffadc;
   --right-bubble: #e3fee0;
   --text-opposite: #ffffff;
+    --deep: #5da853;
 }
 
 .dark {
@@ -46,6 +47,7 @@ body {
   --left-bubble: #3b2643;
   --right-bubble: #c7596f;
   --text-opposite: #000000;
+  --deep: #a63340;
 }
 
 .midnight {
@@ -57,6 +59,7 @@ body {
   --left-bubble: #15283a;
   --right-bubble: #8774e1;
   --text-opposite: #000000;
+  --deep: #4230a2;
 }
 
 @theme inline {
@@ -68,6 +71,7 @@ body {
   --color-left-bubble: var(--left-bubble);
   --color-right-bubble: var(--right-bubble);
   --color-text-opposite: var(--text-opposite);
+  --color-deep: var(--deep);
 
   --breakpoint-sm: 23.4375rem; /* 375px */
   --breakpoint-custom-md: 35.75rem; /* 572px */
