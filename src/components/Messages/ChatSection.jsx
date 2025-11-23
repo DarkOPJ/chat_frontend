@@ -12,11 +12,8 @@ import chatbgmidnight from "../../assets/images/chatbgmidnight.png";
 import chatbgdark from "../../assets/images/chatbgdark.png";
 
 const ChatSection = () => {
-  const {
-    open_sidebar,
-    selected_user,
-    select_a_user,
-  } = useMessageStore();
+  const { open_sidebar, set_open_sidebar, selected_user, select_a_user } =
+    useMessageStore();
   const { theme } = useApplicationStore();
 
   const backgrounds = {
@@ -29,7 +26,10 @@ const ChatSection = () => {
   // Escape key
   useEffect(() => {
     const handleEscKey = (event) => {
-      if (event.key === "Escape") select_a_user(null);
+      if (event.key === "Escape") {
+        set_open_sidebar(true);
+        select_a_user(null);
+      }
     };
 
     window.addEventListener("keydown", handleEscKey);
@@ -40,15 +40,15 @@ const ChatSection = () => {
 
   return (
     <div
-      className={`flex  bg-contain relative ${
-        open_sidebar ? "w-0 md:w-full" : "w-full"
-      } duration-300`}
+      className={`bg-contain w-full relative duration-300 ${
+        open_sidebar ? "hidden md:block" : "block"
+      }`}
       style={{
         backgroundImage: background ? `url(${background})` : "none",
       }}
     >
       {selected_user ? (
-        <div className="w-full h-screen bg-[linear-gradient(135deg,rgba(140,102,241,0.1),rgba(10,10,10,0.2),rgba(190,30,94,0.1))] flex flex-col ">
+        <div className="w-full h-screen bg-[linear-gradient(135deg,rgba(140,102,241,0.1),rgba(10,10,10,0.2),rgba(190,30,94,0.1))] flex flex-col">
           {/* midnight bg-[linear-gradient(135deg,rgba(99,102,241,0.1),rgba(10,10,10,0.2),rgba(200,197,94,0.1))] */}
 
           {/* Selected user header */}

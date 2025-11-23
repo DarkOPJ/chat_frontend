@@ -17,7 +17,7 @@ const Signup = () => {
 
       <div className="md:bg-[linear-gradient(to_left,_#160430_10%,_rgba(0,0,0,0)_100%)] bg-[linear-gradient(to_top,_#240b48_0%,_rgba(0,0,0,0)_50%)]"></div>
 
-      <div className="md:bg-dark_purple bg-normal_purple w-full relative">
+      <div className="md:bg-dark_purple bg-normal_purple w-full relative h-96 md:h-auto">
         <SignupSection />
       </div>
     </div>

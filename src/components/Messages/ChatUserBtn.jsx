@@ -8,9 +8,10 @@ import { IoCamera } from "react-icons/io5";
 import { LuAudioLines } from "react-icons/lu";
 import Badge from "./Badge";
 
-const ChatUserBtn = ({ chat = {}, contact = {}, typing }) => {
-  const { selected_user, select_a_user, unread_counts } = useMessageStore();
-  const { is_compact, theme } = useApplicationStore();
+const ChatUserBtn = ({ chat = {}, contact = {}, typing, width = 0 }) => {
+  const { selected_user, select_a_user, unread_counts, open_sidebar } =
+    useMessageStore();
+  const { is_compact } = useApplicationStore();
   const { online_users } = useAuthStore();
   const id = chat?.partner?._id || contact?._id;
   const partner_details = chat?.partner;
@@ -51,23 +52,23 @@ const ChatUserBtn = ({ chat = {}, contact = {}, typing }) => {
           </div>
         )}
       </div>
-      {!is_compact && (
+      {width > 96 && (
         <div className="flex-1 min-w-0 space-y-0.5">
           <div className="flex justify-between items-baseline">
             <h3
               className={`font-medium text-text truncate ${
-                id === selected_user?._id ? "text-white" : ""
+                id === selected_user?._id && "text-white"
               }`}
             >
               {partner_details?.full_name || contact?.full_name}
             </h3>
-            {!is_compact && partner_details?._id && (
+            {width > 96 && partner_details?._id && (
               <span
                 className={`text-xs ml-2 ${
                   id === selected_user?._id ? "text-white" : "text-gray-500"
                 }`}
               >
-                {formatConversationTime(chat?.updated_at)}
+                {formatConversationTime(chat?.last_message.createdAt)}
               </span>
             )}
           </div>

@@ -37,11 +37,22 @@ const ChatSidebar = ({ smallScreen }) => {
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [width, setWidth] = useState(false);
+
+  useEffect(() => {
+    const ro = new ResizeObserver(([entry]) => {
+      setWidth(entry.contentRect.width);
+    });
+
+    ro.observe(sidebarRef.current);
+
+    return () => ro.disconnect();
+  }, []);
 
   const handleMouseDown = (e) => {
     e.preventDefault();
     setIsResizing(true);
-    set_open_sidebar(false);
+    // set_open_sidebar(false);
   };
 
   useEffect(() => {
@@ -112,7 +123,7 @@ const ChatSidebar = ({ smallScreen }) => {
       >
         {!smallScreen &&
           (is_compact == false ? (
-            <div className=" w-full space-y-3 ">
+            <div className=" w-full space-y-3">
               <div className="flex items-center gap-2">
                 <div className="relative">
                   <button
@@ -156,8 +167,8 @@ const ChatSidebar = ({ smallScreen }) => {
             </div>
           ))}
         {smallScreen && (
-          <div className=" w-full space-y-3 ">
-            <div className="flex items-center gap-2 ">
+          <div className="w-full space-y-3 text-text">
+            <div className="flex items-center gap-2">
               <div className="relative">
                 <button
                   onClick={() => {
@@ -193,7 +204,13 @@ const ChatSidebar = ({ smallScreen }) => {
           {is_loading_chat_partners && <UsersLoadingSkeleton />}
           {current_submenu === "All Chats" &&
             filtered_results.map((chat) => (
-              <ChatUserBtn key={chat._id} chat={chat} unread="" typing={is_typing[chat.partner._id]}/>
+              <ChatUserBtn
+                key={chat._id}
+                chat={chat}
+                unread=""
+                typing={is_typing[chat.partner._id]}
+                width={width}
+              />
             ))}
         </div>
         {/* Contacts */}
@@ -209,7 +226,7 @@ const ChatSidebar = ({ smallScreen }) => {
           {is_loading_contacts && <UsersLoadingSkeleton />}
           {current_submenu === "Contacts" &&
             filtered_results.map((contact) => (
-              <ChatUserBtn key={contact._id} contact={contact} />
+              <ChatUserBtn key={contact._id} contact={contact} width={width}/>
             ))}
         </div>
       </div>

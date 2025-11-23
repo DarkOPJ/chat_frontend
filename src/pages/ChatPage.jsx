@@ -3,6 +3,7 @@ import ChatSidebar from "../components/Messages/ChatSidebar";
 import ChatSection from "../components/Messages/ChatSection";
 import useMessageStore from "../store/MessagesStore";
 import { useEffect } from "react";
+import useApplicationStore from "../store/ApplicationStore";
 
 const ChatPage = () => {
   const {
@@ -14,6 +15,17 @@ const ChatPage = () => {
     // subscribe_to_typing,
     // unsubscribe_from_typing,
   } = useMessageStore();
+  const { theme } = useApplicationStore();
+
+  useEffect(() => {
+    if (theme === "light") {
+      document.body.style.backgroundColor = "#ffffff";
+    } else if (theme === "dark") {
+      document.body.style.backgroundColor = "#212121";
+    } else if (theme === "midnight") {
+      document.body.style.backgroundColor = "#160430";
+    }
+  }, [theme]);
 
   // ✅ GOOD - Run side effects in useEffect
   useEffect(() => {
