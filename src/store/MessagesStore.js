@@ -579,7 +579,7 @@ const useMessageStore = create((set, get) => ({
   // },
 
   // Track which listeners are active
- 
+
   listeners_active: {
     messages: false,
     notifications: false,
@@ -677,7 +677,15 @@ const useMessageStore = create((set, get) => ({
 
         if (selected_user?._id !== sent_message.sender_id) {
           toast.info(
-            `${sender.full_name}: ${sent_message.text || "📷 Photo"}`,
+            `${sender.full_name}: ${
+              sent_message.audio
+                ? "🎙️ Audio"
+                : sent_message.image
+                ? sent_message.text
+                  ? `📷 ${sent_message.text.slice(0, 40)}...`
+                  : "📷 Photo"
+                : `${sent_message.text.slice(0, 40)}...`
+            }`,
             {
               onClick: () => {
                 get().select_a_user(sender);

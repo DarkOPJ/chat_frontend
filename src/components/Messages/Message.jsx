@@ -122,9 +122,11 @@ const Message = ({
               )}
 
             {image && !isSkeleton && (
-              <div className="relative">
+              <div className={`relative ${leftOrRight === "left" && "mt-1.5"}`}>
                 <img
-                  className="w-full rounded-t-[14px] object-contain mb-1.5 cursor-pointer"
+                  className={`w-full ${
+                    leftOrRight === "right" && "rounded-t-[14px]"
+                  }  object-contain mb-1.5 cursor-pointer`}
                   src={image}
                   alt="Shared image."
                   onClick={() => setToggleFullScreen(true)}
@@ -153,7 +155,9 @@ const Message = ({
               </p>
             )}
 
-            {audio && !isSkeleton && <AudioPlayer leftOrRight={leftOrRight} audioUrl={audio} />}
+            {audio && !isSkeleton && (
+              <AudioPlayer leftOrRight={leftOrRight} audioUrl={audio} />
+            )}
 
             {isSkeleton && (
               <div className="space-y-1">

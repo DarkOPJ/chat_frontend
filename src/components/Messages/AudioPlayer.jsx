@@ -126,12 +126,13 @@ const AudioPlayer = ({ leftOrRight, audioUrl }) => {
       : theme === "midnight"
       ? "#4230a2"
       : "#a63340";
+
   const activeColorLeft =
     theme === "light"
-      ? "#fffadc"
+      ? "#cbad03"
       : theme === "midnight"
-      ? "#15283a"
-      : "#3b2643";
+      ? "#195995"
+      : "#8020a6";
 
   return (
     <div className="pt-1.5 px-2 flex items-center gap-1.5">
@@ -142,8 +143,12 @@ const AudioPlayer = ({ leftOrRight, audioUrl }) => {
         onClick={togglePlay}
         className={`size-11 text-2xl flex justify-center items-center rounded-full cursor-pointer ${
           theme === "light"
-            ? "bg-sub-background text-white"
-            : "bg-white text-full-color"
+            ? leftOrRight === "left"
+              ? "bg-deep-left-chat-bubble text-white"
+              : "bg-sub-background text-white"
+            : leftOrRight === "left"
+            ? "text-deep-left-chat-bubble bg-white"
+            : "bg-white text-deep"
         }`}
       >
         {isPlaying ? <FaPause /> : <FaPlay />}
@@ -161,12 +166,26 @@ const AudioPlayer = ({ leftOrRight, audioUrl }) => {
         />
 
         <div className="text-[13px] tracking-wider flex items-center gap-2">
-          <span className="text-sub-background">
+          <span
+            className={
+              theme === "light"
+                ? leftOrRight === "left"
+                  ? "text-deep-left-chat-bubble"
+                  : "text-deep"
+                : "text-white"
+            }
+          >
             {formatTime(current)} / {formatTime(duration)}
           </span>
           <div
-            className={`size-2 rounded-full bg-sub-background opacity-0 ${
+            className={`size-2 rounded-full opacity-0 ${
               isPlaying && "opacity-100 animate-pulse"
+            } ${
+              theme === "light"
+                ? leftOrRight === "left"
+                  ? "bg-deep-left-chat-bubble"
+                  : "bg-deep"
+                : "bg-white"
             }`}
           />
         </div>
