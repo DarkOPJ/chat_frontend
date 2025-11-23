@@ -51,9 +51,9 @@ const Menu = ({
       }}
     >
       <div
-        className={`absolute  ${
+        className={`absolute ${
           isMainMenu ? "top-16 left-5" : "bottom-16 left-16"
-        } w-60 rounded-lg shadow-md p-1 bg-background/80 backdrop-blur-lg shadow-full-color/10`}
+        } custom-md:w-60 rounded-lg shadow-md p-1 bg-background/80 backdrop-blur-lg shadow-full-color/10`}
       >
         {isMainMenu && (
           <>
