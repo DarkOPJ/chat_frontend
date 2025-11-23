@@ -16,8 +16,6 @@ const ChatSection = () => {
     open_sidebar,
     selected_user,
     select_a_user,
-    subscribe_to_typing,
-    unsubscribe_from_typing,
   } = useMessageStore();
   const { theme } = useApplicationStore();
 
@@ -27,13 +25,6 @@ const ChatSection = () => {
     dark: chatbgdark,
   };
   const background = backgrounds[theme] ?? null;
-
-  // typing animation
-  useEffect(() => {
-    subscribe_to_typing();
-
-    return () => unsubscribe_from_typing();
-  }, []);
 
   // Escape key
   useEffect(() => {

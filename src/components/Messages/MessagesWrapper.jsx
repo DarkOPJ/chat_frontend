@@ -10,24 +10,24 @@ const MessagesWrapper = () => {
     get_messages_by_id,
     all_messages_by_id,
     is_loading_messages,
-    subscribe_to_messages,
-    unsubscribe_from_messages,
+    // subscribe_to_messages,
+    // unsubscribe_from_messages,
     streaming_message,
-    subscribe_to_ai_streaming,
-    unsubscribe_from_ai_streaming,
+    // subscribe_to_ai_streaming,
+    // unsubscribe_from_ai_streaming,
   } = useMessageStore();
   const messageEndRef = useRef(null);
 
   useEffect(() => {
     get_messages_by_id();
-    subscribe_to_messages();
-    subscribe_to_ai_streaming();
+    // subscribe_to_messages();
+    // subscribe_to_ai_streaming();
 
     // cleanup function
-    return () => {
-      unsubscribe_from_messages();
-      unsubscribe_from_ai_streaming();
-    };
+    // return () => {
+    //   unsubscribe_from_messages();
+    //   unsubscribe_from_ai_streaming();
+    // };
   }, [selected_user._id]);
 
   useEffect(() => {

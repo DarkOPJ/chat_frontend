@@ -22,6 +22,7 @@ const ChatSidebar = ({ smallScreen }) => {
     open_sidebar,
     set_open_sidebar,
     get_filtered_results,
+    is_typing,
   } = useMessageStore();
 
   const {
@@ -32,6 +33,7 @@ const ChatSidebar = ({ smallScreen }) => {
     change_compact,
     theme,
   } = useApplicationStore();
+
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -191,7 +193,7 @@ const ChatSidebar = ({ smallScreen }) => {
           {is_loading_chat_partners && <UsersLoadingSkeleton />}
           {current_submenu === "All Chats" &&
             filtered_results.map((chat) => (
-              <ChatUserBtn key={chat._id} chat={chat} unread="" />
+              <ChatUserBtn key={chat._id} chat={chat} unread="" typing={is_typing[chat.partner._id]}/>
             ))}
         </div>
         {/* Contacts */}

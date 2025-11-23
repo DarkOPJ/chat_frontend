@@ -97,34 +97,6 @@ const ChatInput = () => {
     set_draft_message(selected_user._id, newValue);
   };
 
-  // const handleInputChange = (e) => {
-  //   const newValue = e.target.value;
-  //   set_draft_message(selected_user._id, newValue);
-
-  //   // Emit typing event
-  //   if (socket && selected_user) {
-  //     socket.emit("user_typing", {
-  //       to: selected_user._id,
-  //       is_typing: true,
-  //     });
-
-  //     // Clear previous timeout
-  //     if (typingTimeoutRef.current) {
-  //       clearTimeout(typingTimeoutRef.current);
-  //     }
-
-  //     // Stop typing after 3 seconds of no input
-  //     typingTimeoutRef.current = setTimeout(() => {
-  //       socket.emit("user_typing", {
-  //         to: selected_user._id,
-  //         is_typing: false,
-  //       });
-  //     }, 3000);
-  //   }
-
-  //   if (enable_sound) playRandomKeyStrokeSound();
-  // };
-
   const setImagePreview = (value) => {
     set_draft_image(selected_user._id, value);
   };
@@ -162,31 +134,6 @@ const ChatInput = () => {
     set_is_recording(false);
   };
 
-  // Emit typing event
-  const emitTypingEvent = (isTyping = true) => {
-    if (!socket || !selected_user) return;
-
-    socket.emit("user_typing", {
-      to: selected_user._id,
-      is_typing: isTyping,
-    });
-
-    // Clear previous timeout
-    if (typingTimeoutRef.current) {
-      clearTimeout(typingTimeoutRef.current);
-    }
-
-    // Stop typing after 3 seconds of no input
-    if (isTyping) {
-      typingTimeoutRef.current = setTimeout(() => {
-        socket.emit("user_typing", {
-          to: selected_user._id,
-          is_typing: false,
-        });
-      }, 3000);
-    }
-  };
-
   const handleInputChange = (e) => {
     const newValue = e.target.value;
     set_draft_message(selected_user._id, newValue);
@@ -196,8 +143,30 @@ const ChatInput = () => {
 
   const handleEmojiClick = (emojiData) => {
     setMessage((prev) => prev + emojiData.emoji);
-    emitTypingEvent(true); // Add this
+    emitTypingEvent(true);
     if (enable_sound) playRandomKeyStrokeSound();
+  };
+
+  const emitTypingEvent = (isTyping = true) => {
+    if (!socket || !selected_user) return;
+
+    socket.emit("user_typing", {
+      to: selected_user._id,
+      is_typing: isTyping,
+    });
+
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+    }
+
+    if (isTyping) {
+      typingTimeoutRef.current = setTimeout(() => {
+        socket.emit("user_typing", {
+          to: selected_user._id,
+          is_typing: false,
+        });
+      }, 2000);
+    }
   };
 
   // Auto-resize textarea
@@ -292,13 +261,7 @@ const ChatInput = () => {
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
                     e.preventDefault();
-                    if (socket) {
-                      socket.emit("user_typing", {
-                        to: selected_user._id,
-                        is_typing: false,
-                      });
-                    }
-
+                    emitTypingEvent(false);
                     handleSend(e);
                   }
                 }}

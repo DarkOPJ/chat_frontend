@@ -8,7 +8,7 @@ import { IoCamera } from "react-icons/io5";
 import { LuAudioLines } from "react-icons/lu";
 import Badge from "./Badge";
 
-const ChatUserBtn = ({ chat = {}, contact = {} }) => {
+const ChatUserBtn = ({ chat = {}, contact = {}, typing }) => {
   const { selected_user, select_a_user, unread_counts } = useMessageStore();
   const { is_compact, theme } = useApplicationStore();
   const { online_users } = useAuthStore();
@@ -72,26 +72,36 @@ const ChatUserBtn = ({ chat = {}, contact = {} }) => {
             )}
           </div>
           <div className="flex items-center justify-between gap-2 text-x">
-            <div
-              className={`flex items-center gap-1.5 ${
-                id === selected_user?._id ? "text-white" : "text-gray-500"
-              }`}
-            >
-              {chat?.last_message?.image && <IoCamera className="text-lg" />}
-              {chat?.last_message?.audio && (
-                <LuAudioLines className="text-lg" />
-              )}
-              <p className="text-sm truncate max-w-[165px]">
-                {partner_details?._id
-                  ? chat?.last_message?.text
+            {typing ? (
+              <div
+                className={`flex items-center gap-1.5 ${
+                  id === selected_user?._id ? "text-white" : "text-gray-500"
+                }`}
+              >
+                <p className="text-sm">typing...</p>
+              </div>
+            ) : (
+              <div
+                className={`flex items-center gap-1.5 ${
+                  id === selected_user?._id ? "text-white" : "text-gray-500"
+                }`}
+              >
+                {chat?.last_message?.image && <IoCamera className="text-lg" />}
+                {chat?.last_message?.audio && (
+                  <LuAudioLines className="text-lg" />
+                )}
+                <p className="text-sm truncate max-w-[165px]">
+                  {partner_details?._id
                     ? chat?.last_message?.text
-                    : chat?.last_message?.image
-                    ? "photo"
-                    : chat?.last_message?.audio && "audio"
-                  : contact?._id &&
-                    (online_users.includes(id) ? "online" : "offline")}
-              </p>
-            </div>
+                      ? chat?.last_message?.text
+                      : chat?.last_message?.image
+                      ? "photo"
+                      : chat?.last_message?.audio && "audio"
+                    : contact?._id &&
+                      (online_users.includes(id) ? "online" : "offline")}
+                </p>
+              </div>
+            )}
             {chat?.last_message && unread_counts[chat._id] > 0 && (
               <Badge
                 selected={id === selected_user?._id}

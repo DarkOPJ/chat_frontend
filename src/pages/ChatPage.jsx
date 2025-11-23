@@ -9,8 +9,10 @@ const ChatPage = () => {
     open_sidebar,
     set_open_sidebar,
     selected_user,
-    subscribe_to_new_message_notifications,
-    unsubscribe_from_new_message_notifications,
+    // subscribe_to_new_message_notifications,
+    // unsubscribe_from_new_message_notifications,
+    // subscribe_to_typing,
+    // unsubscribe_from_typing,
   } = useMessageStore();
 
   // ✅ GOOD - Run side effects in useEffect
@@ -21,12 +23,27 @@ const ChatPage = () => {
   }, [selected_user?._id, set_open_sidebar]);
 
   useEffect(() => {
-    subscribe_to_new_message_notifications();
+    const { setup_all_socket_listeners, cleanup_all_socket_listeners } =
+      useMessageStore.getState();
+
+    // Setup all listeners once
+    setup_all_socket_listeners();
 
     return () => {
-      unsubscribe_from_new_message_notifications();
+      // Cleanup on unmount
+      cleanup_all_socket_listeners();
     };
-  }, []);
+  }, []); // Empty dependency - runs ONCE on mount
+
+  // useEffect(() => {
+  //   subscribe_to_new_message_notifications();
+  //   subscribe_to_typing();
+
+  //   return () => {
+  //     unsubscribe_from_new_message_notifications();
+  //     unsubscribe_from_typing();
+  //   };
+  // }, []);
 
   return (
     <section className="flex h-screen bg-background overflow-x-hidden">
